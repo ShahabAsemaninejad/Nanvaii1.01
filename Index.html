@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پیش‌نمایش برنامه</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
+        * { box-sizing: border-box; }
+        body { font-family: 'Vazirmatn', 'Tahoma', sans-serif; background-color: #e0e0e0; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 10px; }
+        .app-container { width: 100%; max-width: 400px; background-color: #ffffff; border: 3px solid #a0764d; border-radius: 8px; position: relative; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .status-bar { background-color: #1a237e; color: white; padding: 6px 12px; display: flex; justify-content: space-between; font-size: 12px; }
+        .header-section { display: flex; padding: 10px; gap: 10px; align-items: flex-start; }
+        .buttons-group { display: flex; flex-wrap: wrap; gap: 6px; width: 60%; }
+        .btn { border-radius: 6px; color: white; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; font-size: 12px; }
+        .btn-save { background-color: #00838f; width: 65px; height: 65px; font-size: 15px; }
+        .btn-settings { background-color: #546e7a; width: 75px; height: 28px; }
+        .btn-stats { background-color: #2e7d32; width: 65px; height: 28px; }
+        .btn-sales { background-color: #6a1b9a; width: 65px; height: 28px; }
+        .btn-enter { background-color: #e65100; width: 75px; height: 28px; }
+        .date-box { border: 2px solid #1a237e; border-radius: 8px; padding: 8px; font-size: 12px; color: #1a237e; font-weight: bold; display: flex; flex-direction: column; align-items: center; position: relative; width: 100px; margin-right: auto; margin-top: 10px; }
+        .date-box .cal-icon { background-color: #e53935; color: white; font-size: 10px; padding: 1px 5px; border-radius: 4px; position: absolute; top: -8px; right: 8px; }
+        .day-text { font-size: 10px; font-weight: normal; margin-top: 2px; }
+        .col-headers { display: flex; justify-content: space-around; padding: 0 10px; margin-top: 5px; font-weight: bold; color: #1a237e; font-size: 13px; }
+        .col-headers span { border: 1px solid #1a237e; border-radius: 4px; width: 22px; height: 22px; display: flex; justify-content: center; align-items: center; }
+        .col-headers .header-0 { background-color: #d32f2f; color: white; border-color: #d32f2f; border-radius: 50%; }
+        .main-table { width: 100%; border-collapse: collapse; margin-top: 5px; table-layout: fixed; }
+        .main-table td { border: 1px solid #ccc; height: 32px; padding: 2px; font-size: 11px; color: #1a237e; font-weight: bold; text-align: center; vertical-align: middle; }
+        .box-orange { border: 1.5px solid #f57c00; border-radius: 4px; padding: 1px 4px; display: inline-block; color: #333; background-color: white; white-space: nowrap; font-size: 10px; }
+        .box-blue { border: 1px solid #1a237e; border-radius: 4px; padding: 1px 6px; display: inline-block; background-color: white; font-size: 11px; }
+        .thick-border-bottom { border-bottom: 3px solid #333 !important; }
+        .thick-border-left { border-left: 3px solid #333 !important; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="status-bar"><div>۱۱:۰۷</div><div class="status-icons"><span>📶</span><span>📶</span><span>85% 🔋</span></div></div>
+    <div class="header-section">
+        <div class="buttons-group">
+            <div class="btn btn-save">ذخیره</div><div class="btn btn-settings">تنظیمات</div><div class="btn btn-stats">آمار</div><div class="btn btn-sales">فروش</div><div class="btn btn-enter">ورود</div>
+        </div>
+        <div class="date-box"><span class="cal-icon">۱۷</span><div class="date-text">۱۴۰۵/۰۷/۱۵</div><div class="day-text">چهارشنبه</div></div>
+    </div>
+    <div class="col-headers"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span class="header-0">0</span></div>
+    <table class="main-table">
+        <tr><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td><span class="box-blue">۰</span></td><td style="font-weight:bold;">اردشیر</td><td><span class="box-orange">تعداد بسته‌های ا...</span></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td><span class="box-orange">تعداد تراکنش ک...</span></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td><span class="box-orange">تعداد نان کارتخ</span></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td><span class="box-orange">تعداد پلاستیک</span></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td class="thick-border-bottom"><span class="box-orange">مبلغ کارتخو</span> + <span class="box-orange">مبلغ کارتخو</span></td><td><span class="box-blue" style="padding: 5px 15px;">۱۸</span></td><td><span class="box-orange">موجودی آرد</span></td></tr>
+        <tr><td></td><td></td><td><span class="box-blue">-۹۴۰</span> + <span class="box-orange">تراول</span></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td><span class="box-blue">۰</span></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td class="thick-border-left"><span class="box-blue">-۹۴۰</span></td><td><span class="box-blue">۰</span></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td><span class="box-blue">-۹۴۰</span></td><td></td></tr>
+        <tr><td></td><td></td><td><span class="box-blue">-۵۵۳</span></td><td><span class="box-blue">-۵۵۳</span></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td><span class="box-orange">موجودی نقدی ده</span></td></tr>
+        <tr><td></td><td></td><td><span class="box-blue">-۳۱</span></td><td><span class="box-blue">-۳۱</span></td><td></td></tr>
+    </table>
+</div>
+</body>
+</html>
