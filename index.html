@@ -52,36 +52,48 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .today-date:hover{background:#e3f2fd}
 
 /* ===== دکمه‌های ناوبری روز (زیر خط ۲۰) ===== */
+/* خط b = 33.33% ، خط c = 50% ، خط d = 66.66% */
 .day-nav-btn{
   position:absolute;
   top:calc(95.24% + 3px);
-  height:28px;
+  height:24px;
   background:#fff;
-  border:2px solid #1a3a8f;
-  border-radius:6px;
+  border:1.5px solid #1a3a8f;
+  border-radius:5px;
   cursor:pointer;
   display:flex;
   align-items:center;
   justify-content:center;
   font-family:'Vazirmatn',Tahoma,sans-serif;
-  font-size:16px;
+  font-size:14px;
   font-weight:700;
   color:#1a3a8f;
   z-index:60;
   transition:all .15s;
   padding:0;
   line-height:1;
-  width:13%;
+  width:10%;
 }
 .day-nav-btn:hover:not(:disabled){background:#e3f2fd}
 .day-nav-btn:active:not(:disabled){transform:scale(.94)}
 .day-nav-btn:disabled{opacity:.3;cursor:not-allowed}
 
-/* موقعیت دکمه‌ها: مرکز هر دکمه روی نقطه مورد نظر */
-.day-nav-btn.day-prev{right:calc(41.66% - 6.5%)}  /* بین b و c */
-.day-nav-btn.day-today{right:calc(50% - 6.5%);background:#1a3a8f;color:#fff}  /* روی c */
+/* دکمه سمت راست (روز قبل) — لبه راست مماس با خط b */
+.day-nav-btn.day-prev{
+  right:33.33%;
+}
+/* دکمه وسط (امروز) — مرکز روی خط c */
+.day-nav-btn.day-today{
+  right:calc(50% - 5%);
+  background:#1a3a8f;
+  color:#fff;
+  font-size:15px;
+}
 .day-nav-btn.day-today:hover{background:#0d47a1}
-.day-nav-btn.day-next{right:calc(58.33% - 6.5%)}  /* بین c و d */
+/* دکمه سمت چپ (روز بعد) — لبه چپ مماس با خط d */
+.day-nav-btn.day-next{
+  right:calc(66.66% - 10%);
+}
 
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;justify-content:center;align-items:center;padding:20px;backdrop-filter:blur(2px);z-index:1000}
 .modal.active{display:flex}
@@ -163,7 +175,6 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .settings-note{font-size:11px;color:#888;margin-top:4px;line-height:1.5}
 .settings-disabled{opacity:.5;pointer-events:none}
 
-/* ===== تنظیمات موبایل ===== */
 @media (max-width: 700px) {
   body { padding: 3px; }
   .page-wrapper { max-width: 100%; height: calc(100dvh - 6px); aspect-ratio: auto; }
@@ -182,10 +193,10 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
   .ref-label { font-size: 13px; }
   .origin-dot { width: 22px; height: 22px; font-size: 12px; }
   .plus-sign { font-size: 18px; }
-  .day-nav-btn { height: 26px; font-size: 14px; }
+  .day-nav-btn { height: 22px; font-size: 12px; }
+  .day-nav-btn.day-today { font-size: 13px; }
 }
 
-/* ===== ماشین‌حساب شناور ===== */
 .calc-toggle{
   position:fixed;
   bottom:20px;
@@ -639,15 +650,7 @@ document.getElementById('unlinkFileBtn').addEventListener('click',()=>{backupFil
 const calM=document.getElementById('calendarModal'),calMY=document.getElementById('calMonthYear'),calD=document.getElementById('calDays'),calMP=document.getElementById('calMonthPicker'),calYP=document.getElementById('calYearPicker');
 let vY,vM;
 function populate(ms,ys,minY,maxY){ms.innerHTML='';M.forEach((n,i)=>{const o=document.createElement('option');o.value=i+1;o.textContent=n;ms.appendChild(o)});ys.innerHTML='';for(let y=maxY;y>=minY;y--){const o=document.createElement('option');o.value=y;o.textContent=faNum(y);ys.appendChild(o)}}
-
-// ===== setTopDate با به‌روز کردن دکمه‌ها =====
-function setTopDate(j){
-  const w=weekdayName(j.year,j.month,j.day);
-  todayDateEl.textContent='📅 '+w+' '+faNum(j.key);
-  viewedKey=j.key;
-  updateDayNavButtons();
-}
-
+function setTopDate(j){const w=weekdayName(j.year,j.month,j.day);todayDateEl.textContent='📅 '+w+' '+faNum(j.key);viewedKey=j.key;updateDayNavButtons()}
 function openCal(){const t=todayKey();vY=t.year;vM=t.month;populate(calMP,calYP,t.year-20,t.year+10);renderCal();calM.classList.add('active')}
 function renderCal(){const t=todayKey(),db=loadDB();calMY.textContent=M[vM-1]+' '+faNum(vY);calMP.value=vM;calYP.value=vY;calD.innerHTML='';const off=W.indexOf(weekdayName(vY,vM,1));for(let i=0;i<off;i++){const e=document.createElement('div');e.className='calendar-day empty';calD.appendChild(e)}const len=monthLen(vY,vM);for(let d=1;d<=len;d++){const c=document.createElement('div');c.className='calendar-day';c.textContent=faNum(d);const k=vY+'/'+String(vM).padStart(2,'0')+'/'+String(d).padStart(2,'0');const cd={jy:vY,jm:vM,jd:d},tD={jy:t.year,jm:t.month,jd:t.day},cmp=cmpJ(cd,tD);if(cmp===0)c.classList.add('today');else if(cmp<0){if(db[k])c.classList.add('past-data');else c.classList.add('past-empty')}else c.classList.add('future');if(db[k])c.classList.add('has-data');c.addEventListener('click',()=>{if(cmp>0){alert('آینده');return}calM.classList.remove('active');setTopDate({year:vY,month:vM,day:d,key:k});if(db[k]){apply(db[k]);calc();checkEmpty()}else{apply({});REQ.forEach(r=>F[r].classList.remove('empty-warning'));curDate=k;dQ1=Q.slice();sQ=[];showDlg()}});calD.appendChild(c)}}
 document.getElementById('calPrev').addEventListener('click',()=>{vM--;if(vM<1){vM=12;vY--}renderCal()});
@@ -679,7 +682,6 @@ stTB.addEventListener('click',()=>openMini('to'));
 document.getElementById('statsCalcBtn').addEventListener('click',()=>{if(!sFrom||!sTo){alert('هر دو تاریخ رو انتخاب کن');return}const fr=document.getElementById('statsField').value;const fp=sFrom.split('/').map(Number),tp=sTo.split('/').map(Number);const fo={jy:fp[0],jm:fp[1],jd:fp[2]},to={jy:tp[0],jm:tp[1],jd:tp[2]};if(cmpJ(fo,to)>0){alert('تاریخ شروع باید قبل باشه');return}const db=loadDB();let sum=0,cnt=0;Object.keys(db).forEach(k=>{const p=k.split('/').map(Number),ko={jy:p[0],jm:p[1],jd:p[2]};if(cmpJ(ko,fo)>=0&&cmpJ(ko,to)<=0){const v=db[k][fr];if(v!==undefined&&v!==null&&v!==''){sum+=parseFloat(faToEn(v))||0;cnt++}}});const avg=cnt>0?sum/cnt:0;stSum.textContent=Math.floor(sum).toLocaleString('fa-IR');stAvg.textContent=Math.floor(avg).toLocaleString('fa-IR');stDC.textContent=faNum(cnt);stR.classList.add('show')});
 if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('service-worker.js').catch(()=>{})})}
 
-// ===== ناوبری روز: دکمه‌های پایین =====
 function keyToObj(k){const[y,m,d]=k.split('/').map(Number);return{year:y,month:m,day:d,key:k}}
 function goToDateKey(k){
   const db=loadDB();
@@ -691,7 +693,6 @@ function updateDayNavButtons(){
   const today=todayKey().key;
   const cur=viewedKey||today;
   const nextBtn=document.getElementById('btnDayNext');
-  // اگر روی امروز هستیم، دکمه روز بعد غیرفعال
   nextBtn.disabled=(cur>=today);
 }
 document.getElementById('btnDayPrev').addEventListener('click',()=>{
@@ -708,7 +709,6 @@ document.getElementById('btnDayNext').addEventListener('click',()=>{
   goToDateKey(nextDay(cur));
 });
 
-// ===== ماشین‌حساب شناور =====
 (function(){
   const toggle = document.getElementById('calcToggle');
   const panel = document.getElementById('calcPanel');
@@ -797,7 +797,6 @@ document.getElementById('btnDayNext').addEventListener('click',()=>{
     else if(btn.dataset.action === 'dot') inputDot();
   });
 
-  // بستن ماشین‌حساب با کلیک بیرون
   document.addEventListener('click', (e) => {
     if (!panel.classList.contains('open')) return;
     if (panel.contains(e.target)) return;
