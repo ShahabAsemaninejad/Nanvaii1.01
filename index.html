@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#1a3a8f">
-<title>نانوایی ورژن ۱.۰۱</title>
+<title>نانوایی ورژن ۳.۰</title>
 <link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -43,61 +43,41 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .btn:hover{filter:brightness(.9)}
 .btn:active{transform:scale(.97)}
 .btn-stats{background:#2e7d32}
-.btn-save{background:#00838f;font-size:13px}
+.btn-save{background:#00838f;font-size:13px;position:relative;transition:background .2s, filter .15s}
 .btn-save.linked{background:#2e7d32}
+.btn-save.saving{background:#f9a825;pointer-events:none}
+.btn-save.click-2{background:#2e7d32}
+.btn-save.click-3{background:#6a1b9a}
 .btn-settings{background:#546e7a}
 .btn-refresh{background:#6a1b9a}
 .btn-import{background:#e65100}
 .today-date{position:absolute;background:#fff;border:2px solid #1a3a8f;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#1a3a8f;white-space:nowrap;overflow:hidden;padding:0 4px;text-align:center;z-index:50;font-family:'Vazirmatn',Tahoma,sans-serif}
 .today-date:hover{background:#e3f2fd}
-
-/* ===== دکمه‌های ناوبری روز (زیر خط ۲۰) ===== */
-/* خط b = 33.33% ، خط c = 50% ، خط d = 66.66% */
-.day-nav-btn{
-  position:absolute;
-  top:calc(95.24% + 3px);
-  height:24px;
-  background:#fff;
-  border:1.5px solid #1a3a8f;
-  border-radius:5px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:'Vazirmatn',Tahoma,sans-serif;
-  font-size:14px;
-  font-weight:700;
-  color:#1a3a8f;
-  z-index:60;
-  transition:all .15s;
-  padding:0;
-  line-height:1;
-  width:10%;
-}
+.holiday-banner{position:absolute;top:0;right:0;left:0;height:22px;background:linear-gradient(90deg,#ffe0b2,#ffcc80,#ffe0b2);border-bottom:2px solid #e65100;display:none;align-items:center;justify-content:center;font-family:'Vazirmatn',Tahoma,sans-serif;font-size:11px;font-weight:700;color:#bf360c;z-index:80;letter-spacing:.5px;box-shadow:0 2px 6px rgba(230,81,0,.25)}
+.holiday-banner.show{display:flex;animation:holidayIn .3s ease-out}
+@keyframes holidayIn{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
+.save-toast{position:absolute;z-index:200;background:#263238;color:#fff;font-family:'Vazirmatn',Tahoma,sans-serif;font-size:11px;font-weight:700;padding:8px 12px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.4);white-space:nowrap;pointer-events:none;opacity:0;transform:translate(50%, 8px);transition:opacity .25s, transform .25s;text-align:center;line-height:1.4}
+.save-toast.show{opacity:1;transform:translate(50%, 0)}
+.save-toast::before{content:'';position:absolute;top:-6px;right:50%;transform:translateX(50%);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:6px solid #263238}
+.save-toast.info{background:#263238}.save-toast.info::before{border-bottom-color:#263238}
+.save-toast.success{background:#2e7d32}.save-toast.success::before{border-bottom-color:#2e7d32}
+.save-toast.warn{background:#e65100}.save-toast.warn::before{border-bottom-color:#e65100}
+.save-toast.error{background:#c62828}.save-toast.error::before{border-bottom-color:#c62828}
+.save-toast.json{background:#6a1b9a}.save-toast.json::before{border-bottom-color:#6a1b9a}
+.save-toast .spinner{display:inline-block;width:11px;height:11px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-left:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.day-nav-btn{position:absolute;top:calc(95.24% + 3px);height:24px;background:#fff;border:1.5px solid #1a3a8f;border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Vazirmatn',Tahoma,sans-serif;font-size:14px;font-weight:700;color:#1a3a8f;z-index:60;transition:all .15s;padding:0;line-height:1;width:10%}
 .day-nav-btn:hover:not(:disabled){background:#e3f2fd}
 .day-nav-btn:active:not(:disabled){transform:scale(.94)}
 .day-nav-btn:disabled{opacity:.3;cursor:not-allowed}
-
-/* دکمه سمت راست (روز قبل) — لبه راست مماس با خط b */
-.day-nav-btn.day-prev{
-  right:33.33%;
-}
-/* دکمه وسط (امروز) — مرکز روی خط c */
-.day-nav-btn.day-today{
-  right:calc(50% - 5%);
-  background:#1a3a8f;
-  color:#fff;
-  font-size:15px;
-}
+.day-nav-btn.day-prev{right:33.33%}
+.day-nav-btn.day-today{right:calc(50% - 5%);background:#1a3a8f;color:#fff;font-size:15px}
 .day-nav-btn.day-today:hover{background:#0d47a1}
-/* دکمه سمت چپ (روز بعد) — لبه چپ مماس با خط d */
-.day-nav-btn.day-next{
-  right:calc(66.66% - 10%);
-}
-
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;justify-content:center;align-items:center;padding:20px;backdrop-filter:blur(2px);z-index:1000}
+.day-nav-btn.day-next{right:calc(66.66% - 10%)}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;justify-content:center;align-items:center;padding:20px;backdrop-filter:blur(2px);z-index:1000}
 .modal.active{display:flex}
 .dialog-overlay{z-index:1000}.calendar-modal{z-index:1200}.stats-modal{z-index:1300}.mini-calendar-overlay{z-index:1400}.settings-modal{z-index:1500}
+.loan-modal{z-index:1600}.quota-modal{z-index:1700}.factory-modal{z-index:1650}.reminder-layer{z-index:900}
 .dialog-box{background:#fff;width:100%;max-width:380px;border-radius:12px;padding:22px 20px 18px;box-shadow:0 20px 60px rgba(0,0,0,.35);position:relative}
 .dialog-counter{font-size:11px;color:#888;text-align:center;margin-bottom:8px}
 .dialog-question{font-size:16px;font-weight:700;color:#1a3a8f;text-align:center;margin-bottom:16px;line-height:1.6}
@@ -130,17 +110,23 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .calendar-day.past-data:hover{background:#b8e6bd}
 .calendar-day.today{background:#ffcdd2;color:#b71c1c}
 .calendar-day.future{background:#e3f2fd;color:#1565c0;cursor:not-allowed;opacity:.7}
+.calendar-day.holiday{background:#ffe0b2;color:#bf360c;border-color:#e65100}
+.calendar-day.holiday:hover{background:#ffcc80}
+.calendar-day.holiday-worked{background:#d4f5d8;color:#1b5e20;border-color:#e65100;border-style:dashed}
+.calendar-day.today.holiday{background:#ffab91;color:#bf360c}
 .calendar-day.has-data::after{content:'✓';position:absolute;bottom:2px;font-size:9px;font-weight:900;color:#2e7d32}
-.calendar-day.today.has-data::after{color:#b71c1c}
+.calendar-day.holiday::after{content:'🏖';position:absolute;bottom:1px;font-size:9px}
+.calendar-day.holiday.has-data::after{content:'🏖✓';font-size:8px;color:#bf360c}
 .calendar-day.empty{background:transparent;cursor:default;pointer-events:none}
 .calendar-close,.stats-close,.settings-close{width:100%;height:40px;margin-top:12px;background:#eceff1;color:#555;border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
 .calendar-close:hover,.stats-close:hover,.settings-close:hover{background:#dfe4e7}
-.calendar-legend{display:flex;justify-content:center;gap:12px;margin-top:12px;font-size:10px;color:#666;flex-wrap:wrap}
+.calendar-legend{display:flex;justify-content:center;gap:10px;margin-top:12px;font-size:10px;color:#666;flex-wrap:wrap}
 .calendar-legend span::before{content:'';display:inline-block;width:10px;height:10px;border-radius:3px;margin-left:4px;vertical-align:middle;border:1px solid rgba(0,0,0,.1)}
 .calendar-legend .lg-today::before{background:#ffcdd2}
 .calendar-legend .lg-data::before{background:#d4f5d8}
 .calendar-legend .lg-empty::before{background:#eceff1}
 .calendar-legend .lg-future::before{background:#e3f2fd}
+.calendar-legend .lg-holiday::before{background:#ffe0b2;border-color:#e65100}
 .stats-title,.settings-title{font-size:17px;font-weight:700;color:#1a3a8f;text-align:center;margin-bottom:16px}
 .stats-label,.settings-label{font-size:12px;font-weight:700;color:#555;margin-bottom:6px;margin-top:12px}
 .stats-select{width:100%;height:42px;border:2px solid #1565c0;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;color:#1565c0;background:#f5f9ff;outline:none;padding:0 10px;cursor:pointer}
@@ -174,7 +160,158 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .online-dot.off{background:#d32f2f}
 .settings-note{font-size:11px;color:#888;margin-top:4px;line-height:1.5}
 .settings-disabled{opacity:.5;pointer-events:none}
-
+.settings-tabs{display:flex;gap:4px;margin-bottom:14px;flex-wrap:wrap;border-bottom:2px solid #eceff1;padding-bottom:0}
+.settings-tab{padding:8px 12px;background:transparent;border:none;border-bottom:3px solid transparent;font-family:inherit;font-size:12px;font-weight:700;color:#666;cursor:pointer;transition:all .15s;margin-bottom:-2px}
+.settings-tab:hover{color:#1565c0}
+.settings-tab.active{color:#1565c0;border-bottom-color:#1565c0}
+.settings-panel{display:none}
+.settings-panel.active{display:block}
+.loan-section{margin-top:8px;padding:12px;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:10px}
+.loan-section-title{font-size:13px;font-weight:700;color:#1b5e20;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.loan-summary{padding:10px;background:#fff;border-radius:8px;margin-bottom:10px;border-right:3px solid #2e7d32}
+.loan-summary-row{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#333;padding:3px 0}
+.loan-summary-row .lbl{color:#666}
+.loan-summary-row .val{color:#1b5e20}
+.loan-summary-row.net{border-top:1px dashed #a5d6a7;margin-top:5px;padding-top:6px;font-size:13px}
+.loan-summary-row.net .val{color:#1a3a8f}
+.loan-add-btn{width:100%;height:38px;border:none;border-radius:8px;background:#2e7d32;color:#fff;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:10px}
+.loan-add-btn:hover{background:#1b5e20}
+.loan-tabs{display:flex;gap:4px;margin-bottom:8px}
+.loan-tab{flex:1;height:32px;border:1.5px solid #a5d6a7;background:#fff;color:#1b5e20;font-family:inherit;font-size:11px;font-weight:700;border-radius:6px;cursor:pointer}
+.loan-tab.active{background:#2e7d32;color:#fff;border-color:#2e7d32}
+.loan-list{max-height:240px;overflow-y:auto;border:1px solid #c8e6c9;border-radius:6px;background:#fff}
+.loan-list:empty::after{content:'هیچ قرضی ثبت نشده';display:block;padding:16px;text-align:center;font-size:11px;color:#999}
+.loan-item{padding:10px;border-bottom:1px dashed #c8e6c9;font-size:12px}
+.loan-item:last-child{border-bottom:none}
+.loan-item-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.loan-item-party{font-weight:700;color:#1b5e20;font-size:13px}
+.loan-item-amount{font-weight:700;color:#bf360c;font-size:12px}
+.loan-item-meta{color:#888;font-size:10px;margin-bottom:6px}
+.loan-item-actions{display:flex;gap:5px}
+.loan-item-btn{flex:1;height:28px;border:none;border-radius:5px;font-family:inherit;font-size:10px;font-weight:700;cursor:pointer}
+.loan-item-btn.settle{background:#1976d2;color:#fff}
+.loan-item-btn.settle:hover{background:#0d47a1}
+.loan-item-btn.delete{background:#ef5350;color:#fff}
+.loan-item-btn.delete:hover{background:#c62828}
+.loan-form-box{background:#fff;width:100%;max-width:420px;border-radius:12px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.35);position:relative;max-height:90vh;overflow-y:auto}
+.loan-form-title{font-size:16px;font-weight:700;color:#1b5e20;text-align:center;margin-bottom:14px}
+.loan-form-label{font-size:12px;font-weight:700;color:#555;margin-bottom:5px;margin-top:10px}
+.loan-form-input{width:100%;height:40px;border:2px solid #2e7d32;border-radius:8px;font-family:inherit;font-size:14px;font-weight:700;color:#1b5e20;background:#f1f8e9;outline:none;padding:0 10px;text-align:center}
+.loan-form-input:focus{border-color:#1b5e20;background:#e8f5e9}
+.loan-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:5px}
+.loan-type-btn{padding:10px 4px;border:2px solid #c8e6c9;background:#fff;color:#555;font-family:inherit;font-size:11px;font-weight:700;border-radius:8px;cursor:pointer;transition:all .15s}
+.loan-type-btn:hover{background:#f1f8e9}
+.loan-type-btn.active{background:#2e7d32;color:#fff;border-color:#2e7d32}
+.loan-type-btn.active.take{background:#c62828;border-color:#c62828}
+.loan-type-btn.active.settle-give{background:#1976d2;border-color:#1976d2}
+.loan-type-btn.active.settle-take{background:#f57c00;border-color:#f57c00}
+.loan-info-box{background:#fff8e1;border:1px solid #ffcc80;border-radius:8px;padding:10px;margin-top:12px;font-size:11px;color:#6d4c41;line-height:1.7}
+.loan-info-box strong{color:#bf360c}
+.loan-form-buttons{display:flex;gap:8px;margin-top:16px}
+.loan-form-btn{flex:1;height:42px;border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.loan-form-btn-cancel{background:#eceff1;color:#555}
+.loan-form-btn-cancel:hover{background:#dfe4e7}
+.loan-form-btn-submit{background:#2e7d32;color:#fff}
+.loan-form-btn-submit:hover{background:#1b5e20}
+.loan-form-btn-submit:disabled{opacity:.5;cursor:not-allowed}
+.factory-section{margin-top:8px;padding:12px;background:#e3f2fd;border:1px solid #90caf9;border-radius:10px}
+.factory-section-title{font-size:13px;font-weight:700;color:#0d47a1;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.factory-list{max-height:220px;overflow-y:auto;border:1px solid #90caf9;border-radius:6px;background:#fff;margin-bottom:10px}
+.factory-list:empty::after{content:'هیچ آردی در کارخانه نیست';display:block;padding:16px;text-align:center;font-size:11px;color:#999}
+.factory-item{padding:10px;border-bottom:1px dashed #90caf9;font-size:12px}
+.factory-item:last-child{border-bottom:none}
+.factory-item-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.factory-item-name{font-weight:700;color:#0d47a1;font-size:13px}
+.factory-item-amount{font-weight:700;color:#bf360c;font-size:12px}
+.factory-item-meta{color:#666;font-size:10px;margin-bottom:6px;line-height:1.6}
+.factory-item-actions{display:flex;gap:5px}
+.factory-item-btn{flex:1;height:28px;border:none;border-radius:5px;font-family:inherit;font-size:10px;font-weight:700;cursor:pointer}
+.factory-item-btn.transfer{background:#1976d2;color:#fff}
+.factory-item-btn.transfer:hover{background:#0d47a1}
+.factory-item-btn.delete{background:#ef5350;color:#fff}
+.factory-item-btn.delete:hover{background:#c62828}
+.factory-add-btn{width:100%;height:38px;border:none;border-radius:8px;background:#1565c0;color:#fff;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:10px}
+.factory-add-btn:hover{background:#0d47a1}
+.quota-section{margin-top:8px;padding:12px;background:#f3e5f5;border:1px solid #ce93d8;border-radius:10px}
+.quota-section-title{font-size:13px;font-weight:700;color:#6a1b9a;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.quota-info-box{background:#fff;border-radius:8px;padding:12px;font-size:12px;color:#4a148c;line-height:1.9;margin-bottom:10px;border-right:3px solid #6a1b9a}
+.quota-info-box strong{color:#6a1b9a}
+.quota-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed #ce93d8}
+.quota-row:last-child{border-bottom:none}
+.quota-row .lbl{color:#666;font-weight:700}
+.quota-row .val{color:#6a1b9a;font-weight:700}
+.vacation-section{margin-top:8px;padding:12px;background:#fff3e0;border:1px solid #ffcc80;border-radius:10px}
+.vacation-section-title{font-size:13px;font-weight:700;color:#bf360c;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.vacation-list{max-height:150px;overflow-y:auto;border:1px solid #ffcc80;border-radius:6px;background:#fff;margin-bottom:10px}
+.vacation-list:empty::after{content:'هیچ مرخصی ثبت نشده';display:block;padding:12px;text-align:center;font-size:11px;color:#999}
+.vacation-item{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;font-size:12px;border-bottom:1px dashed #ffcc80;color:#4e342e;font-weight:700}
+.vacation-item:last-child{border-bottom:none}
+.vacation-item .del-btn{background:#d32f2f;color:#fff;border:none;border-radius:5px;padding:4px 8px;font-family:inherit;font-size:10px;font-weight:700;cursor:pointer}
+.vacation-item .del-btn:hover{background:#b71c1c}
+.vacation-add-row{display:flex;gap:5px;align-items:center}
+.vacation-date-btn{flex:1;height:36px;border:2px solid #e65100;border-radius:8px;background:#fff;font-family:inherit;font-size:11px;font-weight:700;color:#bf360c;cursor:pointer;padding:0 5px}
+.vacation-date-btn:hover,.vacation-date-btn.has-value{background:#ffe0b2}
+.vacation-add-btn{height:36px;padding:0 12px;border:none;border-radius:8px;background:#e65100;color:#fff;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer}
+.vacation-add-btn:hover{background:#bf360c}
+.vacation-add-btn:disabled{opacity:.4;cursor:not-allowed}
+.vacation-sep{font-size:12px;color:#e65100;font-weight:900;padding:0 2px}
+.reminder-panel{position:fixed;bottom:0;right:0;left:0;display:none;flex-direction:column;background:#2e7d32;color:#fff;padding:16px 20px 18px;box-shadow:0 -4px 20px rgba(0,0,0,.3);z-index:900;transition:all .3s ease-out;font-family:'Vazirmatn',Tahoma,sans-serif}
+.reminder-panel.show{display:flex}
+.reminder-panel .r-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.reminder-panel .r-title{font-size:16px;font-weight:700;line-height:1.4}
+.reminder-panel .r-badges{display:flex;gap:6px;flex-wrap:wrap}
+.reminder-panel .r-badge{background:rgba(255,255,255,.2);padding:3px 8px;border-radius:12px;font-size:11px;font-weight:700}
+.reminder-panel .r-text{font-size:13px;line-height:1.7;margin-bottom:10px;flex:1}
+.reminder-panel .r-actions{display:flex;gap:8px;flex-wrap:wrap}
+.reminder-panel .r-btn{padding:9px 16px;border:none;border-radius:8px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;background:#fff;color:#2e7d32}
+.reminder-panel .r-btn:hover{background:#f5f5f5}
+.reminder-panel .r-btn.buy{background:#f9a825;color:#fff}
+.reminder-panel .r-btn.buy:hover{background:#f57f17}
+.reminder-panel .r-close{position:absolute;top:8px;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.25);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:Tahoma,sans-serif;line-height:1;transition:background .15s}
+.reminder-panel .r-close:hover:not(:disabled){background:rgba(255,255,255,.4)}
+.reminder-panel .r-close.used{background:#555;color:#999;cursor:default}
+.reminder-panel .r-close.x-r{right:10px}
+.reminder-panel .r-close.x-l{left:10px}
+.reminder-panel .r-close.x-rt{right:10px;top:36px}
+.reminder-panel .r-close.x-lt{left:10px;top:36px}
+.reminder-panel.level-1{background:#2e7d32}
+.reminder-panel.level-2{background:#7cb342}
+.reminder-panel.level-3{background:#fdd835;color:#5d4037}
+.reminder-panel.level-3 .r-btn{background:#5d4037;color:#fff}
+.reminder-panel.level-3 .r-btn.buy{background:#e65100;color:#fff}
+.reminder-panel.level-3 .r-close{background:rgba(93,64,55,.25);color:#5d4037}
+.reminder-panel.level-4{background:#f9a825;color:#3e2723}
+.reminder-panel.level-4 .r-btn{background:#3e2723;color:#fff}
+.reminder-panel.level-4 .r-btn.buy{background:#c62828;color:#fff}
+.reminder-panel.level-4 .r-close{background:rgba(62,39,35,.25);color:#3e2723}
+.reminder-panel.level-5{background:#ef6c00;color:#fff}
+.reminder-panel.level-5 .r-btn{background:#fff;color:#ef6c00}
+.reminder-panel.level-5 .r-btn.buy{background:#b71c1c;color:#fff}
+.reminder-panel.level-6{background:#e53935;color:#fff}
+.reminder-panel.level-6 .r-btn{background:#fff;color:#e53935}
+.reminder-panel.level-6 .r-btn.buy{background:#4a148c;color:#fff}
+.reminder-panel.level-7{background:#b71c1c;color:#fff}
+.reminder-panel.level-7 .r-btn{background:#fff;color:#b71c1c}
+.reminder-panel.level-7 .r-btn.buy{background:#4a148c;color:#fff}
+.calc-toggle{position:fixed;bottom:20px;left:20px;width:46px;height:46px;border-radius:50%;background:#2c3e50;color:#fff;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.35);z-index:999;display:flex;align-items:center;justify-content:center;border:2px solid #fdfaf2;padding:0;font-family:'Vazirmatn',Tahoma,sans-serif;transition:transform 0.15s, background 0.15s}
+.calc-toggle:hover{background:#1a2733}
+.calc-toggle:active{transform:scale(0.94)}
+.calc-toggle.open{background:#b3261e}
+.calc-toggle.open:hover{background:#8c1c16}
+.calc-panel{position:fixed;bottom:76px;left:20px;width:min(320px,52vw);background:#fdfaf2;border:2px solid #2c3e50;border-radius:10px;padding:8px;box-shadow:0 8px 24px rgba(0,0,0,0.4);z-index:998;display:none;font-family:'Vazirmatn',Tahoma,sans-serif}
+.calc-panel.open{display:block;animation:calcIn 0.15s ease-out}
+@keyframes calcIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.calc-display{background:#fff;border:1.5px solid #2c3e50;border-radius:6px;padding:6px 10px;font-size:18px;text-align:left;direction:ltr;min-height:36px;line-height:24px;margin-bottom:6px;color:#1a2733;font-weight:700;overflow-x:auto;white-space:nowrap}
+.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.calc-btn{border:1px solid #2c3e50;background:#fff;color:#1a2733;font-family:'Vazirmatn',Tahoma,sans-serif;font-size:15px;font-weight:700;padding:8px 0;border-radius:5px;cursor:pointer;transition:background 0.12s, transform 0.08s;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+.calc-btn:hover{background:#e8eef5}
+.calc-btn:active{transform:scale(0.94);background:#d4e0ef}
+.calc-btn.op{background:#2c3e50;color:#fff;font-size:16px}
+.calc-btn.op:hover{background:#1a2733}
+.calc-btn.eq{background:#b3261e;color:#fff;font-size:17px}
+.calc-btn.eq:hover{background:#8c1c16}
+.calc-btn.clr{background:#f0c14b;color:#1a2733;font-size:14px}
+.calc-btn.clr:hover{background:#e0b040}
 @media (max-width: 700px) {
   body { padding: 3px; }
   .page-wrapper { max-width: 100%; height: calc(100dvh - 6px); aspect-ratio: auto; }
@@ -186,7 +323,6 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
   .calc-box::placeholder { font-size: 9px !important; }
   .btn { font-size: 13px; }
   .btn-save { font-size: 20px; }
-  .btn-long { font-size: 11px; }
   .today-date { font-size: 10px; line-height: 1.15; white-space: normal; word-break: break-word; padding: 2px 4px; border-width: 1px; }
   .label { font-size: 14px; }
   .line-number { font-size: 12px; }
@@ -195,120 +331,12 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
   .plus-sign { font-size: 18px; }
   .day-nav-btn { height: 22px; font-size: 12px; }
   .day-nav-btn.day-today { font-size: 13px; }
-}
-
-.calc-toggle{
-  position:fixed;
-  bottom:20px;
-  left:20px;
-  width:46px;
-  height:46px;
-  border-radius:50%;
-  background:#2c3e50;
-  color:#fff;
-  font-size:20px;
-  cursor:pointer;
-  box-shadow:0 4px 12px rgba(0,0,0,0.35);
-  z-index:999;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border:2px solid #fdfaf2;
-  padding:0;
-  font-family:'Vazirmatn',Tahoma,sans-serif;
-  transition:transform 0.15s, background 0.15s;
-}
-.calc-toggle:hover{background:#1a2733}
-.calc-toggle:active{transform:scale(0.94)}
-.calc-toggle.open{background:#b3261e}
-.calc-toggle.open:hover{background:#8c1c16}
-
-.calc-panel{
-  position:fixed;
-  bottom:76px;
-  left:20px;
-  width:min(320px,52vw);
-  background:#fdfaf2;
-  border:2px solid #2c3e50;
-  border-radius:10px;
-  padding:8px;
-  box-shadow:0 8px 24px rgba(0,0,0,0.4);
-  z-index:998;
-  display:none;
-  font-family:'Vazirmatn',Tahoma,sans-serif;
-}
-.calc-panel.open{display:block;animation:calcIn 0.15s ease-out}
-@keyframes calcIn{
-  from{opacity:0;transform:translateY(8px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-.calc-display{
-  background:#fff;
-  border:1.5px solid #2c3e50;
-  border-radius:6px;
-  padding:6px 10px;
-  font-size:18px;
-  text-align:left;
-  direction:ltr;
-  min-height:36px;
-  line-height:24px;
-  margin-bottom:6px;
-  color:#1a2733;
-  font-weight:700;
-  overflow-x:auto;
-  white-space:nowrap;
-}
-
-.calc-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:4px;
-}
-
-.calc-btn{
-  border:1px solid #2c3e50;
-  background:#fff;
-  color:#1a2733;
-  font-family:'Vazirmatn',Tahoma,sans-serif;
-  font-size:15px;
-  font-weight:700;
-  padding:8px 0;
-  border-radius:5px;
-  cursor:pointer;
-  transition:background 0.12s, transform 0.08s;
-  user-select:none;
-  -webkit-user-select:none;
-  -webkit-tap-highlight-color:transparent;
-}
-.calc-btn:hover{background:#e8eef5}
-.calc-btn:active{transform:scale(0.94);background:#d4e0ef}
-
-.calc-btn.op{
-  background:#2c3e50;
-  color:#fff;
-  font-size:16px;
-}
-.calc-btn.op:hover{background:#1a2733}
-.calc-btn.op:active{background:#0f1821}
-
-.calc-btn.eq{
-  background:#b3261e;
-  color:#fff;
-  font-size:17px;
-}
-.calc-btn.eq:hover{background:#8c1c16}
-
-.calc-btn.clr{
-  background:#f0c14b;
-  color:#1a2733;
-  font-size:14px;
-}
-.calc-btn.clr:hover{background:#e0b040}
-
-@media (max-width: 700px) {
+  .save-toast { font-size: 13px; padding: 10px 14px; }
+  .holiday-banner { font-size: 12px; height: 24px; }
   .calc-panel { width: min(280px, 60vw); }
   .calc-toggle { width: 42px; height: 42px; font-size: 18px; }
+  .reminder-panel .r-title { font-size: 15px; }
+  .reminder-panel .r-text { font-size: 12px; }
 }
 </style>
 </head>
@@ -328,16 +356,15 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
       <div class="today-date" id="todayDate">📅 شنبه ۱۴۰۴/۰۸/۱۲</div>
       <div class="content" id="content"></div>
       <input type="file" id="excelImport" accept=".xlsx,.xls,.csv" style="display:none">
-
-      <!-- ===== سه دکمه ناوبری روز (زیر خط ۲۰) ===== -->
       <button class="day-nav-btn day-prev" id="btnDayPrev" title="روز قبل">→</button>
       <button class="day-nav-btn day-today" id="btnToday" title="امروز">🏠</button>
       <button class="day-nav-btn day-next" id="btnDayNext" title="روز بعد">←</button>
-
+      <div class="holiday-banner" id="holidayBanner">🏖 این روز تعطیل است</div>
+      <div class="save-toast" id="saveToast"></div>
     </div>
   </div>
 </div>
-
+<!-- ========== دیالوگ پرسش‌های روزانه ========== -->
 <div class="modal dialog-overlay" id="dialogOverlay">
   <div class="dialog-box">
     <button class="dialog-close" id="dialogClose">✕</button>
@@ -352,6 +379,7 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
   </div>
 </div>
 
+<!-- ========== تقویم اصلی ========== -->
 <div class="modal calendar-modal" id="calendarModal">
   <div class="calendar-box">
     <div class="calendar-header">
@@ -368,12 +396,17 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
     <div class="calendar-weekdays"><div>ش</div><div>ی</div><div>د</div><div>س</div><div>چ</div><div>پ</div><div>ج</div></div>
     <div class="calendar-days" id="calDays"></div>
     <div class="calendar-legend">
-      <span class="lg-today">امروز</span><span class="lg-data">دارای اطلاعات</span><span class="lg-empty">بدون اطلاعات</span><span class="lg-future">آینده</span>
+      <span class="lg-today">امروز</span>
+      <span class="lg-data">دارای اطلاعات</span>
+      <span class="lg-empty">بدون اطلاعات</span>
+      <span class="lg-holiday">تعطیل</span>
+      <span class="lg-future">آینده</span>
     </div>
     <button class="calendar-close" id="calClose">بستن</button>
   </div>
 </div>
 
+<!-- ========== آمار ========== -->
 <div class="modal stats-modal" id="statsModal">
   <div class="stats-box">
     <div class="stats-title">📊 آمار و مجموع</div>
@@ -397,7 +430,7 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
       <option value="backup-card">مبلغ کارتخوان زاپاس</option>
       <option value="traveller">مبلغ تراول</option>
       <option value="bag-count">تعداد بسته‌های اردشیر</option>
-      <option value="flour-stock">موجودی آرد</option>
+      <option value="flour-stock">موجودی آرد مغازه</option>
       <option value="cash-stock">موجودی نقدی دخل</option>
     </select>
     <div class="stats-label">از تاریخ:</div>
@@ -416,6 +449,7 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
   </div>
 </div>
 
+<!-- ========== تقویم کوچک (انتخاب تاریخ) ========== -->
 <div class="modal mini-calendar-overlay" id="miniCalendarOverlay">
   <div class="mini-calendar-box">
     <div class="calendar-header">
@@ -435,41 +469,202 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
   </div>
 </div>
 
+<!-- ========== تنظیمات ========== -->
 <div class="modal settings-modal" id="settingsModal">
   <div class="settings-box">
     <button class="dialog-close" id="settingsCloseX">✕</button>
     <div class="settings-title">⚙️ تنظیمات</div>
-    <div class="settings-label">🌐 پشتیبان‌گیری ابری (JSONBin.io)</div>
-    <div class="settings-label" style="margin-top:8px">API Key (Master Key):</div>
-    <input type="password" class="settings-input" id="cloudApiKey" placeholder="$2a$10$...">
-    <div class="settings-label">Bin ID:</div>
-    <input type="text" class="settings-input" id="cloudBinId" placeholder="65a1b2c3...">
-    <label class="settings-checkbox">
-      <input type="checkbox" id="cloudAutoSync">
-      <span>ذخیره خودکار در ابر</span>
-    </label>
-    <div class="cloud-status warn" id="cloudStatus">
-      وضعیت: <span id="cloudStatusText">تنظیم نشده</span>
-      <span class="online-dot off" id="onlineDot"></span>
+
+    <div class="settings-tabs">
+      <button class="settings-tab active" data-tab="cloud">☁️ ابری</button>
+      <button class="settings-tab" data-tab="factory">🏭 کارخانه</button>
+      <button class="settings-tab" data-tab="quota">📊 سهمیه</button>
+      <button class="settings-tab" data-tab="loan">📦 قرض آرد</button>
+      <button class="settings-tab" data-tab="vacation">🌴 مرخصی</button>
+      <button class="settings-tab" data-tab="file">📁 فایل</button>
     </div>
-    <div class="cloud-buttons">
-      <button class="cloud-btn cloud-btn-push" id="cloudPushBtn">📤 ارسال به ابر</button>
-      <button class="cloud-btn cloud-btn-pull" id="cloudPullBtn">📥 دریافت از ابر</button>
-      <button class="cloud-btn cloud-btn-full" id="cloudTestBtn">🔍 تست اتصال</button>
-    </div>
-    <div class="settings-label" style="margin-top:20px">📁 فایل پشتیبان محلی (Excel)</div>
-    <div id="fileSection">
-      <div class="cloud-buttons">
-        <button class="cloud-btn cloud-btn-full" id="pickFileBtn" style="background:#00838f">🔗 اتصال فایل Excel</button>
-        <button class="cloud-btn cloud-btn-full" id="unlinkFileBtn" style="background:#d32f2f">🔓 قطع اتصال</button>
+
+    <!-- تب ابری -->
+    <div class="settings-panel active" data-panel="cloud">
+      <div class="settings-label">🌐 پشتیبان‌گیری ابری (JSONBin.io)</div>
+      <div class="settings-label" style="margin-top:8px">API Key (Master Key):</div>
+      <input type="password" class="settings-input" id="cloudApiKey" placeholder="$2a$10$...">
+      <div class="settings-label">Bin ID:</div>
+      <input type="text" class="settings-input" id="cloudBinId" placeholder="65a1b2c3...">
+      <label class="settings-checkbox">
+        <input type="checkbox" id="cloudAutoSync">
+        <span>ذخیره خودکار در ابر</span>
+      </label>
+      <div class="cloud-status warn" id="cloudStatus">
+        وضعیت: <span id="cloudStatusText">تنظیم نشده</span>
+        <span class="online-dot off" id="onlineDot"></span>
       </div>
-      <div class="settings-note" id="fileSectionNote"></div>
+      <div class="cloud-buttons">
+        <button class="cloud-btn cloud-btn-push" id="cloudPushBtn">📤 ارسال به ابر</button>
+        <button class="cloud-btn cloud-btn-pull" id="cloudPullBtn">📥 دریافت از ابر</button>
+        <button class="cloud-btn cloud-btn-full" id="cloudTestBtn">🔍 تست اتصال</button>
+      </div>
     </div>
+
+    <!-- تب کارخانه -->
+    <div class="settings-panel" data-panel="factory">
+      <div class="factory-section">
+        <div class="factory-section-title">🏭 آرد کارخانه</div>
+        <div class="settings-note" style="margin-bottom:8px">آردی که در کارخانه خریداری شده ولی هنوز به مغازه نیومده.</div>
+        <div class="factory-list" id="factoryList"></div>
+        <button class="factory-add-btn" id="factoryAddBtn">➕ ثبت خرید از کارخانه</button>
+      </div>
+    </div>
+
+    <!-- تب سهمیه -->
+    <div class="settings-panel" data-panel="quota">
+      <div class="quota-section">
+        <div class="quota-section-title">📊 سهمیه ماهانه</div>
+        <div class="quota-info-box" id="quotaInfoBox">
+          <div class="quota-row"><span class="lbl">ماه جاری:</span><span class="val" id="quotaCurrentMonth">—</span></div>
+          <div class="quota-row"><span class="lbl">سهمیه ماه:</span><span class="val" id="quotaMonthTotal">—</span></div>
+          <div class="quota-row"><span class="lbl">سهمیه هر دوره:</span><span class="val" id="quotaPerPeriod">—</span></div>
+          <div class="quota-row"><span class="lbl">فوق‌العاده دوره ۱:</span><span class="val" id="quotaExtra1">—</span></div>
+          <div class="quota-row"><span class="lbl">فوق‌العاده دوره ۲:</span><span class="val" id="quotaExtra2">—</span></div>
+          <div class="quota-row"><span class="lbl">خرید دوره ۱:</span><span class="val" id="quotaBought1">—</span></div>
+          <div class="quota-row"><span class="lbl">خرید دوره ۲:</span><span class="val" id="quotaBought2">—</span></div>
+        </div>
+        <button class="factory-add-btn" id="quotaEditBtn">✏️ ویرایش سهمیه ماه جاری</button>
+      </div>
+    </div>
+
+    <!-- تب قرض آرد -->
+    <div class="settings-panel" data-panel="loan">
+      <div class="loan-section">
+        <div class="loan-section-title">📦 دفترچه قرض آرد</div>
+        <div class="loan-summary" id="loanSummary">
+          <div class="loan-summary-row"><span class="lbl">طلب ما از دیگران:</span><span class="val" id="loanTotalGive">۰ کیسه</span></div>
+          <div class="loan-summary-row"><span class="lbl">بدهی ما به دیگران:</span><span class="val" id="loanTotalTake">۰ کیسه</span></div>
+          <div class="loan-summary-row net"><span class="lbl">خالص:</span><span class="val" id="loanNet">۰ کیسه</span></div>
+        </div>
+        <button class="loan-add-btn" id="loanAddBtn">➕ ثبت تراکنش جدید</button>
+        <div class="loan-tabs">
+          <button class="loan-tab active" data-loan-tab="active">فعال</button>
+          <button class="loan-tab" data-loan-tab="settled">تسویه‌شده</button>
+        </div>
+        <div class="loan-list" id="loanList"></div>
+      </div>
+    </div>
+
+    <!-- تب مرخصی -->
+    <div class="settings-panel" data-panel="vacation">
+      <div class="vacation-section">
+        <div class="vacation-section-title">🌴 مرخصی‌های دستی</div>
+        <div class="settings-note" style="margin-bottom:8px">روزهای ۷ و ۲۱ هر ماه به صورت خودکار تعطیل هستند. اینجا می‌تونی مرخصی‌های دیگه رو اضافه کنی.</div>
+        <div class="vacation-list" id="vacationList"></div>
+        <div class="vacation-add-row">
+          <button class="vacation-date-btn" id="vacFromBtn">از: —</button>
+          <span class="vacation-sep">→</span>
+          <button class="vacation-date-btn" id="vacToBtn">تا: —</button>
+          <button class="vacation-add-btn" id="vacAddBtn" disabled>ثبت</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- تب فایل -->
+    <div class="settings-panel" data-panel="file">
+      <div class="settings-label">📁 فایل پشتیبان محلی (Excel)</div>
+      <div id="fileSection">
+        <div class="cloud-buttons">
+          <button class="cloud-btn cloud-btn-full" id="pickFileBtn" style="background:#00838f">🔗 اتصال فایل Excel</button>
+          <button class="cloud-btn cloud-btn-full" id="unlinkFileBtn" style="background:#d32f2f">🔓 قطع اتصال</button>
+        </div>
+        <div class="settings-note" id="fileSectionNote"></div>
+      </div>
+    </div>
+
     <button class="settings-close" id="settingsClose">بستن</button>
   </div>
 </div>
 
-<!-- ===== ماشین‌حساب شناور ===== -->
+<!-- ========== فرم قرض آرد ========== -->
+<div class="modal loan-modal" id="loanModal">
+  <div class="loan-form-box">
+    <button class="dialog-close" id="loanCloseX">✕</button>
+    <div class="loan-form-title" id="loanFormTitle">➕ ثبت تراکنش جدید</div>
+    <div class="loan-form-label">نوع عملیات:</div>
+    <div class="loan-type-grid" id="loanTypeGrid">
+      <button class="loan-type-btn" data-type="give">🟢 دادم (قرض دادم)</button>
+      <button class="loan-type-btn take" data-type="take">🔴 گرفتم (قرض گرفتم)</button>
+      <button class="loan-type-btn settle-give" data-type="settle-give">✅ پس گرفتم</button>
+      <button class="loan-type-btn settle-take" data-type="settle-take">✅ پس دادم</button>
+    </div>
+    <div class="loan-form-label">اسم طرف:</div>
+    <input type="text" class="loan-form-input" id="loanParty" placeholder="اسم طرف" style="text-align:center;font-size:14px;direction:rtl">
+    <div class="loan-form-label">تعداد (کیسه):</div>
+    <input type="text" inputmode="decimal" class="loan-form-input" id="loanAmount" placeholder="مثلاً ۲۰ یا ۲۹.۲۵">
+    <div class="loan-form-label">تاریخ:</div>
+    <button class="loan-form-input" id="loanDateBtn" style="cursor:pointer;text-align:center;font-family:inherit">—</button>
+    <div class="loan-info-box" id="loanInfoBox" style="display:none"></div>
+    <div class="loan-form-buttons">
+      <button class="loan-form-btn loan-form-btn-cancel" id="loanCancelBtn">انصراف</button>
+      <button class="loan-form-btn loan-form-btn-submit" id="loanSubmitBtn">ثبت</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== فرم کارخانه ========== -->
+<div class="modal factory-modal" id="factoryModal">
+  <div class="loan-form-box">
+    <button class="dialog-close" id="factoryCloseX">✕</button>
+    <div class="loan-form-title" style="color:#0d47a1">🏭 ثبت خرید از کارخانه</div>
+    <div class="loan-form-label">اسم کارخانه:</div>
+    <input type="text" class="loan-form-input" id="factoryName" placeholder="اسم کارخانه" style="text-align:center;font-size:14px;direction:rtl;border-color:#1565c0;color:#0d47a1;background:#e3f2fd">
+    <div class="loan-form-label">کد سفارش (اختیاری):</div>
+    <input type="text" class="loan-form-input" id="factoryOrder" placeholder="مثلاً ORD-1234" style="text-align:center;font-size:14px;direction:ltr;border-color:#1565c0;color:#0d47a1;background:#e3f2fd">
+    <div class="loan-form-label">تعداد (کیسه):</div>
+    <input type="text" inputmode="decimal" class="loan-form-input" id="factoryAmount" placeholder="مثلاً ۲۵ یا ۲۹.۲۵" style="border-color:#1565c0;color:#0d47a1;background:#e3f2fd">
+    <div class="loan-form-label">تاریخ:</div>
+    <button class="loan-form-input" id="factoryDateBtn" style="cursor:pointer;text-align:center;font-family:inherit;border-color:#1565c0;color:#0d47a1;background:#e3f2fd">—</button>
+    <div class="loan-form-buttons">
+      <button class="loan-form-btn loan-form-btn-cancel" id="factoryCancelBtn">انصراف</button>
+      <button class="loan-form-btn loan-form-btn-submit" id="factorySubmitBtn" style="background:#1565c0">ثبت خرید</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== فرم سهمیه ماهانه ========== -->
+<div class="modal quota-modal" id="quotaModal">
+  <div class="loan-form-box">
+    <button class="dialog-close" id="quotaCloseX">✕</button>
+    <div class="loan-form-title" style="color:#6a1b9a">📊 سهمیه ماهانه</div>
+    <div class="loan-info-box" id="quotaModalInfo" style="display:block;margin-bottom:12px"></div>
+    <div class="loan-form-label">سهمیه کل ماه (کیسه):</div>
+    <input type="text" inputmode="decimal" class="loan-form-input" id="quotaMonthInput" placeholder="مثلاً ۱۰۰" style="border-color:#6a1b9a;color:#4a148c;background:#f3e5f5">
+    <div class="loan-form-label">فوق‌العاده دوره ۱ (اختیاری):</div>
+    <input type="text" inputmode="decimal" class="loan-form-input" id="quotaExtra1Input" placeholder="۰" style="border-color:#6a1b9a;color:#4a148c;background:#f3e5f5">
+    <div class="loan-form-label">فوق‌العاده دوره ۲ (اختیاری):</div>
+    <input type="text" inputmode="decimal" class="loan-form-input" id="quotaExtra2Input" placeholder="۰" style="border-color:#6a1b9a;color:#4a148c;background:#f3e5f5">
+    <div class="loan-form-buttons">
+      <button class="loan-form-btn loan-form-btn-cancel" id="quotaCancelBtn">انصراف</button>
+      <button class="loan-form-btn loan-form-btn-submit" id="quotaSubmitBtn" style="background:#6a1b9a">ذخیره</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== پنل یادآوری سهمیه ========== -->
+<div class="reminder-panel" id="reminderPanel">
+  <button class="r-close x-r" id="remClose1" data-close="1">✕</button>
+  <button class="r-close x-l" id="remClose2" data-close="2" style="display:none">✕</button>
+  <button class="r-close x-rt" id="remClose3" data-close="3" style="display:none">✕</button>
+  <button class="r-close x-lt" id="remClose4" data-close="4" style="display:none">✕</button>
+  <div class="r-header">
+    <div class="r-title" id="remTitle">📢 یادآوری خرید آرد</div>
+    <div class="r-badges" id="remBadges"></div>
+  </div>
+  <div class="r-text" id="remText"></div>
+  <div class="r-actions">
+    <button class="r-btn buy" id="remBuyBtn">🛒 الان خرید می‌کنم</button>
+    <button class="r-btn" id="remLaterBtn">⏰ بعداً</button>
+  </div>
+</div>
+
+<!-- ========== ماشین‌حساب شناور ========== -->
 <button class="calc-toggle" id="calcToggle" title="ماشین‌حساب">🧮</button>
 <div class="calc-panel" id="calcPanel">
   <div class="calc-display" id="calcDisplay">۰</div>
@@ -478,62 +673,112 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
     <button class="calc-btn op" data-action="div">÷</button>
     <button class="calc-btn op" data-action="mul">×</button>
     <button class="calc-btn op" data-action="sub">−</button>
-
     <button class="calc-btn" data-num="7">۷</button>
     <button class="calc-btn" data-num="8">۸</button>
     <button class="calc-btn" data-num="9">۹</button>
     <button class="calc-btn op" data-action="add">+</button>
-
     <button class="calc-btn" data-num="4">۴</button>
     <button class="calc-btn" data-num="5">۵</button>
     <button class="calc-btn" data-num="6">۶</button>
     <button class="calc-btn" data-num="1">۱</button>
-
     <button class="calc-btn" data-num="2">۲</button>
     <button class="calc-btn" data-num="3">۳</button>
     <button class="calc-btn" data-num="0">۰</button>
     <button class="calc-btn" data-action="dot">٫</button>
-
     <button class="calc-btn eq" data-action="eq" style="grid-column:span 4">=</button>
   </div>
 </div>
 
-<script>
+
+  <script>
+/* ============================================================
+   بخش ۱: توابع تقویم شمسی
+   ============================================================ */
 function j2g(jy,jm,jd){jy+=1595;let d=-355668+(365*jy)+(~~(jy/33)*8)+~~(((jy%33)+3)/4)+jd;d+=(jm<7)?(jm-1)*31:((jm-7)*30+186);let gy=400*~~(d/146097);d%=146097;if(d>36524){gy+=100*~~(--d/36524);d%=36524;if(d>=365)d++}gy+=4*~~(d/1461);d%=1461;if(d>365){gy+=~~((d-1)/365);d=(d-1)%365}let gd=d+1;const sa=[0,31,((gy%4===0&&gy%100!==0)||(gy%400===0))?29:28,31,30,31,30,31,31,30,31,30,31];let gm=0;for(gm=0;gm<13&&gd>sa[gm];gm++)gd-=sa[gm];return{gy,gm,gd}}
 function g2j(gy,gm,gd){const m=[0,31,59,90,120,151,181,212,243,273,304,334];let jy=(gy<=1600)?0:979;gy-=(gy<=1600)?621:1600;const gy2=(gm>2)?(gy+1):gy;let d=(365*gy)+~~((gy2+3)/4)-~~((gy2+99)/100)+~~((gy2+399)/400)-80+gd+m[gm-1];jy+=33*~~(d/12053);d%=12053;jy+=4*~~(d/1461);d%=1461;if(d>365){jy+=~~((d-1)/365);d=(d-1)%365}const jm=(d<186)?1+~~(d/31):7+~~((d-186)/30);const jd=1+((d<186)?(d%31):((d-186)%30));return{jy,jm,jd}}
 function isLeap(jy){return(((((jy-(jy>0?474:473))%2820)+474+38)*682)%2816)<682}
 const W=['شنبه','یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه'];
 const M=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
 const faDigits='۰۱۲۳۴۵۶۷۸۹',enDigits='0123456789';
+
+/* ============================================================
+   بخش ۲: توابع اعداد فارسی
+   ============================================================ */
 function faToEn(s){if(!s)return'';return String(s).replace(/[۰-۹]/g,d=>enDigits[faDigits.indexOf(d)]).replace(/[٠-٩]/g,d=>enDigits['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]).replace(/[,،\s]/g,'')}
 function toFaDigits(s){return String(s).replace(/[0-9]/g,d=>faDigits[+d])}
 function faNum(s){return String(s).replace(/[0-9]/g,d=>faDigits[+d])}
+
+/* نمایش عدد با اعشار (حداکثر ۲ رقم) */
+function formatNumber(n){
+  if(n===null||n===undefined||isNaN(n))return'';
+  const rounded=Math.round(n*100)/100;
+  const isInt=rounded===Math.floor(rounded);
+  const str=isInt?String(Math.floor(rounded)):String(rounded);
+  return str.replace(/[0-9]/g,d=>faDigits[+d]).replace('.','٫');
+}
+/* نمایش عدد صحیح */
+function formatInt(n){
+  if(n===null||n===undefined||isNaN(n))return'';
+  return Math.floor(n).toLocaleString('fa-IR');
+}
+
+/* ============================================================
+   بخش ۳: توابع تاریخ
+   ============================================================ */
 function todayKey(){const g=new Date();const j=g2j(g.getFullYear(),g.getMonth()+1,g.getDate());return{year:j.jy,month:j.jm,day:j.jd,key:j.jy+'/'+String(j.jm).padStart(2,'0')+'/'+String(j.jd).padStart(2,'0')}}
+function keyObj(k){const[y,m,d]=k.split('/').map(Number);return{year:y,month:m,day:d,key:k}}
 function prevDay(k){const[y,m,d]=k.split('/').map(Number);const g=j2g(y,m,d);const dt=new Date(g.gy,g.gm-1,g.gd);dt.setDate(dt.getDate()-1);const j=g2j(dt.getFullYear(),dt.getMonth()+1,dt.getDate());return j.jy+'/'+String(j.jm).padStart(2,'0')+'/'+String(j.jd).padStart(2,'0')}
 function nextDay(k){const[y,m,d]=k.split('/').map(Number);const g=j2g(y,m,d);const dt=new Date(g.gy,g.gm-1,g.gd);dt.setDate(dt.getDate()+1);const j=g2j(dt.getFullYear(),dt.getMonth()+1,dt.getDate());return j.jy+'/'+String(j.jm).padStart(2,'0')+'/'+String(j.jd).padStart(2,'0')}
 function weekdayName(jy,jm,jd){const g=j2g(jy,jm,jd);const dt=new Date(g.gy,g.gm-1,g.gd);const map={6:0,0:1,1:2,2:3,3:4,4:5,5:6};return W[map[dt.getDay()]]}
 function monthLen(jy,jm){if(jm<=6)return 31;if(jm<=11)return 30;return isLeap(jy)?30:29}
 function cmpJ(a,b){if(a.jy!==b.jy)return a.jy-b.jy;if(a.jm!==b.jm)return a.jm-b.jm;return a.jd-b.jd}
-const DB_KEY='nanvaii_accounting_db_v1';
+function cmpKey(a,b){return a<b?-1:a>b?1:0}
+
+/* ============================================================
+   بخش ۴: ذخیره‌سازی اصلی
+   ============================================================ */
+const DB_KEY='nanvaii_accounting_db_v3';
+const META_KEY='nanvaii_meta_v3';
 function loadDB(){try{const r=localStorage.getItem(DB_KEY);return r?JSON.parse(r):{}}catch(e){return{}}}
 function saveDB(db){try{localStorage.setItem(DB_KEY,JSON.stringify(db))}catch(e){alert('خطا: '+e.message)}}
-function canUseFilePicker(){try{return !!(window.showSaveFilePicker && window.self === window.top)}catch(e){return false}}
+function loadMeta(){try{const r=localStorage.getItem(META_KEY);return r?JSON.parse(r):{factoryFlour:[],loans:[],quota:{},vacations:[],currentTab:'cloud'}}catch(e){return{factoryFlour:[],loans:[],quota:{},vacations:[],currentTab:'cloud'}}}
+function saveMeta(m){try{localStorage.setItem(META_KEY,JSON.stringify(m))}catch(e){}}
+
+/* ============================================================
+   بخش ۵: صفحه‌سازی
+   ============================================================ */
 const page=document.getElementById('page');
 const strip=document.getElementById('numberStrip');
 const topStrip=document.getElementById('topStrip');
 const content=document.getElementById('content');
 const H=20,V=5;
-for(let i=1;i<=H;i++){const t=(i*100/(H+1))+'%';const l=document.createElement('div');l.className='hline';l.style.top=t;page.appendChild(l);const s=document.createElement('div');s.className='strip-hline';s.style.top=t;strip.appendChild(s);const n=document.createElement('div');n.className='line-number';n.textContent=toFaDigits(String(i));n.style.top=t;n.style.right='50%';strip.appendChild(n)}
+for(let i=1;i<=H;i++){
+  const t=(i*100/(H+1))+'%';
+  const l=document.createElement('div');l.className='hline';l.style.top=t;page.appendChild(l);
+  const s=document.createElement('div');s.className='strip-hline';s.style.top=t;strip.appendChild(s);
+  const n=document.createElement('div');n.className='line-number';n.textContent=toFaDigits(String(i));n.style.top=t;n.style.right='50%';strip.appendChild(n);
+}
 const letters=['a','b','c','d','e'];const col={};
-for(let i=1;i<=V;i++){const pct=(i*100/(V+1));col[letters[i-1]]=pct;const l=document.createElement('div');l.className='vline';l.style.right=pct+'%';page.appendChild(l);const s=document.createElement('div');s.className='strip-vline';s.style.right=pct+'%';topStrip.appendChild(s);const lab=document.createElement('div');lab.className='ref-label';lab.textContent=letters[i-1];lab.style.right=pct+'%';lab.style.top='50%';topStrip.appendChild(lab)}
+for(let i=1;i<=V;i++){
+  const pct=(i*100/(V+1));col[letters[i-1]]=pct;
+  const l=document.createElement('div');l.className='vline';l.style.right=pct+'%';page.appendChild(l);
+  const s=document.createElement('div');s.className='strip-vline';s.style.right=pct+'%';topStrip.appendChild(s);
+  const lab=document.createElement('div');lab.className='ref-label';lab.textContent=letters[i-1];lab.style.right=pct+'%';lab.style.top='50%';topStrip.appendChild(lab);
+}
 const xPos=n=>(n*100/(V+1))+'%',yPos=n=>(n*100/(H+1))+'%',yM=(a,b)=>((b*100/(H+1)+a*100/(H+1))/2)+'%',xN=n=>n*100/(V+1),yN=n=>n*100/(H+1);
+
+/* خطوط ضخیم */
 const sV=document.createElement('div');sV.className='vline-strong';sV.style.right=xPos(3);sV.style.top=yPos(13);sV.style.height=(yN(20)-yN(13))+'%';page.appendChild(sV);
 const sH1=document.createElement('div');sH1.className='hline-strong';sH1.style.top=yPos(13);sH1.style.right=xPos(3);sH1.style.width=(xN(4)-xN(3))+'%';page.appendChild(sH1);
 const sH2=document.createElement('div');sH2.className='hline-strong';sH2.style.top=yPos(16);sH2.style.right=xPos(1);sH2.style.width=(xN(3)-xN(1))+'%';page.appendChild(sH2);
 const mV=document.createElement('div');mV.className='vline-medium';mV.style.right=xPos(1);mV.style.top=yPos(16);mV.style.height=(yN(19)-yN(16))+'%';page.appendChild(mV);
+
+/* محاسبه‌ی اندازه‌ها */
 const rowH=100/21,colW=100/(V+1),shrinkW=colW*0.05,shrinkH=rowH*0.05;
 const rectW=colW-2*shrinkW,rectH=rowH-2*shrinkH;
 const bigW=col['b']-2*shrinkW,bigH=2*rowH-2*shrinkH,bigRight=shrinkW,bigTop=shrinkH;
+
+/* جای‌گذاری دکمه‌ها */
 const saveBtn=document.getElementById('btnSave');
 saveBtn.style.right=(col['e']+shrinkW)+'%';
 saveBtn.style.top=bigTop+'%';
@@ -546,13 +791,29 @@ placeBtn('btnStats',   col['c']+shrinkW,0+shrinkH);
 placeBtn('btnImport',  col['c']+shrinkW,rowH+shrinkH);
 const todayDateEl=document.getElementById('todayDate');
 todayDateEl.style.top=bigTop+'%';todayDateEl.style.right=bigRight+'%';todayDateEl.style.width=bigW+'%';todayDateEl.style.height=bigH+'%';
+
+/* ============================================================
+   بخش ۶: فیلدها
+   ============================================================ */
 const F={};
-function mk(role,cls,ph,x,y,extra){const i=document.createElement('input');i.className=cls;i.type='text';i.inputMode='numeric';i.dataset.role=role;if(ph)i.placeholder=ph;if(cls.indexOf('calc-box')>=0)i.readOnly=true;i.style.right=x;i.style.top=y;if(extra)Object.assign(i.style,extra);content.appendChild(i);F[role]=i;return i}
+function mk(role,cls,ph,x,y,extra){
+  const i=document.createElement('input');
+  i.className=cls;i.type='text';i.inputMode='numeric';i.dataset.role=role;
+  if(ph)i.placeholder=ph;
+  if(cls.indexOf('calc-box')>=0)i.readOnly=true;
+  i.style.right=x;i.style.top=y;
+  if(extra)Object.assign(i.style,extra);
+  content.appendChild(i);
+  F[role]=i;
+  return i;
+}
 const lbl1=document.createElement('div');lbl1.className='label';lbl1.textContent='اردشیر';lbl1.style.right=xPos(1);lbl1.style.top=yPos(5);content.appendChild(lbl1);
 mk('bread-count','calc-box','تعداد نان اردشیر',xPos(3),yPos(5));
 mk('bag-count','field-input','تعداد بسته‌های اردشیر',xPos(5),yPos(5));
 const mX34=((xN(3)+xN(4))/2)+'%';
-['line10','line11','line12'].forEach((r,i)=>{mk(r,'field-input',['تعداد تراکنش کارتخوان اصلی','تعداد نان کارتخوان اصلی','تعداد پلاستیک کارتخوان اصلی'][i],mX34,yPos(10+i),{width:((xN(4)-xN(3))*.9)+'%'})});
+['line10','line11','line12'].forEach((r,i)=>{
+  mk(r,'field-input',['تعداد تراکنش کارتخوان اصلی','تعداد نان کارتخوان اصلی','تعداد پلاستیک کارتخوان اصلی'][i],mX34,yPos(10+i),{width:((xN(4)-xN(3))*.9)+'%'});
+});
 const cW=xN(3)-xN(2),nW=cW*.9,sW=nW*.7,lC=(xN(2)+xN(3))/2,gap=1,pW=3;
 const lE=lC-(sW/2),pC=lE-gap-(pW/2),rC=pC-(pW/2)-gap-(sW/2);
 mk('main-card','field-input narrow','مبلغ کارتخوان اصلی',lC+'%',yPos(13),{width:sW+'%'});
@@ -571,16 +832,22 @@ mk('total-bread','calc-box','تعداد خالص نان',(xN(1)/2)+'%',yPos(18))
 mk('gross-bread','calc-box','تعداد ناخالص نان',mX12,yPos(18));
 mk('per-plastic-bag','calc-box','تعداد خالص هر کیسه',(xN(1)/2)+'%',yPos(20),{width:'14%'});
 mk('gross-per-bag','calc-box','تعداد ناخالص هر کیسه',mX12,yPos(20),{width:'14%'});
-mk('flour-stock','field-input','موجودی آرد',xPos(5),yPos(13),{transform:'translate(0%,-50%)'});
+mk('flour-stock','field-input','موجودی آرد مغازه',xPos(5),yPos(13),{transform:'translate(0%,-50%)'});
 mk('cash-stock','field-input','موجودی نقدی دخل',xPos(5),yPos(19),{transform:'translate(0%,-50%)'});
+
+/* ============================================================
+   بخش ۷: توابع کمکی فیلدها
+   ============================================================ */
 function gn(i){return parseFloat(faToEn(i.value))||0}
-function sn(i,n){i.value=Math.floor(n).toLocaleString('fa-IR')}
+function sn(i,n){i.value=formatNumber(n)}
 function collect(){const d={};Object.keys(F).forEach(r=>d[r]=F[r].value||'');return d}
 function apply(d){Object.keys(F).forEach(r=>F[r].value=d[r]||'')}
 function saveDate(k){const db=loadDB();db[k]={...collect(),savedAt:new Date().toISOString()};saveDB(db);return k}
 function loadDate(k){const db=loadDB();if(db[k]){apply(db[k]);return true}return false}
 const REQ=['bag-count','line10','line11','line12','main-card','backup-card','traveller','flour-stock','cash-stock'];
 function checkEmpty(){let c=0;REQ.forEach(r=>{const i=F[r],e=!i.value||i.value.trim()==='';if(e){i.classList.add('empty-warning');c++}else i.classList.remove('empty-warning')});return c}
+
+/* فارسی‌سازی ورودی‌ها + محاسبه‌ی مجدد */
 REQ.forEach(r=>{
   F[r].addEventListener('input',()=>{
     if(F[r].value.trim()!=='')F[r].classList.remove('empty-warning');
@@ -595,105 +862,1214 @@ REQ.forEach(r=>{
   F[r].addEventListener('blur',()=>{calc();checkEmpty()});
 });
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){calc();checkEmpty()}});
+
+/* ============================================================
+   بخش ۸: دیالوگ پرسش‌های روزانه
+   ============================================================ */
 const oV=document.getElementById('dialogOverlay'),dI=document.getElementById('dialogInput'),dQ=document.getElementById('dialogQuestion'),dC=document.getElementById('dialogCounter'),bN=document.getElementById('dialogNext'),bP=document.getElementById('dialogPrev'),bS=document.getElementById('dialogSkip'),bX=document.getElementById('dialogClose');
-const Q=[{text:'تعداد بسته‌های اردشیر:',role:'bag-count'},{text:'تعداد تراکنش کارتخوان اصلی:',role:'line10'},{text:'تعداد نان کارتخوان اصلی:',role:'line11'},{text:'تعداد پلاستیک کارتخوان اصلی:',role:'line12'},{text:'مبلغ کارتخوان اصلی:',role:'main-card'},{text:'مبلغ کارتخوان زاپاس:',role:'backup-card'},{text:'مبلغ تراول‌ها:',role:'traveller'},{text:'تعداد کیسه‌های آرد موجود:',role:'flour-stock'},{text:'مبلغ نقدی موجود در دخل:',role:'cash-stock'}];
+const Q=[
+  {text:'تعداد بسته‌های اردشیر:',role:'bag-count'},
+  {text:'تعداد تراکنش کارتخوان اصلی:',role:'line10'},
+  {text:'تعداد نان کارتخوان اصلی:',role:'line11'},
+  {text:'تعداد پلاستیک کارتخوان اصلی:',role:'line12'},
+  {text:'مبلغ کارتخوان اصلی:',role:'main-card'},
+  {text:'مبلغ کارتخوان زاپاس:',role:'backup-card'},
+  {text:'مبلغ تراول‌ها:',role:'traveller'},
+  {text:'تعداد کیسه‌های آرد موجود در مغازه:',role:'flour-stock'},
+  {text:'مبلغ نقدی موجود در دخل:',role:'cash-stock'}
+];
 let dQ1=[],sQ=[],curDate=null;
-function showDlg(){if(dQ1.length===0){oV.classList.remove('active');if(curDate){saveDate(curDate);curDate=null}calc();checkEmpty();return}const q=dQ1[0],done=Q.length-dQ1.length;dC.textContent=(done+1).toLocaleString('fa-IR')+' از '+Q.length.toLocaleString('fa-IR')+(sQ.length>0?' ('+sQ.length.toLocaleString('fa-IR')+' لغو)':'');dQ.textContent=q.text;dI.value=F[q.role].value||'';bP.disabled=(done===0);bN.textContent=(dQ1.length===1&&sQ.length===0)?'✓ پایان':'بعدی →';oV.classList.add('active');setTimeout(()=>{dI.focus();dI.select()},50)}
-function goNext(){const q=dQ1[0];F[q.role].value=toFaDigits(dI.value.trim());dQ1.shift();if(dQ1.length===0&&sQ.length>0){dQ1=sQ.slice();sQ=[]}showDlg()}
-function goSkip(){const q=dQ1.shift();sQ.push(q);if(dQ1.length===0&&sQ.length>0){dQ1=sQ.slice();sQ=[]}showDlg()}
-function closeDialog(){if(dQ1.length>0){const q=dQ1[0];if(dI.value.trim()!=='')F[q.role].value=toFaDigits(dI.value.trim())}oV.classList.remove('active');dQ1=[];sQ=[];if(curDate){saveDate(curDate);curDate=null}calc();checkEmpty()}
-bN.addEventListener('click',goNext);bS.addEventListener('click',goSkip);bP.addEventListener('click',()=>alert('برای ویرایش از روی فیلد قرمز کلیک کن'));bX.addEventListener('click',closeDialog);
-dI.addEventListener('input',()=>{const val=dI.value;const nv=toFaDigits(val);if(nv!==val){const pos=dI.selectionStart;dI.value=nv;try{dI.setSelectionRange(pos,pos)}catch(e){}}});
+
+function showDlg(){
+  if(dQ1.length===0){
+    oV.classList.remove('active');
+    if(curDate){saveDate(curDate);curDate=null}
+    calc();checkEmpty();
+    return;
+  }
+  const q=dQ1[0],done=Q.length-dQ1.length;
+  dC.textContent=(done+1).toLocaleString('fa-IR')+' از '+Q.length.toLocaleString('fa-IR')+(sQ.length>0?' ('+sQ.length.toLocaleString('fa-IR')+' لغو)':'');
+  dQ.textContent=q.text;
+  dI.value=F[q.role].value||'';
+  bP.disabled=(done===0);
+  bN.textContent=(dQ1.length===1&&sQ.length===0)?'✓ پایان':'بعدی →';
+  oV.classList.add('active');
+  setTimeout(()=>{dI.focus();dI.select()},50);
+}
+function goNext(){
+  const q=dQ1[0];
+  F[q.role].value=toFaDigits(dI.value.trim());
+  dQ1.shift();
+  if(dQ1.length===0&&sQ.length>0){dQ1=sQ.slice();sQ=[]}
+  showDlg();
+}
+function goSkip(){
+  const q=dQ1.shift();sQ.push(q);
+  if(dQ1.length===0&&sQ.length>0){dQ1=sQ.slice();sQ=[]}
+  showDlg();
+}
+function closeDialog(){
+  if(dQ1.length>0){const q=dQ1[0];if(dI.value.trim()!=='')F[q.role].value=toFaDigits(dI.value.trim())}
+  oV.classList.remove('active');dQ1=[];sQ=[];
+  if(curDate){saveDate(curDate);curDate=null}
+  calc();checkEmpty();
+}
+bN.addEventListener('click',goNext);
+bS.addEventListener('click',goSkip);
+bP.addEventListener('click',()=>alert('برای ویرایش از روی فیلد قرمز کلیک کن'));
+bX.addEventListener('click',closeDialog);
+dI.addEventListener('input',()=>{
+  const val=dI.value;const nv=toFaDigits(val);
+  if(nv!==val){const pos=dI.selectionStart;dI.value=nv;try{dI.setSelectionRange(pos,pos)}catch(e){}}
+});
 dI.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();goNext()}});
-let viewedKey=null;
-function calc(){const baseKey=viewedKey||todayKey().key;const bc=gn(F['bag-count']),brc=bc*7;sn(F['bread-count'],brc);sn(F['ardeshir-amount'],brc*1.7);const db=loadDB(),yKey=prevDay(baseKey),yD=db[yKey];const tc=gn(F['cash-stock']);let cdv=0;if(yD&&yD['cash-stock']){const yc=parseFloat(faToEn(yD['cash-stock']))||0;cdv=tc-yc;sn(F['cash-diff'],cdv)}else{F['cash-diff'].value='دیروز نیست'}const tf=gn(F['flour-stock']);let fu=0;if(yD&&yD['flour-stock']){const yf=parseFloat(faToEn(yD['flour-stock']))||0;fu=yf-tf;sn(F['flour-used'],fu)}else{F['flour-used'].value='دیروز نیست'}const mc=gn(F['main-card']),bc2=gn(F['backup-card']),tr=gn(F['traveller']);const ta=mc+bc2+tr+cdv+(brc*1.7);sn(F['total-amount'],ta);const pc=gn(F['line12']),tcn=gn(F['line10']);const pp=pc+(tcn*3);sn(F['plastic-price'],pp);const bp=ta-pp;sn(F['bread-price'],bp);const nb=bp/1.7;sn(F['total-bread'],nb);const gb=ta/1.7;sn(F['gross-bread'],gb);if(fu>0){sn(F['per-plastic-bag'],nb/fu);sn(F['gross-per-bag'],gb/fu)}else{F['per-plastic-bag'].value='—';F['gross-per-bag'].value='—'}}
-const EXCEL_HEADERS=['تاریخ','تعداد بسته‌های اردشیر','تعداد نان اردشیر','تعداد تراکنش کارتخوان اصلی','تعداد نان کارتخوان اصلی','تعداد پلاستیک کارتخوان اصلی','مبلغ تراکنش کارتخوان اصلی','مبلغ تراکنش کارتخوان زاپاس','مبلغ تراول','تفاضل نقدی','مبلغ اردشیر','مبلغ کل','مبلغ پلاستیک','مبلغ خالص نان','تعداد خالص نان','تعداد ناخالص نان','آرد مصرفی','تعداد خالص هر کیسه','تعداد ناخالص هر کیسه','موجودی آرد','موجودی نقدی دخل'];
-const EXCEL_FIELDS=[null,'bag-count','bread-count','line10','line11','line12','main-card','backup-card','traveller','cash-diff','ardeshir-amount','total-amount','plastic-price','bread-price','total-bread','gross-bread','flour-used','per-plastic-bag','gross-per-bag','flour-stock','cash-stock'];
-const INPUT_FIELDS=['bag-count','line10','line11','line12','main-card','backup-card','traveller','flour-stock','cash-stock'];
-const CALC_FIELDS=[['bread-count','تعداد نان اردشیر'],['ardeshir-amount','مبلغ اردشیر'],['cash-diff','تفاضل نقدی'],['flour-used','آرد مصرفی'],['total-amount','مبلغ کل'],['plastic-price','مبلغ پلاستیک'],['bread-price','مبلغ خالص نان'],['total-bread','تعداد خالص نان'],['gross-bread','تعداد ناخالص نان'],['per-plastic-bag','تعداد خالص هر کیسه'],['gross-per-bag','تعداد ناخالص هر کیسه']];
-let backupFileHandle=null;
-async function pickBackupFile(){if(!canUseFilePicker())return false;try{backupFileHandle=await window.showSaveFilePicker({suggestedName:'nanvaii-backup.xlsx',types:[{description:'Excel',accept:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx']}}]});await saveFileHandle(backupFileHandle);updateSaveBtnStyle(true);return true}catch(e){if(e.name!=='AbortError')alert('❌ خطا: '+e.message);return false}}
-async function saveFileHandle(h){return new Promise(r=>{const req=indexedDB.open('nanvaii-handles',1);req.onupgradeneeded=e=>{e.target.result.createObjectStore('files')};req.onsuccess=e=>{const db=e.target.result;const tx=db.transaction('files','readwrite');tx.objectStore('files').put(h,'backup');tx.oncomplete=()=>r()};req.onerror=()=>r()})}
-async function loadFileHandle(){return new Promise(r=>{const req=indexedDB.open('nanvaii-handles',1);req.onupgradeneeded=e=>{e.target.result.createObjectStore('files')};req.onsuccess=e=>{const db=e.target.result;const tx=db.transaction('files','readonly');const q=tx.objectStore('files').get('backup');q.onsuccess=()=>r(q.result||null);q.onerror=()=>r(null)};req.onerror=()=>r(null)})}
-function updateSaveBtnStyle(linked){const b=document.getElementById('btnSave');if(linked){b.classList.add('linked');b.title='فایل اکسل متصل'}else{b.classList.remove('linked');b.title='ذخیره'}}
-function buildExcelBlob(){const db=loadDB();const keys=Object.keys(db).sort();const aoa=[EXCEL_HEADERS];keys.forEach(k=>{const row=[faNum(k)];for(let i=1;i<EXCEL_FIELDS.length;i++){row.push(db[k][EXCEL_FIELDS[i]]||'')}aoa.push(row)});const ws=XLSX.utils.aoa_to_sheet(aoa);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'داده‌ها');const arr=XLSX.write(wb,{bookType:'xlsx',type:'array'});return new Blob([arr],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})}
-async function saveToExcelFile(){if(!backupFileHandle)return false;try{const db=loadDB();if(Object.keys(db).length===0)return false;const blob=buildExcelBlob();const perm=await backupFileHandle.queryPermission({mode:'readwrite'});if(perm!=='granted'){const req=await backupFileHandle.requestPermission({mode:'readwrite'});if(req!=='granted')return false}const w=await backupFileHandle.createWritable();await w.write(blob);await w.close();return true}catch(e){backupFileHandle=null;updateSaveBtnStyle(false);return false}}
-function downloadExcel(){const db=loadDB();if(Object.keys(db).length===0)return false;const blob=buildExcelBlob();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='nanvaii-backup-'+todayKey().key.replace(/\//g,'-')+'.xlsx';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);return true}
-const CLOUD_KEY='nanvaii_cloud_config';
+
+/* ============================================================
+   بخش ۹: Toast ذخیره
+   ============================================================ */
+let toastTimeout=null,toastHideTimeout=null;
+function showToast(msg,type,duration){
+  const t=document.getElementById('saveToast');
+  t.innerHTML=msg;
+  t.className='save-toast show '+(type||'info');
+  // موقعیت زیر دکمه ذخیره
+  const btnRect=saveBtn.getBoundingClientRect();
+  const pageRect=page.getBoundingClientRect();
+  const relRight=pageRect.right-btnRect.right-btnRect.width/2;
+  const relTop=btnRect.bottom-pageRect.top+10;
+  t.style.right=relRight+'px';
+  t.style.top=relTop+'px';
+  if(toastTimeout)clearTimeout(toastTimeout);
+  if(toastHideTimeout)clearTimeout(toastHideTimeout);
+  const dur=duration||3000;
+  toastTimeout=setTimeout(()=>{
+    t.classList.remove('show');
+  },dur);
+}
+function hideToast(){
+  const t=document.getElementById('saveToast');
+  t.classList.remove('show');
+}
+
+/* ============================================================
+   بخش ۱۰: ذخیره‌سازی ساده
+   ============================================================ */
+function doLocalSave(){
+  const k=viewedKey||todayKey().key;
+  saveDate(k);
+  checkEmpty();
+  const[y,m,d]=k.split('/').map(Number);
+  setTopDate({year:y,month:m,day:d,key:k});
+  return true;
+}
+async function doExcelSave(){
+  const db=loadDB();
+  if(Object.keys(db).length===0)return false;
+  // اگه فایل متصل هست
+  if(backupFileHandle){
+    const ok=await saveToExcelFile();
+    if(ok)return true;
+  }
+  // دانلود
+  return downloadExcel();
+}
+async function doJsonSave(){
+  const c=loadCloud();
+  if(!c.apiKey||!c.binId){
+    showToast('⚠️ تنظیمات ابری وارد نشده','warn',3000);
+    return false;
+  }
+  if(!navigator.onLine){
+    showToast('📵 اینترنت قطع است','error',3000);
+    return false;
+  }
+  showToast('☁️ در حال ذخیره در JSON <span class="spinner"></span>','json',60000);
+  const ok=await cloudPush(true);
+  if(ok){
+    const db=loadDB();
+    showToast('✅ در JSON ذخیره شد ('+faNum(Object.keys(db).length)+' روز)','success',3000);
+  }else{
+    showToast('❌ خطا در ذخیره JSON','error',3000);
+  }
+  return ok;
+}
+
+/* ============================================================
+   بخش ۱۱: مدیریت دکمه ذخیره (تشخیص یک/دو/سه کلیک)
+   ============================================================ */
+let clickCount=0;
+let clickTimer=null;
+let lastClickTime=0;
+const CLICK_WINDOW=600; // میلی‌ثانیه
+
+saveBtn.addEventListener('click',async()=>{
+  const now=Date.now();
+  if(now-lastClickTime>CLICK_WINDOW){
+    clickCount=0;
+  }
+  clickCount++;
+  lastClickTime=now;
+  
+  if(clickTimer)clearTimeout(clickTimer);
+  
+  // تغییر رنگ دکمه بر اساس تعداد کلیک
+  saveBtn.classList.remove('click-2','click-3');
+  if(clickCount===2)saveBtn.classList.add('click-2');
+  if(clickCount>=3)saveBtn.classList.add('click-3');
+  
+  clickTimer=setTimeout(async()=>{
+    const count=clickCount;
+    clickCount=0;
+    saveBtn.classList.remove('click-2','click-3');
+    
+    if(count===1){
+      // === یک کلیک: localStorage فقط ===
+      showToast('💾 در حال ذخیره...','info',3000);
+      const startTime=Date.now();
+      doLocalSave();
+      const elapsed=Date.now()-startTime;
+      const remaining=Math.max(0,3000-elapsed);
+      // پیام حداقل ۳ ثانیه بمونه
+      if(remaining<3000){
+        setTimeout(()=>{
+          showToast('✅ در حافظه محلی ذخیره شد','success',1500);
+        },remaining);
+      }else{
+        showToast('✅ در حافظه محلی ذخیره شد','success',1500);
+      }
+    }
+    else if(count===2){
+      // === دو کلیک: localStorage + Excel ===
+      showToast('💾 در حال ذخیره در Excel...','info',3000);
+      doLocalSave();
+      const ok=await doExcelSave();
+      const db=loadDB();
+      if(ok){
+        showToast('✅ در Excel ذخیره شد ('+faNum(Object.keys(db).length)+' روز)','success',2500);
+      }else{
+        showToast('❌ خطا در ذخیره Excel','error',2500);
+      }
+    }
+    else if(count>=3){
+      // === سه کلیک: localStorage + Excel + JSON ===
+      showToast('💾 در حال ذخیره در JSON...','json',30000);
+      doLocalSave();
+      await doExcelSave();
+      await doJsonSave();
+    }
+  },CLICK_WINDOW);
+});
+
+/* ============================================================
+   بخش ۱۲: تنظیمات ابری (JSONBin)
+   ============================================================ */
+const CLOUD_KEY='nanvaii_cloud_config_v3';
 function loadCloud(){try{const r=localStorage.getItem(CLOUD_KEY);return r?JSON.parse(r):{apiKey:'',binId:'',autoSync:false}}catch(e){return{apiKey:'',binId:'',autoSync:false}}}
 function saveCloud(c){try{localStorage.setItem(CLOUD_KEY,JSON.stringify(c))}catch(e){}}
-async function cloudPush(silent){const c=loadCloud();if(!c.apiKey||!c.binId){if(!silent)alert('❌ تنظیمات ابری وارد نشده');return false}if(!navigator.onLine){if(!silent)alert('📵 اینترنت قطع است');return false}try{const db=loadDB();const r=await fetch('https://api.jsonbin.io/v3/b/'+c.binId,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':c.apiKey},body:JSON.stringify({data:db,updatedAt:new Date().toISOString()})});if(!r.ok){const t=await r.text();throw new Error('HTTP '+r.status+' - '+t.substring(0,100))}if(!silent)alert('✅ به ابر ارسال شد\n📊 '+Object.keys(db).length+' روز');return true}catch(e){if(!silent)alert('❌ خطا در ارسال:\n'+e.message);return false}}
-async function cloudPull(silent){const c=loadCloud();if(!c.apiKey||!c.binId){if(!silent)alert('❌ تنظیمات ابری وارد نشده');return null}if(!navigator.onLine){if(!silent)alert('📵 اینترنت قطع است');return null}try{const r=await fetch('https://api.jsonbin.io/v3/b/'+c.binId+'/latest',{headers:{'X-Master-Key':c.apiKey}});if(!r.ok){const t=await r.text();throw new Error('HTTP '+r.status+' - '+t.substring(0,100))}const j=await r.json();return j.record||j}catch(e){if(!silent)alert('❌ خطا در دریافت:\n'+e.message);return null}}
-async function cloudTest(){const c=loadCloud();if(!c.apiKey||!c.binId){alert('❌ ابتدا API Key و Bin ID را وارد کنید');return}if(!navigator.onLine){alert('📵 اینترنت قطع است');return}try{const r=await fetch('https://api.jsonbin.io/v3/b/'+c.binId+'/latest',{headers:{'X-Master-Key':c.apiKey}});if(r.ok){const j=await r.json();const rec=j.record||{};const days=rec.data?Object.keys(rec.data).length:Object.keys(rec).length;alert('✅ اتصال موفق\n\n📊 '+faNum(days)+' روز در ابر')}else alert('❌ خطا: HTTP '+r.status)}catch(e){alert('❌ خطا: '+e.message)}}
-function updateCloudStatus(){const c=loadCloud();const el=document.getElementById('cloudStatus');const txt=document.getElementById('cloudStatusText');const dot=document.getElementById('onlineDot');if(c.apiKey&&c.binId){el.className='cloud-status ok';txt.textContent='متصل'+(c.autoSync?' — ذخیره خودکار فعال':' — ذخیره خودکار غیرفعال')}else{el.className='cloud-status warn';txt.textContent='تنظیم نشده'}dot.className='online-dot '+(navigator.onLine?'on':'off')}
-async function syncOnStartup(){const c=loadCloud();if(!c.apiKey||!c.binId||!navigator.onLine)return;try{const remote=await cloudPull(true);if(!remote)return;const remoteDB=remote.data||remote;const remoteTime=remote.updatedAt?new Date(remote.updatedAt).getTime():0;const localDB=loadDB();const localDays=Object.keys(localDB).length;const remoteDays=Object.keys(remoteDB).length;if(remoteDays===0)return;let localLatest=0;Object.values(localDB).forEach(v=>{if(v.savedAt){const t=new Date(v.savedAt).getTime();if(t>localLatest)localLatest=t}});if(remoteTime>localLatest+60000){const want=confirm('☁️ اطلاعات ابری جدیدتر است\n\n📁 محلی: '+faNum(localDays)+' روز\n☁️ ابری: '+faNum(remoteDays)+' روز\n\nبارگذاری شود؟');if(want){saveDB(remoteDB);location.reload()}}}catch(e){}}
+
+async function cloudPush(silent){
+  const c=loadCloud();
+  if(!c.apiKey||!c.binId)return false;
+  if(!navigator.onLine)return false;
+  try{
+    const db=loadDB();
+    const meta=loadMeta();
+    const payload={data:db,meta:meta,updatedAt:new Date().toISOString()};
+    const r=await fetch('https://api.jsonbin.io/v3/b/'+c.binId,{
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Master-Key':c.apiKey},
+      body:JSON.stringify(payload)
+    });
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    return true;
+  }catch(e){
+    if(!silent)console.error(e);
+    return false;
+  }
+}
+async function cloudPull(silent){
+  const c=loadCloud();
+  if(!c.apiKey||!c.binId)return null;
+  if(!navigator.onLine)return null;
+  try{
+    const r=await fetch('https://api.jsonbin.io/v3/b/'+c.binId+'/latest',{
+      headers:{'X-Master-Key':c.apiKey}
+    });
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const j=await r.json();
+    return j.record||j;
+  }catch(e){
+    if(!silent)alert('❌ خطا در دریافت:\n'+e.message);
+    return null;
+  }
+}
+async function cloudTest(){
+  const c=loadCloud();
+  if(!c.apiKey||!c.binId){alert('❌ ابتدا API Key و Bin ID را وارد کنید');return}
+  if(!navigator.onLine){alert('📵 اینترنت قطع است');return}
+  try{
+    const r=await fetch('https://api.jsonbin.io/v3/b/'+c.binId+'/latest',{headers:{'X-Master-Key':c.apiKey}});
+    if(r.ok){
+      const j=await r.json();
+      const rec=j.record||{};
+      const days=rec.data?Object.keys(rec.data).length:0;
+      alert('✅ اتصال موفق\n\n📊 '+faNum(days)+' روز در ابر');
+    }else alert('❌ خطا: HTTP '+r.status);
+  }catch(e){alert('❌ خطا: '+e.message)}
+}
+function updateCloudStatus(){
+  const c=loadCloud();
+  const el=document.getElementById('cloudStatus');
+  const txt=document.getElementById('cloudStatusText');
+  const dot=document.getElementById('onlineDot');
+  if(c.apiKey&&c.binId){
+    el.className='cloud-status ok';
+    txt.textContent='متصل'+(c.autoSync?' — ذخیره خودکار فعال':' — ذخیره خودکار غیرفعال');
+  }else{
+    el.className='cloud-status warn';
+    txt.textContent='تنظیم نشده';
+  }
+  dot.className='online-dot '+(navigator.onLine?'on':'off');
+}
 window.addEventListener('online',updateCloudStatus);
 window.addEventListener('offline',updateCloudStatus);
-function normalizeDate(str){if(!str)return null;const en=faToEn(String(str)).replace(/[^\d]/g,'');if(en.length!==8)return null;return en.substring(0,4)+'/'+en.substring(4,6)+'/'+en.substring(6,8)}
-async function importFromExcel(file){if(typeof XLSX==='undefined'){alert('❌ کتابخانه Excel بارگذاری نشد');return}try{const buf=await file.arrayBuffer();const wb=XLSX.read(buf);const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});if(rows.length<2){alert('❌ فایل خالی');return}const headerMap={};rows[0].forEach((h,i)=>{headerMap[String(h).trim()]=i});if(headerMap['تاریخ']===undefined){alert("❌ ستون «تاریخ» پیدا نشد");return}const dayList=[];for(let r=1;r<rows.length;r++){const row=rows[r];if(!row||row.length===0)continue;const dk=normalizeDate(row[headerMap['تاریخ']]);if(!dk)continue;dayList.push({date:dk,row})}if(dayList.length===0){alert('❌ هیچ ردیف معتبری نیست');return}dayList.sort((a,b)=>a.date.localeCompare(b.date));const db=loadDB();let importedCount=0,totalMismatches=0;const allMismatches=[];for(const item of dayList){const dataObj={};for(const field of INPUT_FIELDS){const headerName=EXCEL_HEADERS[EXCEL_FIELDS.indexOf(field)];const idx=headerMap[headerName];if(idx!==undefined&&item.row[idx]!==undefined&&item.row[idx]!==''){let val=item.row[idx];if(typeof val==='number')val=val.toLocaleString('fa-IR');else val=toFaDigits(String(val).trim());dataObj[field]=val}}apply(dataObj);viewedKey=item.date;calc();const mismatches=[];for(const [role,name] of CALC_FIELDS){const idx=headerMap[name];if(idx===undefined)continue;const raw=item.row[idx];if(raw===undefined||raw===''||raw===null)continue;const en=parseFloat(faToEn(String(raw)));const cn=parseFloat(faToEn(F[role].value));if(isNaN(en)||isNaN(cn))continue;if(Math.abs(en-cn)>0.5)mismatches.push({role,name,excel:String(raw),calc:F[role].value})}if(mismatches.length>0){allMismatches.push({date:item.date,mismatches});totalMismatches+=mismatches.length}db[item.date]={...dataObj,...collect(),savedAt:new Date().toISOString()};importedCount++}saveDB(db);if(totalMismatches===0){alert('✅ ورود کامل شد\n\n📥 '+faNum(importedCount)+' روز')}else{let kept=0,fixed=0;for(const item of allMismatches){for(const m of item.mismatches){const msg='⚠️ در تاریخ '+faNum(item.date)+':\n\nفیلد: '+m.name+'\nدر اکسل: '+m.excel+'\nمحاسبه‌شده: '+m.calc+'\n\nکدام درست است؟\n\n✅ OK = عدد اکسل\n❌ Cancel = محاسبه';if(confirm(msg)){const d=loadDB();if(d[item.date]){d[item.date][m.role]=m.excel;saveDB(d)}kept++}else fixed++}}alert('✅ ورود کامل\n\n📥 '+faNum(importedCount)+' روز\n⚠️ '+faNum(totalMismatches)+' اختلاف\n✔️ حفظ: '+faNum(kept)+'\n✔️ اصلاح: '+faNum(fixed))}const t=todayKey();if(loadDate(t.key)){setTopDate(t);calc();checkEmpty()}}catch(err){alert('❌ خطا: '+err.message)}}
-function refreshAll(){const keys=Object.keys(loadDB()).sort();if(keys.length===0){alert('❌ داده‌ای وجود نداره');return}const workingDB=loadDB();let processed=0;keys.forEach(k=>{if(!workingDB[k])return;apply(workingDB[k]);viewedKey=k;calc();workingDB[k]={...workingDB[k],...collect(),savedAt:new Date().toISOString()};processed++});saveDB(workingDB);const t=todayKey();const fdb=loadDB();if(fdb[t.key])apply(fdb[t.key]);setTopDate(t);calc();checkEmpty();alert('✅ رفرش انجام شد\n📊 '+faNum(processed)+' روز محاسبه شد')}
-document.getElementById('btnSave').addEventListener('click',async()=>{const k=viewedKey||todayKey().key;saveDate(k);checkEmpty();const[y,m,d]=k.split('/').map(Number);setTopDate({year:y,month:m,day:d,key:k});const c=loadCloud();const msgs=['✅ ذخیره شد','📁 حافظه داخلی'];if(canUseFilePicker()){if(!backupFileHandle){const want=confirm('💾 ذخیره در حافظه داخلی انجام شد.\n\nآیا فایل Excel پشتیبان وصل شود؟\n\n✅ OK = بله\n❌ Cancel = فقط حافظه داخلی');if(want)await pickBackupFile()}if(backupFileHandle){const ok=await saveToExcelFile();if(ok){const db=loadDB();msgs.push('📊 Excel ('+faNum(Object.keys(db).length)+' روز)')}else msgs.push('⚠️ خطا در ذخیره Excel')}else{if(downloadExcel())msgs.push('📥 دانلود Excel')}}else{if(downloadExcel())msgs.push('📥 دانلود Excel')}if(c.apiKey&&c.binId&&c.autoSync&&navigator.onLine){const ok=await cloudPush(true);if(ok)msgs.push('☁️ ابر')}alert(msgs.join('\n'))});
-document.getElementById('btnRefresh').addEventListener('click',refreshAll);
-document.getElementById('btnImport').addEventListener('click',()=>document.getElementById('excelImport').click());
-document.getElementById('excelImport').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;importFromExcel(f);e.target.value=''});
-const settingsModal=document.getElementById('settingsModal');
-function openSettings(){const c=loadCloud();document.getElementById('cloudApiKey').value=c.apiKey||'';document.getElementById('cloudBinId').value=c.binId||'';document.getElementById('cloudAutoSync').checked=c.autoSync||false;updateCloudStatus();const fileSection=document.getElementById('fileSection');const note=document.getElementById('fileSectionNote');if(canUseFilePicker()){fileSection.classList.remove('settings-disabled');note.textContent=''}else{fileSection.classList.add('settings-disabled');note.textContent='⚠️ این بخش در محیط فعلی کار نمی‌کند.'}settingsModal.classList.add('active')}
-function closeSettings(){const c=loadCloud();c.apiKey=document.getElementById('cloudApiKey').value.trim();c.binId=document.getElementById('cloudBinId').value.trim();c.autoSync=document.getElementById('cloudAutoSync').checked;saveCloud(c);updateCloudStatus();settingsModal.classList.remove('active')}
-document.getElementById('btnSettings').addEventListener('click',openSettings);
-document.getElementById('settingsClose').addEventListener('click',closeSettings);
-document.getElementById('settingsCloseX').addEventListener('click',closeSettings);
-document.getElementById('cloudPushBtn').addEventListener('click',async()=>{const c=loadCloud();c.apiKey=document.getElementById('cloudApiKey').value.trim();c.binId=document.getElementById('cloudBinId').value.trim();saveCloud(c);await cloudPush(false)});
-document.getElementById('cloudPullBtn').addEventListener('click',async()=>{const c=loadCloud();c.apiKey=document.getElementById('cloudApiKey').value.trim();c.binId=document.getElementById('cloudBinId').value.trim();saveCloud(c);const remote=await cloudPull(false);if(!remote)return;const remoteDB=remote.data||remote;const days=Object.keys(remoteDB).length;if(days===0){alert('☁️ ابر خالی است');return}if(!confirm('☁️ دریافت از ابر\n\n📊 '+faNum(days)+' روز\n\nاطلاعات محلی جایگزین شود؟'))return;saveDB(remoteDB);alert('✅ بارگذاری شد');location.reload()});
-document.getElementById('cloudTestBtn').addEventListener('click',cloudTest);
-document.getElementById('pickFileBtn').addEventListener('click',async()=>{const ok=await pickBackupFile();if(ok){alert('✅ فایل متصل شد');closeSettings()}});
-document.getElementById('unlinkFileBtn').addEventListener('click',()=>{backupFileHandle=null;updateSaveBtnStyle(false);const req=indexedDB.open('nanvaii-handles',1);req.onsuccess=e=>{const db=e.target.result;db.transaction('files','readwrite').objectStore('files').delete('backup')};alert('✅ اتصال فایل قطع شد')});
-const calM=document.getElementById('calendarModal'),calMY=document.getElementById('calMonthYear'),calD=document.getElementById('calDays'),calMP=document.getElementById('calMonthPicker'),calYP=document.getElementById('calYearPicker');
-let vY,vM;
-function populate(ms,ys,minY,maxY){ms.innerHTML='';M.forEach((n,i)=>{const o=document.createElement('option');o.value=i+1;o.textContent=n;ms.appendChild(o)});ys.innerHTML='';for(let y=maxY;y>=minY;y--){const o=document.createElement('option');o.value=y;o.textContent=faNum(y);ys.appendChild(o)}}
-function setTopDate(j){const w=weekdayName(j.year,j.month,j.day);todayDateEl.textContent='📅 '+w+' '+faNum(j.key);viewedKey=j.key;updateDayNavButtons()}
-function openCal(){const t=todayKey();vY=t.year;vM=t.month;populate(calMP,calYP,t.year-20,t.year+10);renderCal();calM.classList.add('active')}
-function renderCal(){const t=todayKey(),db=loadDB();calMY.textContent=M[vM-1]+' '+faNum(vY);calMP.value=vM;calYP.value=vY;calD.innerHTML='';const off=W.indexOf(weekdayName(vY,vM,1));for(let i=0;i<off;i++){const e=document.createElement('div');e.className='calendar-day empty';calD.appendChild(e)}const len=monthLen(vY,vM);for(let d=1;d<=len;d++){const c=document.createElement('div');c.className='calendar-day';c.textContent=faNum(d);const k=vY+'/'+String(vM).padStart(2,'0')+'/'+String(d).padStart(2,'0');const cd={jy:vY,jm:vM,jd:d},tD={jy:t.year,jm:t.month,jd:t.day},cmp=cmpJ(cd,tD);if(cmp===0)c.classList.add('today');else if(cmp<0){if(db[k])c.classList.add('past-data');else c.classList.add('past-empty')}else c.classList.add('future');if(db[k])c.classList.add('has-data');c.addEventListener('click',()=>{if(cmp>0){alert('آینده');return}calM.classList.remove('active');setTopDate({year:vY,month:vM,day:d,key:k});if(db[k]){apply(db[k]);calc();checkEmpty()}else{apply({});REQ.forEach(r=>F[r].classList.remove('empty-warning'));curDate=k;dQ1=Q.slice();sQ=[];showDlg()}});calD.appendChild(c)}}
-document.getElementById('calPrev').addEventListener('click',()=>{vM--;if(vM<1){vM=12;vY--}renderCal()});
-document.getElementById('calNext').addEventListener('click',()=>{vM++;if(vM>12){vM=1;vY++}renderCal()});
-document.getElementById('calYearPrev').addEventListener('click',()=>{vY--;renderCal()});
-document.getElementById('calYearNext').addEventListener('click',()=>{vY++;renderCal()});
-calMP.addEventListener('change',()=>{vM=+calMP.value;renderCal()});
-calYP.addEventListener('change',()=>{vY=+calYP.value;renderCal()});
-document.getElementById('calClose').addEventListener('click',()=>calM.classList.remove('active'));
-todayDateEl.addEventListener('click',openCal);
-const stM=document.getElementById('statsModal'),stFB=document.getElementById('statsFromBtn'),stTB=document.getElementById('statsToBtn'),stR=document.getElementById('statsResult'),stSum=document.getElementById('statsSum'),stAvg=document.getElementById('statsAvg'),stDC=document.getElementById('statsDaysCount');
-let sFrom=null,sTo=null;
-document.getElementById('btnStats').addEventListener('click',()=>{const t=todayKey();sFrom=t.year+'/'+String(t.month).padStart(2,'0')+'/01';sTo=t.key;updStatsBtns();stR.classList.remove('show');stM.classList.add('active')});
-document.getElementById('statsClose').addEventListener('click',()=>stM.classList.remove('active'));
-function updStatsBtns(){if(sFrom){stFB.textContent=faNum(sFrom);stFB.classList.add('has-value')}else{stFB.textContent='— انتخاب —';stFB.classList.remove('has-value')}if(sTo){stTB.textContent=faNum(sTo);stTB.classList.add('has-value')}else{stTB.textContent='— انتخاب —';stTB.classList.remove('has-value')}}
-const miniM=document.getElementById('miniCalendarOverlay'),miniMY=document.getElementById('miniCalMonthYear'),miniD=document.getElementById('miniCalDays'),miniMP=document.getElementById('miniCalMonthPicker'),miniYP=document.getElementById('miniCalYearPicker');
-let miY,miM,miniTarget=null;
-function openMini(t){miniTarget=t;const tk=todayKey();miY=tk.year;miM=tk.month;populate(miniMP,miniYP,tk.year-20,tk.year+10);renderMini();miniM.classList.add('active')}
-function renderMini(){miniMY.textContent=M[miM-1]+' '+faNum(miY);miniMP.value=miM;miniYP.value=miY;miniD.innerHTML='';const off=W.indexOf(weekdayName(miY,miM,1));for(let i=0;i<off;i++){const e=document.createElement('div');e.className='calendar-day empty';miniD.appendChild(e)}const len=monthLen(miY,miM);for(let d=1;d<=len;d++){const c=document.createElement('div');c.className='calendar-day';c.textContent=faNum(d);c.addEventListener('click',()=>{const k=miY+'/'+String(miM).padStart(2,'0')+'/'+String(d).padStart(2,'0');if(miniTarget==='from')sFrom=k;else sTo=k;updStatsBtns();miniM.classList.remove('active')});miniD.appendChild(c)}}
-document.getElementById('miniCalPrev').addEventListener('click',()=>{miM--;if(miM<1){miM=12;miY--}renderMini()});
-document.getElementById('miniCalNext').addEventListener('click',()=>{miM++;if(miM>12){miM=1;miY++}renderMini()});
-document.getElementById('miniCalYearPrev').addEventListener('click',()=>{miY--;renderMini()});
-document.getElementById('miniCalYearNext').addEventListener('click',()=>{miY++;renderMini()});
-miniMP.addEventListener('change',()=>{miM=+miniMP.value;renderMini()});
-miniYP.addEventListener('change',()=>{miY=+miniYP.value;renderMini()});
-document.getElementById('miniCalClose').addEventListener('click',()=>miniM.classList.remove('active'));
-stFB.addEventListener('click',()=>openMini('from'));
-stTB.addEventListener('click',()=>openMini('to'));
-document.getElementById('statsCalcBtn').addEventListener('click',()=>{if(!sFrom||!sTo){alert('هر دو تاریخ رو انتخاب کن');return}const fr=document.getElementById('statsField').value;const fp=sFrom.split('/').map(Number),tp=sTo.split('/').map(Number);const fo={jy:fp[0],jm:fp[1],jd:fp[2]},to={jy:tp[0],jm:tp[1],jd:tp[2]};if(cmpJ(fo,to)>0){alert('تاریخ شروع باید قبل باشه');return}const db=loadDB();let sum=0,cnt=0;Object.keys(db).forEach(k=>{const p=k.split('/').map(Number),ko={jy:p[0],jm:p[1],jd:p[2]};if(cmpJ(ko,fo)>=0&&cmpJ(ko,to)<=0){const v=db[k][fr];if(v!==undefined&&v!==null&&v!==''){sum+=parseFloat(faToEn(v))||0;cnt++}}});const avg=cnt>0?sum/cnt:0;stSum.textContent=Math.floor(sum).toLocaleString('fa-IR');stAvg.textContent=Math.floor(avg).toLocaleString('fa-IR');stDC.textContent=faNum(cnt);stR.classList.add('show')});
-if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('service-worker.js').catch(()=>{})})}
 
-function keyToObj(k){const[y,m,d]=k.split('/').map(Number);return{year:y,month:m,day:d,key:k}}
-function goToDateKey(k){
+/* ============================================================
+   بخش ۱۳: مدیریت فایل Excel
+   ============================================================ */
+let backupFileHandle=null;
+function canUseFilePicker(){try{return !!(window.showSaveFilePicker&&window.self===window.top)}catch(e){return false}}
+async function pickBackupFile(){
+  if(!canUseFilePicker())return false;
+  try{
+    backupFileHandle=await window.showSaveFilePicker({
+      suggestedName:'nanvaii-backup.xlsx',
+      types:[{description:'Excel',accept:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx']}}]
+    });
+    await saveFileHandle(backupFileHandle);
+    updateSaveBtnStyle(true);
+    return true;
+  }catch(e){
+    if(e.name!=='AbortError')alert('❌ خطا: '+e.message);
+    return false;
+  }
+}
+async function saveFileHandle(h){
+  return new Promise(r=>{
+    const req=indexedDB.open('nanvaii-handles-v3',1);
+    req.onupgradeneeded=e=>{e.target.result.createObjectStore('files')};
+    req.onsuccess=e=>{
+      const db=e.target.result;
+      const tx=db.transaction('files','readwrite');
+      tx.objectStore('files').put(h,'backup');
+      tx.oncomplete=()=>r();
+    };
+    req.onerror=()=>r();
+  });
+}
+async function loadFileHandle(){
+  return new Promise(r=>{
+    const req=indexedDB.open('nanvaii-handles-v3',1);
+    req.onupgradeneeded=e=>{e.target.result.createObjectStore('files')};
+    req.onsuccess=e=>{
+      const db=e.target.result;
+      const tx=db.transaction('files','readonly');
+      const q=tx.objectStore('files').get('backup');
+      q.onsuccess=()=>r(q.result||null);
+      q.onerror=()=>r(null);
+    };
+    req.onerror=()=>r(null);
+  });
+}
+function updateSaveBtnStyle(linked){
+  const b=document.getElementById('btnSave');
+  if(linked){b.classList.add('linked');b.title='فایل اکسل متصل'}
+  else{b.classList.remove('linked');b.title='ذخیره'}
+}
+const EXCEL_HEADERS=['تاریخ','تعداد بسته‌های اردشیر','تعداد نان اردشیر','تعداد تراکنش کارتخوان اصلی','تعداد نان کارتخوان اصلی','تعداد پلاستیک کارتخوان اصلی','مبلغ تراکنش کارتخوان اصلی','مبلغ تراکنش کارتخوان زاپاس','مبلغ تراول','تفاضل نقدی','مبلغ اردشیر','مبلغ کل','مبلغ پلاستیک','مبلغ خالص نان','تعداد خالص نان','تعداد ناخالص نان','آرد مصرفی','تعداد خالص هر کیسه','تعداد ناخالص هر کیسه','موجودی آرد مغازه','موجودی نقدی دخل'];
+const EXCEL_FIELDS=[null,'bag-count','bread-count','line10','line11','line12','main-card','backup-card','traveller','cash-diff','ardeshir-amount','total-amount','plastic-price','bread-price','total-bread','gross-bread','flour-used','per-plastic-bag','gross-per-bag','flour-stock','cash-stock'];
+function buildExcelBlob(){
   const db=loadDB();
-  setTopDate(keyToObj(k));
-  if(db[k]){apply(db[k]);calc();checkEmpty()}
-  else{apply({});REQ.forEach(r=>F[r].classList.remove('empty-warning'));curDate=k;dQ1=Q.slice();sQ=[];showDlg()}
+  const keys=Object.keys(db).sort();
+  const aoa=[EXCEL_HEADERS];
+  keys.forEach(k=>{
+    const row=[faNum(k)];
+    for(let i=1;i<EXCEL_FIELDS.length;i++)row.push(db[k][EXCEL_FIELDS[i]]||'');
+    aoa.push(row);
+  });
+  const ws=XLSX.utils.aoa_to_sheet(aoa);
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'داده‌ها');
+  const arr=XLSX.write(wb,{bookType:'xlsx',type:'array'});
+  return new Blob([arr],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+}
+async function saveToExcelFile(){
+  if(!backupFileHandle)return false;
+  try{
+    const db=loadDB();
+    if(Object.keys(db).length===0)return false;
+    const blob=buildExcelBlob();
+    const perm=await backupFileHandle.queryPermission({mode:'readwrite'});
+    if(perm!=='granted'){
+      const req=await backupFileHandle.requestPermission({mode:'readwrite'});
+      if(req!=='granted')return false;
+    }
+    const w=await backupFileHandle.createWritable();
+    await w.write(blob);
+    await w.close();
+    return true;
+  }catch(e){
+    backupFileHandle=null;updateSaveBtnStyle(false);
+    return false;
+  }
+}
+function downloadExcel(){
+  const db=loadDB();
+  if(Object.keys(db).length===0)return false;
+  const blob=buildExcelBlob();
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='nanvaii-backup-'+todayKey().key.replace(/\//g,'-')+'.xlsx';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  return true;
+}
+
+
+
+
+                   /* ============================================================
+   بخش ۱۴: تعطیلات (خودکار + مرخصی دستی)
+   ============================================================ */
+function isAutoHoliday(jy,jm,jd){return jd===7||jd===21}
+function isVacationDay(k){
+  const meta=loadMeta();
+  return meta.vacations.some(v=>k>=v.from&&k<=v.to);
+}
+function isHoliday(k){
+  const[y,m,d]=k.split('/').map(Number);
+  if(isAutoHoliday(y,m,d))return true;
+  if(isVacationDay(k))return true;
+  return false;
+}
+function showHolidayBanner(k){
+  const banner=document.getElementById('holidayBanner');
+  if(isHoliday(k))banner.classList.add('show');
+  else banner.classList.remove('show');
+}
+
+/* ============================================================
+   بخش ۱۵: پیدا کردن آخرین روز کاری (برای محاسبه)
+   ============================================================ */
+function findLastWorkingDay(fromKey){
+  const db=loadDB();
+  let k=prevDay(fromKey);
+  let max=90;
+  while(max-->0){
+    const d=db[k];
+    if(d&&(d['flour-stock']||d['cash-stock'])){
+      return k;
+    }
+    k=prevDay(k);
+  }
+  return null;
+}
+
+/* ============================================================
+   بخش ۱۶: سیستم قرض آرد
+   ============================================================ */
+let loanEditingId=null;
+let loanSelectedType=null;
+let loanSelectedDate=null;
+
+function getLoanTotals(){
+  const meta=loadMeta();
+  let totalGive=0,totalTake=0;
+  meta.loans.forEach(l=>{
+    if(l.type==='give')totalGive+=l.remaining;
+    else if(l.type==='take')totalTake+=l.remaining;
+  });
+  return{totalGive,totalTake,net:totalGive-totalTake};
+}
+function getPartyBalance(party){
+  const meta=loadMeta();
+  let give=0,take=0;
+  meta.loans.forEach(l=>{
+    if(l.party===party){
+      if(l.type==='give')give+=l.remaining;
+      else take+=l.remaining;
+    }
+  });
+  return{give,take,net:give-take};
+}
+function getAllParties(){
+  const meta=loadMeta();
+  const set=new Set();
+  meta.loans.forEach(l=>{if(l.remaining>0)set.add(l.party)});
+  return Array.from(set);
+}
+
+/* رندر لیست قرض‌ها */
+function renderLoans(tab){
+  const meta=loadMeta();
+  const listEl=document.getElementById('loanList');
+  const filterActive=tab!=='settled';
+  const filtered=meta.loans.filter(l=>filterActive?!l.settled:l.settled);
+  filtered.sort((a,b)=>b.date.localeCompare(a.date));
+  listEl.innerHTML='';
+  if(filtered.length===0){
+    const empty=document.createElement('div');
+    empty.className='loan-empty';
+    empty.textContent=filterActive?'هیچ قرض فعالی نیست':'هیچ قرض تسویه‌شده‌ای نیست';
+    listEl.appendChild(empty);
+    return;
+  }
+  filtered.forEach(loan=>{
+    const item=document.createElement('div');
+    item.className='loan-item';
+    const typeLabel=loan.type==='give'?'🟢 دادم':'🔴 گرفتم';
+    const typeColor=loan.type==='give'?'#2e7d32':'#c62828';
+    item.innerHTML=`
+      <div class="loan-item-head">
+        <div class="loan-item-party">${loan.party}</div>
+        <div class="loan-item-amount" style="color:${typeColor}">${formatNumber(loan.remaining)} کیسه</div>
+      </div>
+      <div class="loan-item-meta">
+        ${typeLabel} — مقدار اولیه: ${formatNumber(loan.amount)} کیسه<br>
+        تاریخ: ${faNum(loan.date)}
+        ${loan.history.length>0?'<br>تسویه‌ها: '+loan.history.map(h=>formatNumber(h.amount)+' ('+faNum(h.date)+')').join(' ، '):''}
+      </div>
+      <div class="loan-item-actions">
+        ${!loan.settled?`<button class="loan-item-btn settle" data-loan-settle="${loan.id}">${loan.type==='give'?'✅ پس گرفتم':'✅ پس دادم'}</button>`:''}
+        <button class="loan-item-btn delete" data-loan-del="${loan.id}">🗑 حذف</button>
+      </div>
+    `;
+    listEl.appendChild(item);
+  });
+  // Event listeners
+  listEl.querySelectorAll('[data-loan-settle]').forEach(btn=>{
+    btn.addEventListener('click',()=>openSettleDialog(btn.dataset.loanSettle));
+  });
+  listEl.querySelectorAll('[data-loan-del]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      if(confirm('این قرض حذف شود؟')){
+        const m=loadMeta();
+        m.loans=m.loans.filter(l=>l.id!==btn.dataset.loanDel);
+        saveMeta(m);
+        renderLoans(document.querySelector('.loan-tab.active').dataset.loanTab);
+        updateLoanSummary();
+      }
+    });
+  });
+}
+function updateLoanSummary(){
+  const t=getLoanTotals();
+  document.getElementById('loanTotalGive').textContent=formatNumber(t.totalGive)+' کیسه';
+  document.getElementById('loanTotalTake').textContent=formatNumber(t.totalTake)+' کیسه';
+  const netEl=document.getElementById('loanNet');
+  if(t.net>0)netEl.textContent=formatNumber(t.net)+' کیسه به نفع ما';
+  else if(t.net<0)netEl.textContent=formatNumber(-t.net)+' کیسه به نفع طرف';
+  else netEl.textContent='تسویه';
+}
+
+/* باز کردن فرم قرض */
+function openLoanForm(editId){
+  loanEditingId=editId||null;
+  loanSelectedType=null;
+  loanSelectedDate=todayKey().key;
+  document.getElementById('loanParty').value='';
+  document.getElementById('loanAmount').value='';
+  document.getElementById('loanDateBtn').textContent=faNum(loanSelectedDate);
+  document.getElementById('loanFormTitle').textContent=editId?'✏️ ویرایش':'➕ ثبت تراکنش جدید';
+  document.querySelectorAll('.loan-type-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('loanInfoBox').style.display='none';
+  document.getElementById('loanModal').classList.add('active');
+}
+function closeLoanForm(){
+  document.getElementById('loanModal').classList.remove('active');
+  loanEditingId=null;
+}
+function updateLoanInfo(){
+  const party=document.getElementById('loanParty').value.trim();
+  const info=document.getElementById('loanInfoBox');
+  if(!party){info.style.display='none';return}
+  const b=getPartyBalance(party);
+  info.style.display='block';
+  info.innerHTML=`
+    <strong>وضعیت «${party}»:</strong><br>
+    طلب ما: <strong>${formatNumber(b.give)}</strong> کیسه<br>
+    بدهی ما: <strong>${formatNumber(b.take)}</strong> کیسه<br>
+    خالص: <strong>${b.net>0?formatNumber(b.net)+' به نفع ما':b.net<0?formatNumber(-b.net)+' به نفع طرف':'تسویه'}</strong>
+  `;
+}
+document.getElementById('loanParty').addEventListener('input',updateLoanInfo);
+document.querySelectorAll('.loan-type-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.loan-type-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    loanSelectedType=btn.dataset.type;
+  });
+});
+document.getElementById('loanDateBtn').addEventListener('click',()=>{
+  openMiniCalendar('loan',loanSelectedDate,newKey=>{
+    loanSelectedDate=newKey;
+    document.getElementById('loanDateBtn').textContent=faNum(newKey);
+  });
+});
+document.getElementById('loanCloseX').addEventListener('click',closeLoanForm);
+document.getElementById('loanCancelBtn').addEventListener('click',closeLoanForm);
+document.getElementById('loanAddBtn').addEventListener('click',()=>openLoanForm());
+document.getElementById('loanSubmitBtn').addEventListener('click',submitLoan);
+
+function submitLoan(){
+  if(!loanSelectedType){alert('نوع عملیات را انتخاب کن');return}
+  const party=document.getElementById('loanParty').value.trim();
+  if(!party){alert('اسم طرف را وارد کن');return}
+  const amountStr=document.getElementById('loanAmount').value.trim();
+  const amount=parseFloat(faToEn(amountStr))||0;
+  if(amount<=0){alert('مقدار باید بیشتر از صفر باشه');return}
+  const date=loanSelectedDate;
+  const meta=loadMeta();
+  
+  if(loanSelectedType==='give'||loanSelectedType==='take'){
+    // ثبت قرض جدید
+    meta.loans.push({
+      id:'loan_'+Date.now()+'_'+Math.random().toString(36).substr(2,5),
+      party,type:loanSelectedType,amount,remaining:amount,
+      date,settled:false,history:[],createdAt:new Date().toISOString()
+    });
+  }else if(loanSelectedType==='settle-give'||loanSelectedType==='settle-take'){
+    // تسویه
+    const targetType=loanSelectedType==='settle-give'?'give':'take';
+    const activeLoans=meta.loans.filter(l=>l.party===party&&l.type===targetType&&!l.settled);
+    activeLoans.sort((a,b)=>a.date.localeCompare(b.date));
+    let totalRemaining=activeLoans.reduce((s,l)=>s+l.remaining,0);
+    if(totalRemaining===0){alert('قرض فعالی برای این طرف با این نوع پیدا نشد');return}
+    if(amount>totalRemaining+0.0001){
+      alert('مقدار پس‌گرفتن ('+formatNumber(amount)+') بیشتر از قرض فعال ('+formatNumber(totalRemaining)+') است');
+      return;
+    }
+    let remainingToSettle=amount;
+    for(const loan of activeLoans){
+      if(remainingToSettle<=0)break;
+      const use=Math.min(loan.remaining,remainingToSettle);
+      loan.remaining=Math.round((loan.remaining-use)*10000)/10000;
+      loan.history.push({date,amount:use});
+      if(loan.remaining<=0.0001){loan.remaining=0;loan.settled=true}
+      remainingToSettle=Math.round((remainingToSettle-use)*10000)/10000;
+    }
+  }
+  saveMeta(meta);
+  closeLoanForm();
+  renderLoans(document.querySelector('.loan-tab.active').dataset.loanTab);
+  updateLoanSummary();
+  // محاسبه‌ی مجدد اگر امروز هست
+  if(viewedKey===todayKey().key)calc();
+}
+function openSettleDialog(loanId){
+  const meta=loadMeta();
+  const loan=meta.loans.find(l=>l.id===loanId);
+  if(!loan)return;
+  const type=loan.type==='give'?'settle-give':'settle-take';
+  openLoanForm();
+  document.querySelectorAll('.loan-type-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.type===type);
+  });
+  loanSelectedType=type;
+  document.getElementById('loanParty').value=loan.party;
+  document.getElementById('loanAmount').value='';
+  updateLoanInfo();
+}
+/* تب‌های قرض */
+document.querySelectorAll('.loan-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.loan-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    renderLoans(tab.dataset.loanTab);
+  });
+});
+
+/* ============================================================
+   بخش ۱۷: سیستم کارخانه
+   ============================================================ */
+function getFactoryFlour(){
+  return loadMeta().factoryFlour||[];
+}
+function renderFactoryList(){
+  const list=document.getElementById('factoryList');
+  const items=getFactoryFlour().filter(f=>f.remaining>0);
+  list.innerHTML='';
+  if(items.length===0){
+    const e=document.createElement('div');
+    e.className='loan-empty';e.textContent='هیچ آردی در کارخانه نیست';
+    list.appendChild(e);
+    return;
+  }
+  items.forEach(f=>{
+    const el=document.createElement('div');
+    el.className='factory-item';
+    el.innerHTML=`
+      <div class="factory-item-head">
+        <div class="factory-item-name">${f.factory}</div>
+        <div class="factory-item-amount">${formatNumber(f.remaining)} کیسه</div>
+      </div>
+      <div class="factory-item-meta">
+        کد سفارش: ${f.orderCode||'—'}<br>
+        تاریخ خرید: ${faNum(f.date)} — مقدار اولیه: ${formatNumber(f.amount)} کیسه
+      </div>
+      <div class="factory-item-actions">
+        <button class="factory-item-btn transfer" data-factory-transfer="${f.id}">🚚 انتقال به مغازه</button>
+        <button class="factory-item-btn delete" data-factory-del="${f.id}">🗑 حذف</button>
+      </div>
+    `;
+    list.appendChild(el);
+  });
+  list.querySelectorAll('[data-factory-transfer]').forEach(btn=>{
+    btn.addEventListener('click',()=>transferFromFactory(btn.dataset.factoryTransfer));
+  });
+  list.querySelectorAll('[data-factory-del]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      if(confirm('این خرید حذف شود؟')){
+        const m=loadMeta();
+        m.factoryFlour=m.factoryFlour.filter(f=>f.id!==btn.dataset.factoryDel);
+        saveMeta(m);renderFactoryList();
+      }
+    });
+  });
+}
+function transferFromFactory(id){
+  const m=loadMeta();
+  const f=m.factoryFlour.find(x=>x.id===id);
+  if(!f)return;
+  const input=prompt('چند کیسه به مغازه منتقل شد؟ (موجود: '+formatNumber(f.remaining)+')');
+  if(input===null)return;
+  const amount=parseFloat(faToEn(input))||0;
+  if(amount<=0||amount>f.remaining+0.0001){alert('مقدار نامعتبر');return}
+  f.remaining=Math.round((f.remaining-amount)*10000)/10000;
+  saveMeta(m);
+  // افزودن به موجودی مغازه
+  const current=gn(F['flour-stock']);
+  sn(F['flour-stock'],current+amount);
+  renderFactoryList();
+  calc();
+  showToast('✅ '+formatNumber(amount)+' کیسه به مغازه اضافه شد','success',2500);
+}
+document.getElementById('factoryAddBtn').addEventListener('click',()=>{
+  document.getElementById('factoryName').value='';
+  document.getElementById('factoryOrder').value='';
+  document.getElementById('factoryAmount').value='';
+  document.getElementById('factoryDateBtn').textContent=faNum(todayKey().key);
+  window._factoryDate=todayKey().key;
+  document.getElementById('factoryModal').classList.add('active');
+});
+document.getElementById('factoryCloseX').addEventListener('click',()=>{
+  document.getElementById('factoryModal').classList.remove('active');
+});
+document.getElementById('factoryCancelBtn').addEventListener('click',()=>{
+  document.getElementById('factoryModal').classList.remove('active');
+});
+document.getElementById('factoryDateBtn').addEventListener('click',()=>{
+  openMiniCalendar('factory',window._factoryDate||todayKey().key,newKey=>{
+    window._factoryDate=newKey;
+    document.getElementById('factoryDateBtn').textContent=faNum(newKey);
+  });
+});
+document.getElementById('factorySubmitBtn').addEventListener('click',()=>{
+  const factory=document.getElementById('factoryName').value.trim();
+  if(!factory){alert('اسم کارخانه را وارد کن');return}
+  const orderCode=document.getElementById('factoryOrder').value.trim();
+  const amount=parseFloat(faToEn(document.getElementById('factoryAmount').value.trim()))||0;
+  if(amount<=0){alert('مقدار باید بیشتر از صفر باشه');return}
+  const date=window._factoryDate||todayKey().key;
+  const m=loadMeta();
+  m.factoryFlour.push({
+    id:'f_'+Date.now()+'_'+Math.random().toString(36).substr(2,5),
+    factory,orderCode,amount,remaining:amount,date,
+    createdAt:new Date().toISOString()
+  });
+  saveMeta(m);
+  document.getElementById('factoryModal').classList.remove('active');
+  renderFactoryList();
+  showToast('✅ خرید از '+factory+' ثبت شد','success',2500);
+});
+
+/* ============================================================
+   بخش ۱۸: سیستم سهمیه ماهانه
+   ============================================================ */
+function getMonthQuota(jy,jm){
+  const m=loadMeta();
+  const key=jy+'/'+String(jm).padStart(2,'0');
+  return m.quota[key]||null;
+}
+function setMonthQuota(jy,jm,data){
+  const m=loadMeta();
+  const key=jy+'/'+String(jm).padStart(2,'0');
+  m.quota[key]=data;
+  saveMeta(m);
+}
+/* پیدا کردن دوره‌ی فعلی */
+function getCurrentPeriod(){
+  const t=todayKey();
+  const d=t.day;
+  // دوره ۱: ۲۵ ماه قبل → ۹ همین ماه
+  // دوره ۲: ۱۰ همین ماه → ۲۵ همین ماه
+  if(d>=25){
+    // یعنی الان دوره‌ی ۱ ماه بعد شروع شده
+    let nm=t.month+1,ny=t.year;
+    if(nm>12){nm=1;ny++}
+    return{period:1,year:ny,month:nm,startKey:t.key,endKey:null};
+  }else if(d>=10&&d<25){
+    // دوره ۲ ماه جاری
+    return{period:2,year:t.year,month:t.month,startKey:t.key,endKey:null};
+  }else if(d>=1&&d<=9){
+    // دوره ۱ ماه جاری
+    return{period:1,year:t.year,month:t.month,startKey:t.key,endKey:null};
+  }
+  return null;
+}
+/* محاسبه‌ی سقف هر دوره */
+function getPeriodLimit(jy,jm,period){
+  const q=getMonthQuota(jy,jm);
+  if(!q)return null;
+  const half=q.total/2;
+  const extra=period===1?(q.extra1||0):(q.extra2||0);
+  return half+extra;
+}
+/* جمع خریدهای یک دوره */
+function getPeriodBought(jy,jm,period){
+  const m=loadMeta();
+  const monthKey=jy+'/'+String(jm).padStart(2,'0');
+  let sum=0;
+  m.factoryFlour.forEach(f=>{
+    if(f.period===monthKey+'_'+period){
+      sum+=f.amount;
+    }
+  });
+  return sum;
+}
+/* ثبت خرید با دوره */
+function tagPurchaseWithPeriod(factoryEntry){
+  const t=todayKey();
+  const d=t.day;
+  let period=null,monthKey=null;
+  if(d>=25){
+    let nm=t.month+1,ny=t.year;
+    if(nm>12){nm=1;ny++}
+    period=1;monthKey=ny+'/'+String(nm).padStart(2,'0');
+  }else if(d>=10){
+    period=2;monthKey=t.year+'/'+String(t.month).padStart(2,'0');
+  }else{
+    period=1;monthKey=t.year+'/'+String(t.month).padStart(2,'0');
+  }
+  factoryEntry.period=monthKey+'_'+period;
+  factoryEntry.monthKey=monthKey;
+  return factoryEntry;
+}
+
+/* رندر اطلاعات سهمیه در تنظیمات */
+function renderQuotaInfo(){
+  const cp=getCurrentPeriod();
+  if(!cp)return;
+  const q=getMonthQuota(cp.year,cp.month);
+  document.getElementById('quotaCurrentMonth').textContent=M[cp.month-1]+' '+faNum(cp.year)+' (دوره '+faNum(cp.period)+')';
+  if(!q){
+    document.getElementById('quotaMonthTotal').textContent='ثبت نشده';
+    document.getElementById('quotaPerPeriod').textContent='—';
+    document.getElementById('quotaExtra1').textContent='—';
+    document.getElementById('quotaExtra2').textContent='—';
+    document.getElementById('quotaBought1').textContent='—';
+    document.getElementById('quotaBought2').textContent='—';
+    return;
+  }
+  document.getElementById('quotaMonthTotal').textContent=formatNumber(q.total)+' کیسه';
+  document.getElementById('quotaPerPeriod').textContent=formatNumber(q.total/2)+' کیسه';
+  document.getElementById('quotaExtra1').textContent=formatNumber(q.extra1||0)+' کیسه';
+  document.getElementById('quotaExtra2').textContent=formatNumber(q.extra2||0)+' کیسه';
+  document.getElementById('quotaBought1').textContent=formatNumber(getPeriodBought(cp.year,cp.month,1))+' کیسه';
+  document.getElementById('quotaBought2').textContent=formatNumber(getPeriodBought(cp.year,cp.month,2))+' کیسه';
+}
+document.getElementById('quotaEditBtn').addEventListener('click',()=>{
+  const cp=getCurrentPeriod();
+  if(!cp)return;
+  const q=getMonthQuota(cp.year,cp.month)||{total:'',extra1:'',extra2:''};
+  document.getElementById('quotaMonthInput').value=q.total||'';
+  document.getElementById('quotaExtra1Input').value=q.extra1||'';
+  document.getElementById('quotaExtra2Input').value=q.extra2||'';
+  document.getElementById('quotaModalInfo').innerHTML='دوره: <strong>'+(cp.period===1?'اول':'دوم')+'</strong> از ماه <strong>'+M[cp.month-1]+' '+faNum(cp.year)+'</strong>';
+  document.getElementById('quotaModal').classList.add('active');
+});
+document.getElementById('quotaCloseX').addEventListener('click',()=>document.getElementById('quotaModal').classList.remove('active'));
+document.getElementById('quotaCancelBtn').addEventListener('click',()=>document.getElementById('quotaModal').classList.remove('active'));
+document.getElementById('quotaSubmitBtn').addEventListener('click',()=>{
+  const cp=getCurrentPeriod();
+  if(!cp)return;
+  const total=parseFloat(faToEn(document.getElementById('quotaMonthInput').value.trim()))||0;
+  if(total<=0){alert('سهمیه باید بیشتر از صفر باشه');return}
+  const extra1=parseFloat(faToEn(document.getElementById('quotaExtra1Input').value.trim()))||0;
+  const extra2=parseFloat(faToEn(document.getElementById('quotaExtra2Input').value.trim()))||0;
+  setMonthQuota(cp.year,cp.month,{total,extra1,extra2});
+  document.getElementById('quotaModal').classList.remove('active');
+  renderQuotaInfo();
+  checkReminder();
+  showToast('✅ سهمیه ذخیره شد','success',2000);
+});
+
+/* ============================================================
+   بخش ۱۹: سیستم یادآوری سهمیه
+   ============================================================ */
+let reminderState={dismissed:null};
+function checkReminder(){
+  const panel=document.getElementById('reminderPanel');
+  const t=todayKey();
+  const d=t.day;
+  const cp=getCurrentPeriod();
+  if(!cp){panel.classList.remove('show');return}
+  const q=getMonthQuota(cp.year,cp.month);
+  if(!q){
+    // سهمیه ثبت نشده → پیام اول
+    // فقط از روز ۲۵ ماه قبل یا از روز ۱ همین ماه تا ۹
+    // اگه بین ۲۵ ماه قبل تا ۹ ماه جاری
+    const isInPeriod1Window=(d>=25||d<=9);
+    if(isInPeriod1Window){
+      const dismissKey=t.key+'_quota';
+      if(reminderState.dismissed===dismissKey){panel.classList.remove('show');return}
+      showReminderPanel({
+        level:1,
+        title:'📢 سهمیه این ماه را ثبت کن',
+        text:'دوره‌ی خرید آرد شروع شده. لطفاً سهمیه‌ی این ماه و فوق‌العاده‌ی دوره‌ی اول را مشخص کن.',
+        badges:[M[cp.month-1]+' '+faNum(cp.year),'دوره '+faNum(cp.period)],
+        buyLabel:'📝 ثبت سهمیه',
+        onBuy:()=>{
+          document.getElementById('quotaModal').classList.add('active');
+          panel.classList.remove('show');
+        },
+        dismissKey
+      });
+    }else{
+      panel.classList.remove('show');
+    }
+    return;
+  }
+  // سهمیه هست → بررسی خرید
+  const periodLimit=getPeriodLimit(cp.year,cp.month,cp.period);
+  const bought=getPeriodBought(cp.year,cp.month,cp.period);
+  const remaining=Math.max(0,periodLimit-bought);
+  if(remaining<=0.0001){
+    panel.classList.remove('show');
+    return;
+  }
+  // محاسبه‌ی روزهای باقیمونده تا آخر دوره
+  let endDay;
+  if(cp.period===1)endDay=9;
+  else endDay=25;
+  let remainingDays;
+  if(d>=25){
+    // دوره‌ی ۱ ماه بعد، از ۲۵ ماه جاری تا ۹ ماه بعد
+    remainingDays=endDay+ (monthLen(cp.year, t.month)-d);
+  }else if(d<=9){
+    remainingDays=endDay-d;
+  }else{
+    remainingDays=endDay-d;
+  }
+  if(remainingDays<0)remainingDays=0;
+  // تعیین سطح (۱ تا ۷)
+  let level;
+  if(remainingDays<=0)level=7;
+  else if(remainingDays<=2)level=7;
+  else if(remainingDays<=4)level=6;
+  else if(remainingDays<=6)level=5;
+  else if(remainingDays<=8)level=4;
+  else if(remainingDays<=12)level=3;
+  else if(remainingDays<=16)level=2;
+  else level=1;
+  
+  const dismissKey=t.key+'_'+cp.year+'_'+cp.month+'_'+cp.period;
+  if(reminderState.dismissed===dismissKey){panel.classList.remove('show');return}
+  
+  // عنوان و متن بر اساس سطح
+  const titles={
+    1:'📢 یادآوری خرید آرد',
+    2:'📢 یادآوری خرید آرد',
+    3:'⚠️ یادآوری خرید آرد',
+    4:'⚠️ یادآوری خرید آرد',
+    5:'🔴 یادآوری مهم خرید آرد',
+    6:'🚨 یادآوری فوری خرید آرد',
+    7:'🆘 آخرین فرصت خرید آرد'
+  };
+  const texts={
+    1:'زمان خرید آرد دوره '+faNum(cp.period)+' ماه '+M[cp.month-1]+' فرا رسیده است. تاکنون '+formatNumber(bought)+' از '+formatNumber(periodLimit)+' کیسه خریداری شده.',
+    2:'فرصت خرید رو به اتمام است. باقی‌مانده: '+formatNumber(remaining)+' کیسه.',
+    3:'توجه! فقط '+faNum(Math.max(0,remainingDays))+' روز تا پایان دوره فرصت داری. باقی‌مانده: '+formatNumber(remaining)+' کیسه.',
+    4:'⚠️ زمان محدود است! فقط '+faNum(Math.max(0,remainingDays))+' روز فرصت داری. باقی‌مانده: '+formatNumber(remaining)+' کیسه.',
+    5:'🔴 زمان در حال اتمام! فقط '+faNum(Math.max(0,remainingDays))+' روز فرصت داری. باقی‌مانده: '+formatNumber(remaining)+' کیسه.',
+    6:'🚨 فوری! فقط '+faNum(Math.max(0,remainingDays))+' روز تا پایان دوره. باقی‌مانده: '+formatNumber(remaining)+' کیسه.',
+    7:'🆘 آخرین فرصت! همین امروز خرید را ثبت کن. باقی‌مانده: '+formatNumber(remaining)+' کیسه.'
+  };
+  
+  showReminderPanel({
+    level,
+    title:titles[level],
+    text:texts[level],
+    badges:[M[cp.month-1]+' '+faNum(cp.year),'دوره '+faNum(cp.period),'باقی: '+formatNumber(remaining)+' کیسه'],
+    buyLabel:'🛒 الان خرید می‌کنم',
+    onBuy:()=>{
+      document.getElementById('factoryModal').classList.add('active');
+      panel.classList.remove('show');
+    },
+    dismissKey
+  });
+}
+function showReminderPanel(opts){
+  const panel=document.getElementById('reminderPanel');
+  panel.className='reminder-panel show level-'+opts.level;
+  document.getElementById('remTitle').textContent=opts.title;
+  document.getElementById('remText').textContent=opts.text;
+  const bEl=document.getElementById('remBadges');
+  bEl.innerHTML='';
+  (opts.badges||[]).forEach(b=>{
+    const s=document.createElement('span');
+    s.className='r-badge';s.textContent=b;
+    bEl.appendChild(s);
+  });
+  // تنظیم اندازه بر اساس سطح
+  const sizes={1:'12.5%',2:'12.5%',3:'25%',4:'25%',5:'50%',6:'50%',7:'100%'};
+  panel.style.height=sizes[opts.level]||'12.5%';
+  // دکمه‌ها
+  const buyBtn=document.getElementById('remBuyBtn');
+  buyBtn.textContent=opts.buyLabel||'🛒 الان خرید می‌کنم';
+  buyBtn.onclick=()=>{if(opts.onBuy)opts.onBuy()};
+  document.getElementById('remLaterBtn').onclick=()=>{
+    reminderState.dismissed=opts.dismissKey;
+    panel.classList.remove('show');
+  };
+  // ضربدرها
+  const xs=[1,2,3,4].map(i=>document.getElementById('remClose'+i));
+  xs.forEach(x=>{x.classList.remove('used');x.style.display='none'});
+  // تعداد ضربدر بر اساس سطح
+  let xCount=0;
+  if(opts.level===1||opts.level===2)xCount=0; // کلیک هر جای خالی
+  else if(opts.level===3||opts.level===4)xCount=1;
+  else if(opts.level===5)xCount=2;
+  else if(opts.level===6)xCount=4;
+  else if(opts.level===7)xCount=4;
+  
+  let clickedCount=0;
+  for(let i=0;i<xCount;i++){
+    xs[i].style.display='flex';
+    xs[i].onclick=()=>{
+      if(xs[i].classList.contains('used'))return;
+      xs[i].classList.add('used');
+      clickedCount++;
+      if(clickedCount>=xCount){
+        reminderState.dismissed=opts.dismissKey;
+        panel.classList.remove('show');
+      }
+    };
+  }
+  // اگه سطح ۱ یا ۲: کلیک روی هر جای خالی صفحه → بستن
+  if(xCount===0){
+    const clickHandler=(e)=>{
+      if(panel.contains(e.target))return;
+      reminderState.dismissed=opts.dismissKey;
+      panel.classList.remove('show');
+      document.removeEventListener('click',clickHandler);
+    };
+    setTimeout(()=>document.addEventListener('click',clickHandler),100);
+  }
+}
+
+/* ============================================================
+   بخش ۲۰: مرخصی دستی
+   ============================================================ */
+let vacFrom=null,vacTo=null;
+function renderVacations(){
+  const list=document.getElementById('vacationList');
+  const vs=loadMeta().vacations;
+  list.innerHTML='';
+  if(vs.length===0){
+    const e=document.createElement('div');
+    e.className='loan-empty';e.textContent='هیچ مرخصی ثبت نشده';
+    list.appendChild(e);return;
+  }
+  vs.forEach((v,i)=>{
+    const item=document.createElement('div');
+    item.className='vacation-item';
+    item.innerHTML=`
+      <span>${faNum(v.from)}${v.from!==v.to?' → '+faNum(v.to):''}</span>
+      <button class="del-btn" data-vac-del="${i}">🗑 حذف</button>
+    `;
+    list.appendChild(item);
+  });
+  list.querySelectorAll('[data-vac-del]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const m=loadMeta();
+      m.vacations.splice(+btn.dataset.vacDel,1);
+      saveMeta(m);
+      renderVacations();
+      showHolidayBanner(viewedKey||todayKey().key);
+    });
+  });
+}
+document.getElementById('vacFromBtn').addEventListener('click',()=>{
+  openMiniCalendar('vac-from',vacFrom||todayKey().key,newKey=>{
+    vacFrom=newKey;
+    document.getElementById('vacFromBtn').textContent='از: '+faNum(newKey);
+    document.getElementById('vacFromBtn').classList.add('has-value');
+    document.getElementById('vacAddBtn').disabled=!vacFrom||!vacTo;
+  });
+});
+document.getElementById('vacToBtn').addEventListener('click',()=>{
+  openMiniCalendar('vac-to',vacTo||todayKey().key,newKey=>{
+    vacTo=newKey;
+    document.getElementById('vacToBtn').textContent='تا: '+faNum(newKey);
+    document.getElementById('vacToBtn').classList.add('has-value');
+    document.getElementById('vacAddBtn').disabled=!vacFrom||!vacTo;
+  });
+});
+document.getElementById('vacAddBtn').addEventListener('click',()=>{
+  if(!vacFrom||!vacTo)return;
+  if(vacFrom>vacTo){alert('تاریخ شروع باید قبل از پایان باشه');return}
+  const m=loadMeta();
+  m.vacations.push({from:vacFrom,to:vacTo});
+  saveMeta(m);
+  vacFrom=null;vacTo=null;
+  document.getElementById('vacFromBtn').textContent='از: —';
+  document.getElementById('vacToBtn').textContent='تا: —';
+  document.getElementById('vacFromBtn').classList.remove('has-value');
+  document.getElementById('vacToBtn').classList.remove('has-value');
+  document.getElementById('vacAddBtn').disabled=true;
+  renderVacations();
+  renderCal();
+  showHolidayBanner(viewedKey||todayKey().key);
+  showToast('✅ مرخصی ثبت شد','success',2000);
+});
+
+/* ============================================================
+   بخش ۲۱: محاسبه‌ی اصلی
+   ============================================================ */
+let viewedKey=null;
+function calc(){
+  const baseKey=viewedKey||todayKey().key;
+  // 1) نان و مبلغ اردشیر
+  const bc=gn(F['bag-count']),brc=bc*7;
+  sn(F['bread-count'],brc);
+  sn(F['ardeshir-amount'],brc*1.7);
+  
+  // 2) موجودی قبلی
+  const lastWorkKey=findLastWorkingDay(baseKey);
+  const db=loadDB();
+  const yD=lastWorkKey?db[lastWorkKey]:null;
+  
+  // 3) تفاضل نقدی
+  const tc=gn(F['cash-stock']);
+  let cdv=0;
+  if(yD&&yD['cash-stock']){
+    const yc=parseFloat(faToEn(yD['cash-stock']))||0;
+    cdv=tc-yc;
+    sn(F['cash-diff'],cdv);
+  }else{
+    F['cash-diff'].value='داده قبل نیست';
+  }
+  
+  // 4) آرد مصرفی با احتساب قرض‌ها و کارخانه
+  const tf=gn(F['flour-stock']);
+  let flourUsed=0;
+  if(yD&&yD['flour-stock']){
+    const yf=parseFloat(faToEn(yD['flour-stock']))||0;
+    // اثر تراکنش‌های قرض امروز
+    let loanEffect=0;
+    const meta=loadMeta();
+    meta.loans.forEach(l=>{
+      if(l.date===baseKey){
+        if(l.type==='give')loanEffect-=l.amount;   // دادم → کم شد
+        else if(l.type==='take')loanEffect+=l.amount; // گرفتم → زیاد شد
+      }
+      // history هم بررسی
+      l.history.forEach(h=>{
+        if(h.date===baseKey){
+          if(l.type==='give')loanEffect+=h.amount; // پس گرفتم → برگشت
+          else loanEffect-=h.amount; // پس دادم → رفت
+        }
+      });
+    });
+    // اثر کارخانه: آردی که امروز از کارخانه اومده (به مغازه اضافه شده)
+    // این رو خود کاربر در flour-stock اعمال کرده، پس در فرمول زیر خودکار محاسبه میشه
+    flourUsed=yf+loanEffect-tf;
+    sn(F['flour-used'],flourUsed);
+  }else{
+    F['flour-used'].value='داده قبل نیست';
+  }
+  
+  // 5) مبلغ کل
+  const mc=gn(F['main-card']),bc2=gn(F['backup-card']),tr=gn(F['traveller']);
+  const ta=mc+bc2+tr+cdv+(brc*1.7);
+  sn(F['total-amount'],ta);
+  
+  // 6) پلاستیک
+  const pc=gn(F['line12']),tcn=gn(F['line10']);
+  const pp=pc+(tcn*3);
+  sn(F['plastic-price'],pp);
+  
+  // 7) خالص نان
+  const bp=ta-pp;
+  sn(F['bread-price'],bp);
+  
+  // 8) تعداد خالص و ناخالص
+  const nb=bp/1.7;
+  sn(F['total-bread'],nb);
+  const gb=ta/1.7;
+  sn(F['gross-bread'],gb);
+  
+  // 9) هر کیسه
+  if(flourUsed>0){
+    sn(F['per-plastic-bag'],nb/flourUsed);
+    sn(F['gross-per-bag'],gb/flourUsed);
+  }else{
+    F['per-plastic-bag'].value='—';
+    F['gross-per-bag'].value='—';
+  }
+}
+
+/* ============================================================
+   بخش ۲۲: تاریخ بالای صفحه
+   ============================================================ */
+function setTopDate(j){
+  const w=weekdayName(j.year,j.month,j.day);
+  todayDateEl.textContent='📅 '+w+' '+faNum(j.key);
+  viewedKey=j.key;
+  updateDayNavButtons();
+  showHolidayBanner(j.key);
 }
 function updateDayNavButtons(){
   const today=todayKey().key;
   const cur=viewedKey||today;
   const nextBtn=document.getElementById('btnDayNext');
   nextBtn.disabled=(cur>=today);
+}
+function goToDateKey(k){
+  const db=loadDB();
+  setTopDate(keyObj(k));
+  if(db[k]){
+    apply(db[k]);
+    calc();checkEmpty();
+  }else{
+    apply({});
+    REQ.forEach(r=>F[r].classList.remove('empty-warning'));
+    // اگه روز تعطیله → پر کردن خودکار موجودی
+    if(isHoliday(k)){
+      const lastWork=findLastWorkingDay(k);
+      if(lastWork&&db[lastWork]){
+        F['flour-stock'].value=db[lastWork]['flour-stock']||'';
+        F['cash-stock'].value=db[lastWork]['cash-stock']||'';
+      }
+      calc();checkEmpty();
+    }else{
+      curDate=k;
+      dQ1=Q.slice();sQ=[];
+      showDlg();
+    }
+  }
 }
 document.getElementById('btnDayPrev').addEventListener('click',()=>{
   const cur=viewedKey||todayKey().key;
@@ -709,105 +2085,436 @@ document.getElementById('btnDayNext').addEventListener('click',()=>{
   goToDateKey(nextDay(cur));
 });
 
-(function(){
-  const toggle = document.getElementById('calcToggle');
-  const panel = document.getElementById('calcPanel');
-  const display = document.getElementById('calcDisplay');
-  const faDigits = '۰۱۲۳۴۵۶۷۸۹';
-  const enDigits = '0123456789';
-
-  let current = '0';
-  let previous = null;
-  let operation = null;
-  let shouldReset = false;
-
-  function toFa(s){
-    return String(s).replace(/[0-9]/g, d => faDigits[+d]).replace('.', '٫');
+/* ============================================================
+   بخش ۲۳: تقویم اصلی
+   ============================================================ */
+const calM=document.getElementById('calendarModal'),calMY=document.getElementById('calMonthYear'),calD=document.getElementById('calDays'),calMP=document.getElementById('calMonthPicker'),calYP=document.getElementById('calYearPicker');
+let vY,vM;
+function populate(ms,ys,minY,maxY){
+  ms.innerHTML='';
+  M.forEach((n,i)=>{const o=document.createElement('option');o.value=i+1;o.textContent=n;ms.appendChild(o)});
+  ys.innerHTML='';
+  for(let y=maxY;y>=minY;y--){const o=document.createElement('option');o.value=y;o.textContent=faNum(y);ys.appendChild(o)}
+}
+function openCal(){
+  const t=todayKey();
+  vY=t.year;vM=t.month;
+  populate(calMP,calYP,t.year-20,t.year+10);
+  renderCal();
+  calM.classList.add('active');
+}
+function renderCal(){
+  const t=todayKey(),db=loadDB();
+  calMY.textContent=M[vM-1]+' '+faNum(vY);
+  calMP.value=vM;calYP.value=vY;
+  calD.innerHTML='';
+  const off=W.indexOf(weekdayName(vY,vM,1));
+  for(let i=0;i<off;i++){
+    const e=document.createElement('div');
+    e.className='calendar-day empty';calD.appendChild(e);
   }
-  function toEn(s){
-    return String(s).replace(/[۰-۹]/g, d => enDigits[faDigits.indexOf(d)]).replace('٫', '.');
-  }
-  function updateDisplay(){
-    display.textContent = toFa(current);
-  }
-
-  function inputNum(n){
-    if(shouldReset){ current = '0'; shouldReset = false; }
-    if(current === '0') current = n;
-    else current += n;
-    if(current.length > 12) current = current.slice(0, 12);
-    updateDisplay();
-  }
-
-  function inputDot(){
-    if(shouldReset){ current = '0'; shouldReset = false; }
-    if(!current.includes('.')) current += '.';
-    updateDisplay();
-  }
-
-  function inputOp(op){
-    if(operation && !shouldReset){ calculate(); }
-    previous = current;
-    operation = op;
-    shouldReset = true;
-  }
-
-  function calculate(){
-    if(!operation || previous === null) return;
-    const a = parseFloat(toEn(previous));
-    const b = parseFloat(toEn(current));
-    if(isNaN(a) || isNaN(b)) return;
-    let result = 0;
-    switch(operation){
-      case 'add': result = a + b; break;
-      case 'sub': result = a - b; break;
-      case 'mul': result = a * b; break;
-      case 'div': result = b === 0 ? 0 : a / b; break;
+  const len=monthLen(vY,vM);
+  for(let d=1;d<=len;d++){
+    const c=document.createElement('div');
+    c.className='calendar-day';
+    c.textContent=faNum(d);
+    const k=vY+'/'+String(vM).padStart(2,'0')+'/'+String(d).padStart(2,'0');
+    const cd={jy:vY,jm:vM,jd:d},tD={jy:t.year,jm:t.month,jd:t.day};
+    const cmp=cmpJ(cd,tD);
+    const isH=isHoliday(k);
+    const hasData=!!db[k];
+    if(cmp===0)c.classList.add('today');
+    else if(cmp<0){if(hasData)c.classList.add('past-data');else c.classList.add('past-empty')}
+    else c.classList.add('future');
+    if(isH){
+      if(hasData)c.classList.add('holiday-worked');
+      else c.classList.add('holiday');
     }
-    result = Math.round(result * 10000) / 10000;
-    current = String(result);
-    previous = null;
-    operation = null;
+    if(hasData)c.classList.add('has-data');
+    c.addEventListener('click',()=>{
+      if(cmp>0){alert('آینده');return}
+      calM.classList.remove('active');
+      goToDateKey(k);
+    });
+    calD.appendChild(c);
+  }
+}
+document.getElementById('calPrev').addEventListener('click',()=>{vM--;if(vM<1){vM=12;vY--}renderCal()});
+document.getElementById('calNext').addEventListener('click',()=>{vM++;if(vM>12){vM=1;vY++}renderCal()});
+document.getElementById('calYearPrev').addEventListener('click',()=>{vY--;renderCal()});
+document.getElementById('calYearNext').addEventListener('click',()=>{vY++;renderCal()});
+calMP.addEventListener('change',()=>{vM=+calMP.value;renderCal()});
+calYP.addEventListener('change',()=>{vY=+calYP.value;renderCal()});
+document.getElementById('calClose').addEventListener('click',()=>calM.classList.remove('active'));
+todayDateEl.addEventListener('click',openCal);
+
+/* ============================================================
+   بخش ۲۴: تقویم کوچک (برای انتخاب تاریخ در فرم‌ها)
+   ============================================================ */
+const miniM=document.getElementById('miniCalendarOverlay'),miniMY=document.getElementById('miniCalMonthYear'),miniD=document.getElementById('miniCalDays'),miniMP=document.getElementById('miniCalMonthPicker'),miniYP=document.getElementById('miniCalYearPicker');
+let miY,miM,miniCallback=null,miniSource=null;
+function openMiniCalendar(source,currentKey,callback){
+  miniSource=source;
+  miniCallback=callback;
+  const tk=currentKey?keyObj(currentKey):todayKey();
+  miY=tk.year;miM=tk.month;
+  populate(miniMP,miniYP,tk.year-10,tk.year+10);
+  renderMini(currentKey);
+  miniM.classList.add('active');
+}
+function renderMini(selectedKey){
+  miniMY.textContent=M[miM-1]+' '+faNum(miY);
+  miniMP.value=miM;miniYP.value=miY;
+  miniD.innerHTML='';
+  const off=W.indexOf(weekdayName(miY,miM,1));
+  for(let i=0;i<off;i++){
+    const e=document.createElement('div');
+    e.className='calendar-day empty';miniD.appendChild(e);
+  }
+  const len=monthLen(miY,miM);
+  for(let d=1;d<=len;d++){
+    const c=document.createElement('div');
+    c.className='calendar-day';
+    c.textContent=faNum(d);
+    const k=miY+'/'+String(miM).padStart(2,'0')+'/'+String(d).padStart(2,'0');
+    if(selectedKey===k)c.style.background='#c8e6c9';
+    c.addEventListener('click',()=>{
+      miniM.classList.remove('active');
+      if(miniCallback)miniCallback(k);
+    });
+    miniD.appendChild(c);
+  }
+}
+document.getElementById('miniCalPrev').addEventListener('click',()=>{miM--;if(miM<1){miM=12;miY--}renderMini()});
+document.getElementById('miniCalNext').addEventListener('click',()=>{miM++;if(miM>12){miM=1;miY++}renderMini()});
+document.getElementById('miniCalYearPrev').addEventListener('click',()=>{miY--;renderMini()});
+document.getElementById('miniCalYearNext').addEventListener('click',()=>{miY++;renderMini()});
+miniMP.addEventListener('change',()=>{miM=+miniMP.value;renderMini()});
+miniYP.addEventListener('change',()=>{miY=+miniYP.value;renderMini()});
+document.getElementById('miniCalClose').addEventListener('click',()=>miniM.classList.remove('active'));
+
+/* ============================================================
+   بخش ۲۵: آمار
+   ============================================================ */
+const stM=document.getElementById('statsModal'),stFB=document.getElementById('statsFromBtn'),stTB=document.getElementById('statsToBtn'),stR=document.getElementById('statsResult'),stSum=document.getElementById('statsSum'),stAvg=document.getElementById('statsAvg'),stDC=document.getElementById('statsDaysCount');
+let sFrom=null,sTo=null;
+document.getElementById('btnStats').addEventListener('click',()=>{
+  const t=todayKey();
+  sFrom=t.year+'/'+String(t.month).padStart(2,'0')+'/01';
+  sTo=t.key;
+  updStatsBtns();
+  stR.classList.remove('show');
+  stM.classList.add('active');
+});
+document.getElementById('statsClose').addEventListener('click',()=>stM.classList.remove('active'));
+function updStatsBtns(){
+  if(sFrom){stFB.textContent=faNum(sFrom);stFB.classList.add('has-value')}
+  else{stFB.textContent='— انتخاب —';stFB.classList.remove('has-value')}
+  if(sTo){stTB.textContent=faNum(sTo);stTB.classList.add('has-value')}
+  else{stTB.textContent='— انتخاب —';stTB.classList.remove('has-value')}
+}
+stFB.addEventListener('click',()=>openMiniCalendar('from',sFrom,newKey=>{sFrom=newKey;updStatsBtns()}));
+stTB.addEventListener('click',()=>openMiniCalendar('to',sTo,newKey=>{sTo=newKey;updStatsBtns()}));
+document.getElementById('statsCalcBtn').addEventListener('click',()=>{
+  if(!sFrom||!sTo){alert('هر دو تاریخ را انتخاب کن');return}
+  const fr=document.getElementById('statsField').value;
+  const fp=sFrom.split('/').map(Number),tp=sTo.split('/').map(Number);
+  const fo={jy:fp[0],jm:fp[1],jd:fp[2]},to={jy:tp[0],jm:tp[1],jd:tp[2]};
+  if(cmpJ(fo,to)>0){alert('تاریخ شروع باید قبل باشد');return}
+  const db=loadDB();
+  let sum=0,cnt=0;
+  Object.keys(db).forEach(k=>{
+    const p=k.split('/').map(Number),ko={jy:p[0],jm:p[1],jd:p[2]};
+    if(cmpJ(ko,fo)>=0&&cmpJ(ko,to)<=0){
+      const v=db[k][fr];
+      if(v!==undefined&&v!==null&&v!==''){
+        sum+=parseFloat(faToEn(v))||0;
+        cnt++;
+      }
+    }
+  });
+  const avg=cnt>0?sum/cnt:0;
+  stSum.textContent=formatNumber(sum);
+  stAvg.textContent=formatNumber(avg);
+  stDC.textContent=faNum(cnt);
+  stR.classList.add('show');
+});
+
+/* ============================================================
+   بخش ۲۶: تنظیمات
+   ============================================================ */
+const settingsModal=document.getElementById('settingsModal');
+function openSettings(){
+  const c=loadCloud();
+  document.getElementById('cloudApiKey').value=c.apiKey||'';
+  document.getElementById('cloudBinId').value=c.binId||'';
+  document.getElementById('cloudAutoSync').checked=c.autoSync||false;
+  updateCloudStatus();
+  const fileSection=document.getElementById('fileSection');
+  const note=document.getElementById('fileSectionNote');
+  if(canUseFilePicker()){fileSection.classList.remove('settings-disabled');note.textContent=''}
+  else{fileSection.classList.add('settings-disabled');note.textContent='⚠️ این بخش در محیط فعلی کار نمی‌کند.'}
+  renderFactoryList();
+  renderQuotaInfo();
+  renderLoans(document.querySelector('.loan-tab.active').dataset.loanTab);
+  updateLoanSummary();
+  renderVacations();
+  settingsModal.classList.add('active');
+}
+function closeSettings(){
+  const c=loadCloud();
+  c.apiKey=document.getElementById('cloudApiKey').value.trim();
+  c.binId=document.getElementById('cloudBinId').value.trim();
+  c.autoSync=document.getElementById('cloudAutoSync').checked;
+  saveCloud(c);
+  updateCloudStatus();
+  settingsModal.classList.remove('active');
+}
+document.getElementById('btnSettings').addEventListener('click',openSettings);
+document.getElementById('settingsClose').addEventListener('click',closeSettings);
+document.getElementById('settingsCloseX').addEventListener('click',closeSettings);
+document.querySelectorAll('.settings-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.settings-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.settings-panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelector('.settings-panel[data-panel="'+tab.dataset.tab+'"]').classList.add('active');
+  });
+});
+document.getElementById('cloudPushBtn').addEventListener('click',async()=>{
+  const c=loadCloud();
+  c.apiKey=document.getElementById('cloudApiKey').value.trim();
+  c.binId=document.getElementById('cloudBinId').value.trim();
+  saveCloud(c);
+  showToast('☁️ در حال ارسال به ابر <span class="spinner"></span>','json',60000);
+  const ok=await cloudPush(true);
+  if(ok)showToast('✅ ارسال به ابر موفق','success',3000);
+  else showToast('❌ خطا در ارسال','error',3000);
+});
+document.getElementById('cloudPullBtn').addEventListener('click',async()=>{
+  const c=loadCloud();
+  c.apiKey=document.getElementById('cloudApiKey').value.trim();
+  c.binId=document.getElementById('cloudBinId').value.trim();
+  saveCloud(c);
+  const remote=await cloudPull(false);
+  if(!remote)return;
+  const remoteDB=remote.data||remote;
+  const days=Object.keys(remoteDB).length;
+  if(days===0){alert('☁️ ابر خالی است');return}
+  if(!confirm('☁️ دریافت از ابر\n\n📊 '+faNum(days)+' روز\n\nاطلاعات محلی جایگزین شود؟'))return;
+  saveDB(remoteDB);
+  if(remote.meta)saveMeta(remote.meta);
+  alert('✅ بارگذاری شد');
+  location.reload();
+});
+document.getElementById('cloudTestBtn').addEventListener('click',cloudTest);
+document.getElementById('pickFileBtn').addEventListener('click',async()=>{
+  const ok=await pickBackupFile();
+  if(ok){alert('✅ فایل متصل شد');closeSettings()}
+});
+document.getElementById('unlinkFileBtn').addEventListener('click',()=>{
+  backupFileHandle=null;
+  updateSaveBtnStyle(false);
+  const req=indexedDB.open('nanvaii-handles-v3',1);
+  req.onsuccess=e=>{
+    const db=e.target.result;
+    db.transaction('files','readwrite').objectStore('files').delete('backup');
+  };
+  alert('✅ اتصال فایل قطع شد');
+});
+
+/* ============================================================
+   بخش ۲۷: رفرش و ورود اکسل
+   ============================================================ */
+document.getElementById('btnRefresh').addEventListener('click',()=>{
+  const keys=Object.keys(loadDB()).sort();
+  if(keys.length===0){alert('❌ داده‌ای وجود ندارد');return}
+  const workingDB=loadDB();
+  let processed=0;
+  keys.forEach(k=>{
+    if(!workingDB[k])return;
+    apply(workingDB[k]);
+    viewedKey=k;
+    calc();
+    workingDB[k]={...workingDB[k],...collect(),savedAt:new Date().toISOString()};
+    processed++;
+  });
+  saveDB(workingDB);
+  const t=todayKey();
+  const fdb=loadDB();
+  if(fdb[t.key])apply(fdb[t.key]);
+  setTopDate(t);
+  calc();checkEmpty();
+  alert('✅ رفرش انجام شد\n📊 '+faNum(processed)+' روز');
+});
+document.getElementById('btnImport').addEventListener('click',()=>document.getElementById('excelImport').click());
+document.getElementById('excelImport').addEventListener('change',async e=>{
+  const f=e.target.files[0];
+  if(!f)return;
+  await importFromExcel(f);
+  e.target.value='';
+});
+function normalizeDate(str){
+  if(!str)return null;
+  const en=faToEn(String(str)).replace(/[^\d]/g,'');
+  if(en.length!==8)return null;
+  return en.substring(0,4)+'/'+en.substring(4,6)+'/'+en.substring(6,8);
+}
+async function importFromExcel(file){
+  if(typeof XLSX==='undefined'){alert('❌ کتابخانه Excel بارگذاری نشد');return}
+  try{
+    const buf=await file.arrayBuffer();
+    const wb=XLSX.read(buf);
+    const ws=wb.Sheets[wb.SheetNames[0]];
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+    if(rows.length<2){alert('❌ فایل خالی');return}
+    const headerMap={};
+    rows[0].forEach((h,i)=>{headerMap[String(h).trim()]=i});
+    if(headerMap['تاریخ']===undefined){alert('❌ ستون «تاریخ» پیدا نشد');return}
+    const db=loadDB();
+    let imported=0;
+    for(let r=1;r<rows.length;r++){
+      const row=rows[r];
+      if(!row||row.length===0)continue;
+      const dk=normalizeDate(row[headerMap['تاریخ']]);
+      if(!dk)continue;
+      const dataObj={};
+      const INPUT_FIELDS=['bag-count','line10','line11','line12','main-card','backup-card','traveller','flour-stock','cash-stock'];
+      for(const field of INPUT_FIELDS){
+        const headerName=EXCEL_HEADERS[EXCEL_FIELDS.indexOf(field)];
+        const idx=headerMap[headerName];
+        if(idx!==undefined&&row[idx]!==undefined&&row[idx]!==''){
+          let val=row[idx];
+          if(typeof val==='number')val=val.toLocaleString('fa-IR');
+          else val=toFaDigits(String(val).trim());
+          dataObj[field]=val;
+        }
+      }
+      apply(dataObj);
+      viewedKey=dk;
+      calc();
+      db[dk]={...dataObj,...collect(),savedAt:new Date().toISOString()};
+      imported++;
+    }
+    saveDB(db);
+    alert('✅ ورود کامل شد\n📥 '+faNum(imported)+' روز');
+    const t=todayKey();
+    if(loadDB()[t.key]){apply(loadDB()[t.key]);calc();checkEmpty()}
+  }catch(err){alert('❌ خطا: '+err.message)}
+}
+
+/* ============================================================
+   بخش ۲۸: ماشین‌حساب شناور
+   ============================================================ */
+(function(){
+  const toggle=document.getElementById('calcToggle');
+  const panel=document.getElementById('calcPanel');
+  const display=document.getElementById('calcDisplay');
+  const faD='۰۱۲۳۴۵۶۷۸۹',enD='0123456789';
+  let current='0',previous=null,operation=null,shouldReset=false;
+  function toFa(s){return String(s).replace(/[0-9]/g,d=>faD[+d]).replace('.','٫')}
+  function toEn(s){return String(s).replace(/[۰-۹]/g,d=>enD[faD.indexOf(d)]).replace('٫','.')}
+  function updateDisplay(){display.textContent=toFa(current)}
+  function inputNum(n){
+    if(shouldReset){current='0';shouldReset=false}
+    if(current==='0')current=n;
+    else current+=n;
+    if(current.length>12)current=current.slice(0,12);
     updateDisplay();
   }
-
-  function clearAll(){
-    current = '0';
-    previous = null;
-    operation = null;
-    shouldReset = false;
+  function inputDot(){
+    if(shouldReset){current='0';shouldReset=false}
+    if(!current.includes('.'))current+='.';
     updateDisplay();
   }
-
-  toggle.addEventListener('click', () => {
-    panel.classList.toggle('open');
-    toggle.classList.toggle('open');
+  function inputOp(op){
+    if(operation&&!shouldReset)calculate();
+    previous=current;operation=op;shouldReset=true;
+  }
+  function calculate(){
+    if(!operation||previous===null)return;
+    const a=parseFloat(toEn(previous)),b=parseFloat(toEn(current));
+    if(isNaN(a)||isNaN(b))return;
+    let result=0;
+    switch(operation){
+      case 'add':result=a+b;break;
+      case 'sub':result=a-b;break;
+      case 'mul':result=a*b;break;
+      case 'div':result=b===0?0:a/b;break;
+    }
+    result=Math.round(result*10000)/10000;
+    current=String(result);
+    previous=null;operation=null;
+    updateDisplay();
+  }
+  function clearAll(){current='0';previous=null;operation=null;shouldReset=false;updateDisplay()}
+  toggle.addEventListener('click',()=>{
+    panel.classList.toggle('open');toggle.classList.toggle('open');
   });
-
-  panel.addEventListener('click', (e) => {
-    const btn = e.target.closest('button');
-    if(!btn) return;
-    if(btn.dataset.num !== undefined) inputNum(btn.dataset.num);
-    else if(btn.dataset.action === 'add') inputOp('add');
-    else if(btn.dataset.action === 'sub') inputOp('sub');
-    else if(btn.dataset.action === 'mul') inputOp('mul');
-    else if(btn.dataset.action === 'div') inputOp('div');
-    else if(btn.dataset.action === 'eq'){ calculate(); shouldReset = true; }
-    else if(btn.dataset.action === 'clear') clearAll();
-    else if(btn.dataset.action === 'dot') inputDot();
+  panel.addEventListener('click',e=>{
+    const btn=e.target.closest('button');
+    if(!btn)return;
+    if(btn.dataset.num!==undefined)inputNum(btn.dataset.num);
+    else if(btn.dataset.action==='add')inputOp('add');
+    else if(btn.dataset.action==='sub')inputOp('sub');
+    else if(btn.dataset.action==='mul')inputOp('mul');
+    else if(btn.dataset.action==='div')inputOp('div');
+    else if(btn.dataset.action==='eq'){calculate();shouldReset=true}
+    else if(btn.dataset.action==='clear')clearAll();
+    else if(btn.dataset.action==='dot')inputDot();
   });
-
-  document.addEventListener('click', (e) => {
-    if (!panel.classList.contains('open')) return;
-    if (panel.contains(e.target)) return;
-    if (toggle.contains(e.target)) return;
-    panel.classList.remove('open');
-    toggle.classList.remove('open');
+  document.addEventListener('click',e=>{
+    if(!panel.classList.contains('open'))return;
+    if(panel.contains(e.target))return;
+    if(toggle.contains(e.target))return;
+    panel.classList.remove('open');toggle.classList.remove('open');
   });
 })();
 
-window.addEventListener('load',async()=>{const t=todayKey();setTopDate(t);if(canUseFilePicker()){try{const h=await loadFileHandle();if(h){const perm=await h.queryPermission({mode:'readwrite'});if(perm==='granted'){backupFileHandle=h;updateSaveBtnStyle(true)}}}catch(e){}}if(loadDate(t.key)){calc();checkEmpty()}else{curDate=t.key;dQ1=Q.slice();sQ=[];showDlg()}setTimeout(syncOnStartup,2000)});
+/* ============================================================
+   بخش ۲۹: Service Worker + راه‌اندازی
+   ============================================================ */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+  });
+}
+window.addEventListener('load',async()=>{
+  const t=todayKey();
+  setTopDate(t);
+  if(canUseFilePicker()){
+    try{
+      const h=await loadFileHandle();
+      if(h){
+        const perm=await h.queryPermission({mode:'readwrite'});
+        if(perm==='granted'){backupFileHandle=h;updateSaveBtnStyle(true)}
+      }
+    }catch(e){}
+  }
+  if(loadDate(t.key)){
+    calc();checkEmpty();
+  }else{
+    if(isHoliday(t.key)){
+      // روز تعطیله → پر کردن خودکار
+      const lastWork=findLastWorkingDay(t.key);
+      const db=loadDB();
+      if(lastWork&&db[lastWork]){
+        F['flour-stock'].value=db[lastWork]['flour-stock']||'';
+        F['cash-stock'].value=db[lastWork]['cash-stock']||'';
+      }
+      calc();checkEmpty();
+    }else{
+      curDate=t.key;
+      dQ1=Q.slice();sQ=[];
+      showDlg();
+    }
+  }
+  // بررسی یادآوری سهمیه
+  setTimeout(checkReminder,1500);
+});
 </script>
 
 </body>
-</html>
+</html>            
+
+    
