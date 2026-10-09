@@ -3280,6 +3280,17 @@ window.addEventListener('load',async()=>{
 });
 </script>
 
+:
+
+<script>
+window.onerror=function(m,u,l,c,e){
+  var d=document.createElement('div');
+  d.style.cssText='position:fixed;top:0;left:0;right:0;background:#c62828;color:#fff;padding:15px;z-index:99999;font-family:monospace;font-size:13px;direction:ltr;text-align:left;line-height:1.6';
+  d.innerHTML='🚨 ERROR: '+m+'<br>Line: '+l+':'+c;
+  document.body.appendChild(d);
+};
+</script>
+  
 </body>
 </html>
   
