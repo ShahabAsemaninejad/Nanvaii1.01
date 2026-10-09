@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#1a3a8f">
-<title>نانوایی ورژن ۳.۰</title>
+<title>نانوایی ورژن ۴.۰</title>
 <link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -53,9 +53,34 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .btn-import{background:#e65100}
 .today-date{position:absolute;background:#fff;border:2px solid #1a3a8f;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#1a3a8f;white-space:nowrap;overflow:hidden;padding:0 4px;text-align:center;z-index:50;font-family:'Vazirmatn',Tahoma,sans-serif}
 .today-date:hover{background:#e3f2fd}
-.holiday-banner{position:absolute;top:0;right:0;left:0;height:22px;background:linear-gradient(90deg,#ffe0b2,#ffcc80,#ffe0b2);border-bottom:2px solid #e65100;display:none;align-items:center;justify-content:center;font-family:'Vazirmatn',Tahoma,sans-serif;font-size:11px;font-weight:700;color:#bf360c;z-index:80;letter-spacing:.5px;box-shadow:0 2px 6px rgba(230,81,0,.25)}
-.holiday-banner.show{display:flex;animation:holidayIn .3s ease-out}
-@keyframes holidayIn{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* ===== نوار تعطیلی (بزرگ‌تر + شفاف) ===== */
+.holiday-banner{
+  position:absolute;
+  top:0;right:0;left:0;
+  height:40px;
+  background:linear-gradient(90deg,#ffe0b2,#ffcc80,#ffe0b2);
+  border-bottom:2px solid #e65100;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  font-family:'Vazirmatn',Tahoma,sans-serif;
+  font-size:15px;
+  font-weight:700;
+  color:#bf360c;
+  z-index:80;
+  letter-spacing:.5px;
+  box-shadow:0 2px 6px rgba(230,81,0,.25);
+  opacity:0.5;
+  cursor:pointer;
+  transition:opacity .3s, transform .3s;
+}
+.holiday-banner.show{display:flex;animation:holidayIn .3s ease-out;opacity:0.5}
+.holiday-banner.show:hover{opacity:0.7}
+.holiday-banner.hiding{opacity:0;transform:translateY(-100%)}
+@keyframes holidayIn{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:0.5}}
+
+  /* ===== Toast ذخیره ===== */
 .save-toast{position:absolute;z-index:200;background:#263238;color:#fff;font-family:'Vazirmatn',Tahoma,sans-serif;font-size:11px;font-weight:700;padding:8px 12px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.4);white-space:nowrap;pointer-events:none;opacity:0;transform:translate(50%, 8px);transition:opacity .25s, transform .25s;text-align:center;line-height:1.4}
 .save-toast.show{opacity:1;transform:translate(50%, 0)}
 .save-toast::before{content:'';position:absolute;top:-6px;right:50%;transform:translateX(50%);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:6px solid #263238}
@@ -66,6 +91,8 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .save-toast.json{background:#6a1b9a}.save-toast.json::before{border-bottom-color:#6a1b9a}
 .save-toast .spinner{display:inline-block;width:11px;height:11px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-left:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== دکمه‌های ناوبری روز ===== */
 .day-nav-btn{position:absolute;top:calc(95.24% + 3px);height:24px;background:#fff;border:1.5px solid #1a3a8f;border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Vazirmatn',Tahoma,sans-serif;font-size:14px;font-weight:700;color:#1a3a8f;z-index:60;transition:all .15s;padding:0;line-height:1;width:10%}
 .day-nav-btn:hover:not(:disabled){background:#e3f2fd}
 .day-nav-btn:active:not(:disabled){transform:scale(.94)}
@@ -74,10 +101,13 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .day-nav-btn.day-today{right:calc(50% - 5%);background:#1a3a8f;color:#fff;font-size:15px}
 .day-nav-btn.day-today:hover{background:#0d47a1}
 .day-nav-btn.day-next{right:calc(66.66% - 10%)}
-  .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;justify-content:center;align-items:center;padding:20px;backdrop-filter:blur(2px);z-index:1000}
+
+/* ===== مودال‌ها ===== */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;justify-content:center;align-items:center;padding:20px;backdrop-filter:blur(2px);z-index:1000}
 .modal.active{display:flex}
 .dialog-overlay{z-index:1000}.calendar-modal{z-index:1200}.stats-modal{z-index:1300}.mini-calendar-overlay{z-index:1400}.settings-modal{z-index:1500}
 .loan-modal{z-index:1600}.quota-modal{z-index:1700}.factory-modal{z-index:1650}.reminder-layer{z-index:900}
+.progress-modal{z-index:1800}.mode-modal{z-index:1850}.transfer-modal{z-index:1900}
 .dialog-box{background:#fff;width:100%;max-width:380px;border-radius:12px;padding:22px 20px 18px;box-shadow:0 20px 60px rgba(0,0,0,.35);position:relative}
 .dialog-counter{font-size:11px;color:#888;text-align:center;margin-bottom:8px}
 .dialog-question{font-size:16px;font-weight:700;color:#1a3a8f;text-align:center;margin-bottom:16px;line-height:1.6}
@@ -90,8 +120,9 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .dialog-btn-next{background:#1565c0;color:#fff}.dialog-btn-next:hover{background:#0d47a1}
 .dialog-close{position:absolute;top:8px;left:8px;width:28px;height:28px;border-radius:50%;background:#eceff1;color:#555;border:none;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:Tahoma,sans-serif;line-height:1}
 .dialog-close:hover{background:#d32f2f;color:#fff}
+
+/* ===== تقویم ===== */
 .calendar-box,.mini-calendar-box{background:#fff;width:100%;max-width:440px;border-radius:12px;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
-.stats-box,.settings-box{background:#fff;width:100%;max-width:480px;max-height:90vh;border-radius:12px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow-y:auto;position:relative}
 .calendar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:6px}
 .calendar-nav{background:#1565c0;color:#fff;border:none;height:34px;min-width:34px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:700;padding:0 8px;font-family:inherit}
 .calendar-nav:hover{background:#0d47a1}
@@ -127,6 +158,9 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .calendar-legend .lg-empty::before{background:#eceff1}
 .calendar-legend .lg-future::before{background:#e3f2fd}
 .calendar-legend .lg-holiday::before{background:#ffe0b2;border-color:#e65100}
+
+/* ===== آمار ===== */
+.stats-box,.settings-box{background:#fff;width:100%;max-width:480px;max-height:90vh;border-radius:12px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow-y:auto;position:relative}
 .stats-title,.settings-title{font-size:17px;font-weight:700;color:#1a3a8f;text-align:center;margin-bottom:16px}
 .stats-label,.settings-label{font-size:12px;font-weight:700;color:#555;margin-bottom:6px;margin-top:12px}
 .stats-select{width:100%;height:42px;border:2px solid #1565c0;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;color:#1565c0;background:#f5f9ff;outline:none;padding:0 10px;cursor:pointer}
@@ -142,30 +176,112 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .stats-result-row:last-child{border-bottom:none}
 .stats-result-row .k{color:#555;font-weight:700}
 .stats-result-row .v{color:#1a3a8f;font-weight:700;font-size:15px}
-.settings-input{width:100%;height:40px;border:2px solid #1565c0;border-radius:8px;font-family:inherit;font-size:12px;color:#1565c0;background:#f5f9ff;outline:none;padding:0 10px;direction:ltr;text-align:left}
-.settings-input:focus{border-color:#0d47a1;background:#e3f2fd}
-.settings-checkbox{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px;font-weight:700;color:#1a3a8f;cursor:pointer;user-select:none}
-.settings-checkbox input{width:18px;height:18px;cursor:pointer}
-.cloud-status{font-size:12px;font-weight:700;padding:8px 12px;border-radius:8px;text-align:center;margin-top:10px}
-.cloud-status.ok{background:#d4f5d8;color:#1b5e20}
-.cloud-status.warn{background:#fff3e0;color:#e65100}
-.cloud-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
-.cloud-btn{padding:12px;border:none;border-radius:8px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;color:#fff}
-.cloud-btn-push{background:#00838f}.cloud-btn-push:hover{background:#006064}
-.cloud-btn-pull{background:#e65100}.cloud-btn-pull:hover{background:#bf360c}
-.cloud-btn-full{grid-column:1/-1;background:#546e7a}
-.cloud-btn-full:hover{background:#37474f}
-.online-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:6px}
-.online-dot.on{background:#2e7d32}
-.online-dot.off{background:#d32f2f}
-.settings-note{font-size:11px;color:#888;margin-top:4px;line-height:1.5}
-.settings-disabled{opacity:.5;pointer-events:none}
+
+/* ===== تب‌های تنظیمات ===== */
 .settings-tabs{display:flex;gap:4px;margin-bottom:14px;flex-wrap:wrap;border-bottom:2px solid #eceff1;padding-bottom:0}
 .settings-tab{padding:8px 12px;background:transparent;border:none;border-bottom:3px solid transparent;font-family:inherit;font-size:12px;font-weight:700;color:#666;cursor:pointer;transition:all .15s;margin-bottom:-2px}
 .settings-tab:hover{color:#1565c0}
 .settings-tab.active{color:#1565c0;border-bottom-color:#1565c0}
 .settings-panel{display:none}
 .settings-panel.active{display:block}
+.settings-input{width:100%;height:40px;border:2px solid #1565c0;border-radius:8px;font-family:inherit;font-size:12px;color:#1565c0;background:#f5f9ff;outline:none;padding:0 10px;direction:ltr;text-align:left}
+.settings-input:focus{border-color:#0d47a1;background:#e3f2fd}
+.settings-checkbox{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px;font-weight:700;color:#1a3a8f;cursor:pointer;user-select:none}
+.settings-checkbox input{width:18px;height:18px;cursor:pointer}
+.settings-note{font-size:11px;color:#888;margin-top:4px;line-height:1.5}
+.settings-disabled{opacity:.5;pointer-events:none}
+
+/* ===== مثلث تبادل داده (LTR چون SVG) ===== */
+.data-triangle-wrap{direction:ltr;position:relative;width:100%;max-width:420px;margin:0 auto;padding:10px 0 20px}
+.data-triangle-wrap svg{display:block;width:100%;height:auto;overflow:visible}
+.data-triangle-wrap .node{cursor:pointer;transition:all .2s}
+.data-triangle-wrap .node:hover .node-bg{filter:brightness(1.08)}
+.data-triangle-wrap .node.selected .node-bg{stroke-width:4;filter:drop-shadow(0 0 8px rgba(255,193,7,.9))}
+.data-triangle-wrap .node-bg{transition:all .2s}
+.data-triangle-wrap .edge{transition:all .25s;cursor:pointer}
+.data-triangle-wrap .edge.arrow-line{stroke-width:6;opacity:.55}
+.data-triangle-wrap .edge.arrow-head{opacity:.55}
+.data-triangle-wrap .edge.active{opacity:1;stroke-width:8}
+.data-triangle-wrap .edge.active .arrow-head{opacity:1}
+.data-triangle-wrap .edge.active .arrow-line{stroke-width:8;opacity:1}
+.data-triangle-wrap .edge-hitbox{cursor:pointer;fill:none;stroke:transparent}
+.data-triangle-wrap .edge-hitbox:hover+.edge,
+.data-triangle-wrap .edge-hitbox:hover~.edge{opacity:.9}
+.data-triangle-wrap .edge-label{font-family:'Vazirmatn',Tahoma,sans-serif;font-weight:700;font-size:11px;fill:#fff;pointer-events:none;text-anchor:middle;dominant-baseline:middle}
+.data-triangle-wrap .node-icon{font-size:24px;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.data-triangle-wrap .node-title{font-family:'Vazirmatn',Tahoma,sans-serif;font-weight:700;font-size:12px;fill:#fff;text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+.data-triangle-wrap .node-status{font-family:'Vazirmatn',Tahoma,sans-serif;font-weight:700;font-size:9px;fill:#fff;text-anchor:middle;dominant-baseline:middle;pointer-events:none;opacity:.85}
+.data-triangle-info{background:#f5f9ff;border:1px dashed #1565c0;border-radius:8px;padding:10px 12px;font-size:12px;font-weight:700;color:#1565c0;text-align:center;margin-top:6px;line-height:1.6;min-height:44px;display:flex;align-items:center;justify-content:center}
+.data-triangle-info.has-selection{background:#fff8e1;border-color:#f9a825;color:#bf360c}
+.data-status-list{margin-top:14px;padding:10px 12px;background:#fafafa;border-radius:8px;border:1px solid #eceff1}
+.data-status-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:12px;font-weight:700;color:#333;border-bottom:1px dashed #e0e0e0}
+.data-status-item:last-child{border-bottom:none}
+.data-status-item .lbl{color:#666;display:flex;align-items:center;gap:6px}
+.data-status-item .val{color:#1a3a8f;display:flex;align-items:center;gap:6px}
+.data-status-dot{display:inline-block;width:10px;height:10px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.1)}
+.data-status-dot.on{background:#2e7d32}
+.data-status-dot.off{background:#c62828}
+.data-status-dot.warn{background:#f9a825}
+.data-actions{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.data-action-btn{padding:12px;border:none;border-radius:8px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center;gap:8px}
+.data-action-btn.push{background:#2e7d32}
+.data-action-btn.push:hover{background:#1b5e20}
+.data-action-btn.pull{background:#1565c0}
+.data-action-btn.pull:hover{background:#0d47a1}
+.data-action-btn.sync{background:#6a1b9a}
+.data-action-btn.sync:hover{background:#4a148c}
+.data-action-btn.tool{background:#546e7a}
+.data-action-btn.tool:hover{background:#37474f}
+.data-action-btn:disabled{opacity:.5;cursor:not-allowed}
+.section-divider{margin:18px 0 10px;padding-top:12px;border-top:2px dashed #e0e0e0;font-size:13px;font-weight:700;color:#555;display:flex;align-items:center;gap:6px}
+
+/* ===== مودال پیشرفت ===== */
+.progress-box{background:#fff;width:100%;max-width:420px;border-radius:14px;padding:24px 22px 20px;box-shadow:0 20px 60px rgba(0,0,0,.4);text-align:center;position:relative}
+.progress-icon{font-size:44px;margin-bottom:8px}
+.progress-title{font-size:16px;font-weight:700;color:#1a3a8f;margin-bottom:14px;line-height:1.5}
+.progress-bar-bg{width:100%;height:22px;background:#eceff1;border-radius:11px;overflow:hidden;position:relative;margin-bottom:10px;box-shadow:inset 0 2px 4px rgba(0,0,0,.08)}
+.progress-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#1565c0,#42a5f5);border-radius:11px;transition:width .35s ease-out;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;min-width:40px}
+.progress-bar-fill.success{background:linear-gradient(90deg,#2e7d32,#66bb6a)}
+.progress-bar-fill.error{background:linear-gradient(90deg,#c62828,#ef5350)}
+.progress-detail{font-size:12px;font-weight:700;color:#666;min-height:18px}
+.progress-stats{margin-top:12px;display:flex;justify-content:space-around;gap:8px;font-size:11px;font-weight:700;color:#555}
+.progress-stats>div{display:flex;flex-direction:column;gap:2px}
+.progress-stats .num{font-size:15px;color:#1a3a8f}
+.progress-close-btn{margin-top:16px;width:100%;height:40px;border:none;border-radius:8px;background:#1565c0;color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;display:none}
+.progress-close-btn.show{display:block}
+.progress-close-btn:hover{background:#0d47a1}
+.progress-close-btn.ok{background:#2e7d32}
+.progress-close-btn.ok:hover{background:#1b5e20}
+.progress-close-btn.err{background:#c62828}
+.progress-close-btn.err:hover{background:#b71c1c}
+
+/* ===== مودال انتخاب حالت ===== */
+.mode-box{background:#fff;width:100%;max-width:440px;border-radius:14px;padding:22px 20px 18px;box-shadow:0 20px 60px rgba(0,0,0,.4);position:relative}
+.mode-title{font-size:16px;font-weight:700;color:#1a3a8f;text-align:center;margin-bottom:8px}
+.mode-subtitle{font-size:12px;color:#666;text-align:center;margin-bottom:16px;line-height:1.6}
+.mode-compare{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:stretch;margin-bottom:18px}
+.mode-card{background:#f5f9ff;border:2px solid #c5d9f1;border-radius:10px;padding:12px 10px;text-align:center}
+.mode-card.cloud{background:#f3e5f5;border-color:#ce93d8}
+.mode-card.local{background:#e8f5e9;border-color:#a5d6a7}
+.mode-card .mode-icon{font-size:28px;margin-bottom:4px}
+.mode-card .mode-name{font-size:12px;font-weight:700;color:#555;margin-bottom:6px}
+.mode-card .mode-value{font-size:20px;font-weight:700;color:#1a3a8f}
+.mode-card .mode-value .unit{font-size:11px;color:#666;margin-right:3px}
+.mode-card .mode-date{font-size:10px;color:#888;margin-top:4px}
+.mode-vs{display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#999;padding:0 4px}
+.mode-buttons{display:flex;flex-direction:column;gap:8px}
+.mode-btn{height:44px;border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 12px}
+.mode-btn.replace{background:#e65100;color:#fff}
+.mode-btn.replace:hover{background:#bf360c}
+.mode-btn.merge{background:#1565c0;color:#fff}
+.mode-btn.merge:hover{background:#0d47a1}
+.mode-btn.cancel{background:#eceff1;color:#555}
+.mode-btn.cancel:hover{background:#dfe4e7}
+.mode-note{font-size:10px;color:#888;text-align:center;margin-top:12px;line-height:1.5}
+.mode-buttons-row{display:flex;gap:8px}
+.mode-buttons-row .mode-btn{flex:1}
+
+  /* ===== قرض آرد ===== */
 .loan-section{margin-top:8px;padding:12px;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:10px}
 .loan-section-title{font-size:13px;font-weight:700;color:#1b5e20;margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .loan-summary{padding:10px;background:#fff;border-radius:8px;margin-bottom:10px;border-right:3px solid #2e7d32}
@@ -186,7 +302,7 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .loan-item-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
 .loan-item-party{font-weight:700;color:#1b5e20;font-size:13px}
 .loan-item-amount{font-weight:700;color:#bf360c;font-size:12px}
-.loan-item-meta{color:#888;font-size:10px;margin-bottom:6px}
+.loan-item-meta{color:#888;font-size:10px;margin-bottom:6px;line-height:1.6}
 .loan-item-actions{display:flex;gap:5px}
 .loan-item-btn{flex:1;height:28px;border:none;border-radius:5px;font-family:inherit;font-size:10px;font-weight:700;cursor:pointer}
 .loan-item-btn.settle{background:#1976d2;color:#fff}
@@ -214,6 +330,8 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .loan-form-btn-submit{background:#2e7d32;color:#fff}
 .loan-form-btn-submit:hover{background:#1b5e20}
 .loan-form-btn-submit:disabled{opacity:.5;cursor:not-allowed}
+
+/* ===== کارخانه ===== */
 .factory-section{margin-top:8px;padding:12px;background:#e3f2fd;border:1px solid #90caf9;border-radius:10px}
 .factory-section-title{font-size:13px;font-weight:700;color:#0d47a1;margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .factory-list{max-height:220px;overflow-y:auto;border:1px solid #90caf9;border-radius:6px;background:#fff;margin-bottom:10px}
@@ -232,6 +350,8 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .factory-item-btn.delete:hover{background:#c62828}
 .factory-add-btn{width:100%;height:38px;border:none;border-radius:8px;background:#1565c0;color:#fff;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:10px}
 .factory-add-btn:hover{background:#0d47a1}
+
+/* ===== سهمیه ===== */
 .quota-section{margin-top:8px;padding:12px;background:#f3e5f5;border:1px solid #ce93d8;border-radius:10px}
 .quota-section-title{font-size:13px;font-weight:700;color:#6a1b9a;margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .quota-info-box{background:#fff;border-radius:8px;padding:12px;font-size:12px;color:#4a148c;line-height:1.9;margin-bottom:10px;border-right:3px solid #6a1b9a}
@@ -240,6 +360,8 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .quota-row:last-child{border-bottom:none}
 .quota-row .lbl{color:#666;font-weight:700}
 .quota-row .val{color:#6a1b9a;font-weight:700}
+
+/* ===== مرخصی ===== */
 .vacation-section{margin-top:8px;padding:12px;background:#fff3e0;border:1px solid #ffcc80;border-radius:10px}
 .vacation-section-title{font-size:13px;font-weight:700;color:#bf360c;margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .vacation-list{max-height:150px;overflow-y:auto;border:1px solid #ffcc80;border-radius:6px;background:#fff;margin-bottom:10px}
@@ -255,21 +377,23 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .vacation-add-btn:hover{background:#bf360c}
 .vacation-add-btn:disabled{opacity:.4;cursor:not-allowed}
 .vacation-sep{font-size:12px;color:#e65100;font-weight:900;padding:0 2px}
+
+/* ===== پنل یادآوری سهمیه ===== */
 .reminder-panel{position:fixed;bottom:0;right:0;left:0;display:none;flex-direction:column;background:#2e7d32;color:#fff;padding:16px 20px 18px;box-shadow:0 -4px 20px rgba(0,0,0,.3);z-index:900;transition:all .3s ease-out;font-family:'Vazirmatn',Tahoma,sans-serif}
 .reminder-panel.show{display:flex}
-.reminder-panel .r-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
-.reminder-panel .r-title{font-size:16px;font-weight:700;line-height:1.4}
+.reminder-panel .r-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:10px}
+.reminder-panel .r-title{font-size:16px;font-weight:700;line-height:1.4;flex:1}
 .reminder-panel .r-badges{display:flex;gap:6px;flex-wrap:wrap}
 .reminder-panel .r-badge{background:rgba(255,255,255,.2);padding:3px 8px;border-radius:12px;font-size:11px;font-weight:700}
 .reminder-panel .r-text{font-size:13px;line-height:1.7;margin-bottom:10px;flex:1}
 .reminder-panel .r-actions{display:flex;gap:8px;flex-wrap:wrap}
-.reminder-panel .r-btn{padding:9px 16px;border:none;border-radius:8px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;background:#fff;color:#2e7d32}
-.reminder-panel .r-btn:hover{background:#f5f5f5}
+.reminder-panel .r-btn{padding:9px 16px;border:none;border-radius:8px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;background:#fff;color:#2e7d32;transition:filter .15s}
+.reminder-panel .r-btn:hover{filter:brightness(.95)}
 .reminder-panel .r-btn.buy{background:#f9a825;color:#fff}
 .reminder-panel .r-btn.buy:hover{background:#f57f17}
 .reminder-panel .r-close{position:absolute;top:8px;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.25);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:Tahoma,sans-serif;line-height:1;transition:background .15s}
-.reminder-panel .r-close:hover:not(:disabled){background:rgba(255,255,255,.4)}
-.reminder-panel .r-close.used{background:#555;color:#999;cursor:default}
+.reminder-panel .r-close:hover:not(.used){background:rgba(255,255,255,.4)}
+.reminder-panel .r-close.used{background:#555;color:#999;cursor:default;opacity:.6}
 .reminder-panel .r-close.x-r{right:10px}
 .reminder-panel .r-close.x-l{left:10px}
 .reminder-panel .r-close.x-rt{right:10px;top:36px}
@@ -293,25 +417,126 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .reminder-panel.level-7{background:#b71c1c;color:#fff}
 .reminder-panel.level-7 .r-btn{background:#fff;color:#b71c1c}
 .reminder-panel.level-7 .r-btn.buy{background:#4a148c;color:#fff}
-.calc-toggle{position:fixed;bottom:20px;left:20px;width:46px;height:46px;border-radius:50%;background:#2c3e50;color:#fff;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.35);z-index:999;display:flex;align-items:center;justify-content:center;border:2px solid #fdfaf2;padding:0;font-family:'Vazirmatn',Tahoma,sans-serif;transition:transform 0.15s, background 0.15s}
-.calc-toggle:hover{background:#1a2733}
+
+/* ===== ماشین‌حساب دایره‌ای (مطابق عکس) ===== */
+.calc-toggle{
+  position:fixed;
+  bottom:20px;
+  left:20px;
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  background:#4a5568;
+  color:#fff;
+  font-size:22px;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,0.35);
+  z-index:999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:none;
+  padding:0;
+  font-family:'Vazirmatn',Tahoma,sans-serif;
+  transition:transform 0.15s, background 0.15s;
+}
+.calc-toggle:hover{background:#2d3748}
 .calc-toggle:active{transform:scale(0.94)}
 .calc-toggle.open{background:#b3261e}
 .calc-toggle.open:hover{background:#8c1c16}
-.calc-panel{position:fixed;bottom:76px;left:20px;width:min(320px,52vw);background:#fdfaf2;border:2px solid #2c3e50;border-radius:10px;padding:8px;box-shadow:0 8px 24px rgba(0,0,0,0.4);z-index:998;display:none;font-family:'Vazirmatn',Tahoma,sans-serif}
-.calc-panel.open{display:block;animation:calcIn 0.15s ease-out}
-@keyframes calcIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.calc-display{background:#fff;border:1.5px solid #2c3e50;border-radius:6px;padding:6px 10px;font-size:18px;text-align:left;direction:ltr;min-height:36px;line-height:24px;margin-bottom:6px;color:#1a2733;font-weight:700;overflow-x:auto;white-space:nowrap}
-.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
-.calc-btn{border:1px solid #2c3e50;background:#fff;color:#1a2733;font-family:'Vazirmatn',Tahoma,sans-serif;font-size:15px;font-weight:700;padding:8px 0;border-radius:5px;cursor:pointer;transition:background 0.12s, transform 0.08s;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
-.calc-btn:hover{background:#e8eef5}
-.calc-btn:active{transform:scale(0.94);background:#d4e0ef}
-.calc-btn.op{background:#2c3e50;color:#fff;font-size:16px}
-.calc-btn.op:hover{background:#1a2733}
-.calc-btn.eq{background:#b3261e;color:#fff;font-size:17px}
-.calc-btn.eq:hover{background:#8c1c16}
-.calc-btn.clr{background:#f0c14b;color:#1a2733;font-size:14px}
-.calc-btn.clr:hover{background:#e0b040}
+
+.calc-panel{
+  position:fixed;
+  bottom:84px;
+  left:20px;
+  width:min(340px,88vw);
+  background:#e8f0f5;
+  border-radius:22px;
+  padding:14px 12px 16px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.25);
+  z-index:998;
+  display:none;
+  font-family:'Vazirmatn',Tahoma,sans-serif;
+}
+.calc-panel.open{display:block;animation:calcIn 0.18s ease-out}
+@keyframes calcIn{
+  from{opacity:0;transform:translateY(10px) scale(0.96)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.calc-display{
+  background:transparent;
+  padding:6px 12px 14px;
+  font-size:36px;
+  text-align:left;
+  direction:ltr;
+  min-height:52px;
+  line-height:44px;
+  color:#1a2733;
+  font-weight:400;
+  overflow-x:auto;
+  white-space:nowrap;
+  font-family:'Segoe UI',Tahoma,sans-serif;
+}
+.calc-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  justify-items:center;
+  align-items:center;
+}
+.calc-btn{
+  width:100%;
+  aspect-ratio:1;
+  max-width:66px;
+  border:none;
+  background:#dde5ea;
+  color:#1a2733;
+  font-family:'Segoe UI',Tahoma,sans-serif;
+  font-size:24px;
+  font-weight:400;
+  border-radius:50%;
+  cursor:pointer;
+  transition:background 0.12s, transform 0.08s;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+}
+.calc-btn:hover{background:#cdd6dc}
+.calc-btn:active{transform:scale(0.92);background:#bcc6cc}
+.calc-btn.op{
+  background:#c8dce8;
+  color:#1a2733;
+  font-size:26px;
+}
+.calc-btn.op:hover{background:#b6cfe0}
+.calc-btn.op:active{background:#9dc0d6}
+.calc-btn.clr{
+  background:#a8d8f0;
+  color:#1a2733;
+  font-size:20px;
+  font-weight:400;
+}
+.calc-btn.clr:hover{background:#93cceb}
+.calc-btn.clr:active{background:#7abfe3}
+.calc-btn.eq{
+  background:#4a4a6a;
+  color:#fff;
+  font-size:28px;
+  width:100%;
+  max-width:none;
+  aspect-ratio:auto;
+  height:62px;
+  border-radius:32px;
+  grid-column:1/-1;
+}
+.calc-btn.eq:hover{background:#3d3d5c}
+.calc-btn.eq:active{background:#2f2f4a}
+
+/* ===== Media Query موبایل ===== */
 @media (max-width: 700px) {
   body { padding: 3px; }
   .page-wrapper { max-width: 100%; height: calc(100dvh - 6px); aspect-ratio: auto; }
@@ -332,11 +557,17 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
   .day-nav-btn { height: 22px; font-size: 12px; }
   .day-nav-btn.day-today { font-size: 13px; }
   .save-toast { font-size: 13px; padding: 10px 14px; }
-  .holiday-banner { font-size: 12px; height: 24px; }
-  .calc-panel { width: min(280px, 60vw); }
-  .calc-toggle { width: 42px; height: 42px; font-size: 18px; }
+  .holiday-banner { font-size: 13px; height: 36px; }
+  .calc-panel { width: min(310px, 92vw); }
+  .calc-toggle { width:46px; height:46px; font-size:20px; }
+  .calc-display { font-size:30px; }
+  .calc-btn { font-size:20px; max-width:58px; }
+  .calc-btn.op { font-size:22px; }
+  .calc-btn.eq { font-size:24px; height:54px; }
+  .calc-btn.clr { font-size:17px; }
   .reminder-panel .r-title { font-size: 15px; }
   .reminder-panel .r-text { font-size: 12px; }
+  .data-triangle-wrap{max-width:100%}
 }
 </style>
 </head>
@@ -359,12 +590,13 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
       <button class="day-nav-btn day-prev" id="btnDayPrev" title="روز قبل">→</button>
       <button class="day-nav-btn day-today" id="btnToday" title="امروز">🏠</button>
       <button class="day-nav-btn day-next" id="btnDayNext" title="روز بعد">←</button>
-      <div class="holiday-banner" id="holidayBanner">🏖 این روز تعطیل است</div>
+      <div class="holiday-banner" id="holidayBanner">🏖 این روز تعطیل است — برای بستن کلیک کنید</div>
       <div class="save-toast" id="saveToast"></div>
     </div>
   </div>
 </div>
-<!-- ========== دیالوگ پرسش‌های روزانه ========== -->
+
+  <!-- ========== دیالوگ پرسش‌های روزانه ========== -->
 <div class="modal dialog-overlay" id="dialogOverlay">
   <div class="dialog-box">
     <button class="dialog-close" id="dialogClose">✕</button>
@@ -449,7 +681,7 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
   </div>
 </div>
 
-<!-- ========== تقویم کوچک (انتخاب تاریخ) ========== -->
+<!-- ========== تقویم کوچک ========== -->
 <div class="modal mini-calendar-overlay" id="miniCalendarOverlay">
   <div class="mini-calendar-box">
     <div class="calendar-header">
@@ -476,37 +708,112 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
     <div class="settings-title">⚙️ تنظیمات</div>
 
     <div class="settings-tabs">
-      <button class="settings-tab active" data-tab="cloud">☁️ ابری</button>
+      <button class="settings-tab active" data-tab="transfer">🔄 تبادل داده</button>
       <button class="settings-tab" data-tab="factory">🏭 کارخانه</button>
       <button class="settings-tab" data-tab="quota">📊 سهمیه</button>
       <button class="settings-tab" data-tab="loan">📦 قرض آرد</button>
       <button class="settings-tab" data-tab="vacation">🌴 مرخصی</button>
-      <button class="settings-tab" data-tab="file">📁 فایل</button>
+      <button class="settings-tab" data-tab="cloud">☁️ ابری</button>
     </div>
 
-    <!-- تب ابری -->
-    <div class="settings-panel active" data-panel="cloud">
-      <div class="settings-label">🌐 پشتیبان‌گیری ابری (JSONBin.io)</div>
-      <div class="settings-label" style="margin-top:8px">API Key (Master Key):</div>
-      <input type="password" class="settings-input" id="cloudApiKey" placeholder="$2a$10$...">
-      <div class="settings-label">Bin ID:</div>
-      <input type="text" class="settings-input" id="cloudBinId" placeholder="65a1b2c3...">
-      <label class="settings-checkbox">
-        <input type="checkbox" id="cloudAutoSync">
-        <span>ذخیره خودکار در ابر</span>
-      </label>
-      <div class="cloud-status warn" id="cloudStatus">
-        وضعیت: <span id="cloudStatusText">تنظیم نشده</span>
-        <span class="online-dot off" id="onlineDot"></span>
+    <!-- ===== تب تبادل داده ===== -->
+    <div class="settings-panel active" data-panel="transfer">
+      <div class="settings-note" style="text-align:center;margin-bottom:10px">روی یک رأس کلیک کن (مبدا)، بعد روی رأس دیگر (مقصد)</div>
+
+      <div class="data-triangle-wrap">
+        <svg viewBox="0 0 300 260" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <marker id="arrowForward" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#546e7a"/>
+            </marker>
+            <marker id="arrowBack" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#546e7a"/>
+            </marker>
+            <marker id="arrowActive" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#f9a825"/>
+            </marker>
+            <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+              <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.25"/>
+            </filter>
+          </defs>
+
+          <!-- خطوط اتصال (ضلع‌ها) - 3 ضلع مثلث -->
+          <!-- ضلع Local-JSON (چپ) -->
+          <line class="edge arrow-line" id="edgeLocalJson" x1="60" y1="210" x2="150" y2="60" stroke="#546e7a" stroke-linecap="round"/>
+          <!-- ضلع JSON-Excel (راست) -->
+          <line class="edge arrow-line" id="edgeJsonExcel" x1="150" y1="60" x2="240" y2="210" stroke="#546e7a" stroke-linecap="round"/>
+          <!-- ضلع Local-Excel (پایین) -->
+          <line class="edge arrow-line" id="edgeLocalExcel" x1="60" y1="210" x2="240" y2="210" stroke="#546e7a" stroke-linecap="round"/>
+
+          <!-- رأس Local (پایین چپ) -->
+          <g class="node" id="nodeLocal" data-node="local" filter="url(#shadow)">
+            <circle class="node-bg" cx="60" cy="210" r="38" fill="#1976d2" stroke="#0d47a1" stroke-width="2"/>
+            <text class="node-icon" x="60" y="203">💾</text>
+            <text class="node-title" x="60" y="222">لوکال</text>
+          </g>
+
+          <!-- رأس JSON (بالا) -->
+          <g class="node" id="nodeJson" data-node="json" filter="url(#shadow)">
+            <circle class="node-bg" cx="150" cy="60" r="42" fill="#6a1b9a" stroke="#4a148c" stroke-width="2"/>
+            <text class="node-icon" x="150" y="50" style="font-size:26px">☁️</text>
+            <text class="node-title" x="150" y="70">JSON</text>
+            <text class="node-status" x="150" y="82" id="statusJsonText">— روز</text>
+          </g>
+
+          <!-- رأس Excel (پایین راست) -->
+          <g class="node" id="nodeExcel" data-node="excel" filter="url(#shadow)">
+            <circle class="node-bg" cx="240" cy="210" r="38" fill="#2e7d32" stroke="#1b5e20" stroke-width="2"/>
+            <text class="node-icon" x="240" y="203">📊</text>
+            <text class="node-title" x="240" y="222">اکسل</text>
+          </g>
+
+          <!-- برچسب‌های وضعیت روی رأس Local و Excel -->
+          <text class="node-status" x="60" y="235" style="fill:#fff" id="statusLocalText">— روز</text>
+          <text class="node-status" x="240" y="235" style="fill:#fff" id="statusExcelText">—</text>
+
+          <!-- نقاط اتصال روی ضلع‌ها برای کلیک راحت‌تر -->
+          <circle class="edge-hitbox" cx="105" cy="135" r="22" data-edge="local-json"/>
+          <circle class="edge-hitbox" cx="195" cy="135" r="22" data-edge="json-excel"/>
+          <circle class="edge-hitbox" cx="150" cy="210" r="22" data-edge="local-excel"/>
+        </svg>
       </div>
-      <div class="cloud-buttons">
-        <button class="cloud-btn cloud-btn-push" id="cloudPushBtn">📤 ارسال به ابر</button>
-        <button class="cloud-btn cloud-btn-pull" id="cloudPullBtn">📥 دریافت از ابر</button>
-        <button class="cloud-btn cloud-btn-full" id="cloudTestBtn">🔍 تست اتصال</button>
+
+      <div class="data-triangle-info" id="dataTriangleInfo">
+        یک رأس را انتخاب کن
+      </div>
+
+      <div class="data-status-list">
+        <div class="data-status-item">
+          <span class="lbl">💾 حافظه محلی <span class="data-status-dot on" id="dotLocal"></span></span>
+          <span class="val" id="infoLocal">—</span>
+        </div>
+        <div class="data-status-item">
+          <span class="lbl">📊 فایل اکسل <span class="data-status-dot off" id="dotExcel"></span></span>
+          <span class="val" id="infoExcel">متصل نیست</span>
+        </div>
+        <div class="data-status-item">
+          <span class="lbl">☁️ JSON ابری <span class="data-status-dot off" id="dotJson"></span></span>
+          <span class="val" id="infoJson">تنظیم نشده</span>
+        </div>
+        <div class="data-status-item">
+          <span class="lbl">📡 اینترنت <span class="data-status-dot on" id="dotOnline"></span></span>
+          <span class="val" id="infoOnline">آنلاین</span>
+        </div>
+      </div>
+
+      <div class="data-actions">
+        <button class="data-action-btn sync" id="dataSyncBtn">🔄 همگام‌سازی خودکار (اختیاری)</button>
+      </div>
+
+      <div class="section-divider">🛠 ابزارهای پیشرفته</div>
+      <div class="data-actions">
+        <button class="data-action-btn tool" id="dataPickFileBtn">🔗 اتصال فایل اکسل</button>
+        <button class="data-action-btn tool" id="dataUnlinkFileBtn">🔓 قطع اتصال اکسل</button>
+        <button class="data-action-btn tool" id="dataTestCloudBtn">🔍 تست اتصال ابر</button>
       </div>
     </div>
 
-    <!-- تب کارخانه -->
+    <!-- ===== تب کارخانه ===== -->
     <div class="settings-panel" data-panel="factory">
       <div class="factory-section">
         <div class="factory-section-title">🏭 آرد کارخانه</div>
@@ -516,7 +823,7 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
       </div>
     </div>
 
-    <!-- تب سهمیه -->
+    <!-- ===== تب سهمیه ===== -->
     <div class="settings-panel" data-panel="quota">
       <div class="quota-section">
         <div class="quota-section-title">📊 سهمیه ماهانه</div>
@@ -529,11 +836,11 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
           <div class="quota-row"><span class="lbl">خرید دوره ۱:</span><span class="val" id="quotaBought1">—</span></div>
           <div class="quota-row"><span class="lbl">خرید دوره ۲:</span><span class="val" id="quotaBought2">—</span></div>
         </div>
-        <button class="factory-add-btn" id="quotaEditBtn">✏️ ویرایش سهمیه ماه جاری</button>
+        <button class="factory-add-btn" id="quotaEditBtn" style="background:#6a1b9a">✏️ ویرایش سهمیه ماه جاری</button>
       </div>
     </div>
 
-    <!-- تب قرض آرد -->
+    <!-- ===== تب قرض آرد ===== -->
     <div class="settings-panel" data-panel="loan">
       <div class="loan-section">
         <div class="loan-section-title">📦 دفترچه قرض آرد</div>
@@ -551,7 +858,7 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
       </div>
     </div>
 
-    <!-- تب مرخصی -->
+    <!-- ===== تب مرخصی ===== -->
     <div class="settings-panel" data-panel="vacation">
       <div class="vacation-section">
         <div class="vacation-section-title">🌴 مرخصی‌های دستی</div>
@@ -566,16 +873,21 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
       </div>
     </div>
 
-    <!-- تب فایل -->
-    <div class="settings-panel" data-panel="file">
-      <div class="settings-label">📁 فایل پشتیبان محلی (Excel)</div>
-      <div id="fileSection">
-        <div class="cloud-buttons">
-          <button class="cloud-btn cloud-btn-full" id="pickFileBtn" style="background:#00838f">🔗 اتصال فایل Excel</button>
-          <button class="cloud-btn cloud-btn-full" id="unlinkFileBtn" style="background:#d32f2f">🔓 قطع اتصال</button>
-        </div>
-        <div class="settings-note" id="fileSectionNote"></div>
+    <!-- ===== تب ابری (آخرین تب) ===== -->
+    <div class="settings-panel" data-panel="cloud">
+      <div class="settings-label">🌐 پشتیبان‌گیری ابری (JSONBin.io)</div>
+      <div class="settings-label" style="margin-top:8px">API Key (Master Key):</div>
+      <input type="password" class="settings-input" id="cloudApiKey" placeholder="$2a$10$...">
+      <div class="settings-label">Bin ID:</div>
+      <input type="text" class="settings-input" id="cloudBinId" placeholder="65a1b2c3...">
+      <label class="settings-checkbox">
+        <input type="checkbox" id="cloudAutoSync">
+        <span>ذخیره خودکار در ابر</span>
+      </label>
+      <div class="cloud-status warn" id="cloudStatus" style="padding:8px 12px;border-radius:8px;text-align:center;margin-top:10px;font-size:12px;font-weight:700">
+        وضعیت: <span id="cloudStatusText">تنظیم نشده</span>
       </div>
+      <button class="data-action-btn tool" id="cloudTestBtn2" style="width:100%;margin-top:10px;padding:12px;border:none;border-radius:8px;background:#546e7a;color:#fff;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer">🔍 تست اتصال</button>
     </div>
 
     <button class="settings-close" id="settingsClose">بستن</button>
@@ -628,7 +940,7 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
   </div>
 </div>
 
-<!-- ========== فرم سهمیه ماهانه ========== -->
+<!-- ========== فرم سهمیه ========== -->
 <div class="modal quota-modal" id="quotaModal">
   <div class="loan-form-box">
     <button class="dialog-close" id="quotaCloseX">✕</button>
@@ -644,6 +956,55 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
       <button class="loan-form-btn loan-form-btn-cancel" id="quotaCancelBtn">انصراف</button>
       <button class="loan-form-btn loan-form-btn-submit" id="quotaSubmitBtn" style="background:#6a1b9a">ذخیره</button>
     </div>
+  </div>
+</div>
+
+<!-- ========== مودال پیشرفت ========== -->
+<div class="modal progress-modal" id="progressModal">
+  <div class="progress-box">
+    <div class="progress-icon" id="progressIcon">🔄</div>
+    <div class="progress-title" id="progressTitle">در حال انجام...</div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill" style="width:0%">0%</div>
+    </div>
+    <div class="progress-detail" id="progressDetail"></div>
+    <div class="progress-stats">
+      <div><span class="num" id="progressStat1">۰</span><span>کل</span></div>
+      <div><span class="num" id="progressStat2">۰</span><span>انجام‌شده</span></div>
+      <div><span class="num" id="progressStat3">۰</span><span>باقی‌مانده</span></div>
+    </div>
+    <button class="progress-close-btn" id="progressCloseBtn">بستن</button>
+  </div>
+</div>
+
+<!-- ========== مودال انتخاب حالت ========== -->
+<div class="modal mode-modal" id="modeModal">
+  <div class="mode-box">
+    <div class="mode-title" id="modeTitle">📥 دریافت اطلاعات</div>
+    <div class="mode-subtitle">داده‌های موجود در دو منبع متفاوت هستند. یکی را انتخاب کن:</div>
+    <div class="mode-compare">
+      <div class="mode-card cloud">
+        <div class="mode-icon">☁️</div>
+        <div class="mode-name">منبع</div>
+        <div class="mode-value"><span id="modeSourceCount">۰</span><span class="unit">روز</span></div>
+        <div class="mode-date" id="modeSourceDate">—</div>
+      </div>
+      <div class="mode-vs">↔</div>
+      <div class="mode-card local">
+        <div class="mode-icon">💾</div>
+        <div class="mode-name">محلی</div>
+        <div class="mode-value"><span id="modeTargetCount">۰</span><span class="unit">روز</span></div>
+        <div class="mode-date" id="modeTargetDate">—</div>
+      </div>
+    </div>
+    <div class="mode-buttons">
+      <button class="mode-btn replace" id="modeReplaceBtn">🔄 جایگزینی کامل</button>
+      <button class="mode-btn merge" id="modeMergeBtn">🔀 ادغام (روزهای جدید اضافه شوند)</button>
+    </div>
+    <div class="mode-buttons-row" style="margin-top:8px">
+      <button class="mode-btn cancel" id="modeCancelBtn">❌ لغو</button>
+    </div>
+    <div class="mode-note">💡 جایگزینی: داده‌های فعلی پاک و با داده‌های جدید جایگزین می‌شوند.<br>ادغام: روزهای جدید اضافه می‌شوند و روزهای تکراری جایگزین می‌شوند.</div>
   </div>
 </div>
 
@@ -667,28 +1028,31 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 <!-- ========== ماشین‌حساب شناور ========== -->
 <button class="calc-toggle" id="calcToggle" title="ماشین‌حساب">🧮</button>
 <div class="calc-panel" id="calcPanel">
-  <div class="calc-display" id="calcDisplay">۰</div>
+  <div class="calc-display" id="calcDisplay">0</div>
   <div class="calc-grid">
-    <button class="calc-btn clr" data-action="clear">پاک</button>
+    <button class="calc-btn clr" data-action="clear">AC</button>
     <button class="calc-btn op" data-action="div">÷</button>
     <button class="calc-btn op" data-action="mul">×</button>
     <button class="calc-btn op" data-action="sub">−</button>
-    <button class="calc-btn" data-num="7">۷</button>
-    <button class="calc-btn" data-num="8">۸</button>
-    <button class="calc-btn" data-num="9">۹</button>
+
+    <button class="calc-btn" data-num="7">7</button>
+    <button class="calc-btn" data-num="8">8</button>
+    <button class="calc-btn" data-num="9">9</button>
     <button class="calc-btn op" data-action="add">+</button>
-    <button class="calc-btn" data-num="4">۴</button>
-    <button class="calc-btn" data-num="5">۵</button>
-    <button class="calc-btn" data-num="6">۶</button>
-    <button class="calc-btn" data-num="1">۱</button>
-    <button class="calc-btn" data-num="2">۲</button>
-    <button class="calc-btn" data-num="3">۳</button>
-    <button class="calc-btn" data-num="0">۰</button>
-    <button class="calc-btn" data-action="dot">٫</button>
-    <button class="calc-btn eq" data-action="eq" style="grid-column:span 4">=</button>
+
+    <button class="calc-btn" data-num="4">4</button>
+    <button class="calc-btn" data-num="5">5</button>
+    <button class="calc-btn" data-num="6">6</button>
+    <button class="calc-btn" data-num="1">1</button>
+
+    <button class="calc-btn" data-num="2">2</button>
+    <button class="calc-btn" data-num="3">3</button>
+    <button class="calc-btn" data-num="0">0</button>
+    <button class="calc-btn" data-action="dot">.</button>
+
+    <button class="calc-btn eq" data-action="eq">=</button>
   </div>
 </div>
-
 
   <script>
 /* ============================================================
@@ -701,14 +1065,9 @@ const W=['شنبه','یکشنبه','دوشنبه','سه‌شنبه','چهارش�
 const M=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
 const faDigits='۰۱۲۳۴۵۶۷۸۹',enDigits='0123456789';
 
-/* ============================================================
-   بخش ۲: توابع اعداد فارسی
-   ============================================================ */
 function faToEn(s){if(!s)return'';return String(s).replace(/[۰-۹]/g,d=>enDigits[faDigits.indexOf(d)]).replace(/[٠-٩]/g,d=>enDigits['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]).replace(/[,،\s]/g,'')}
 function toFaDigits(s){return String(s).replace(/[0-9]/g,d=>faDigits[+d])}
 function faNum(s){return String(s).replace(/[0-9]/g,d=>faDigits[+d])}
-
-/* نمایش عدد با اعشار (حداکثر ۲ رقم) */
 function formatNumber(n){
   if(n===null||n===undefined||isNaN(n))return'';
   const rounded=Math.round(n*100)/100;
@@ -716,15 +1075,8 @@ function formatNumber(n){
   const str=isInt?String(Math.floor(rounded)):String(rounded);
   return str.replace(/[0-9]/g,d=>faDigits[+d]).replace('.','٫');
 }
-/* نمایش عدد صحیح */
-function formatInt(n){
-  if(n===null||n===undefined||isNaN(n))return'';
-  return Math.floor(n).toLocaleString('fa-IR');
-}
+function formatInt(n){if(n===null||n===undefined||isNaN(n))return'';return Math.floor(n).toLocaleString('fa-IR')}
 
-/* ============================================================
-   بخش ۳: توابع تاریخ
-   ============================================================ */
 function todayKey(){const g=new Date();const j=g2j(g.getFullYear(),g.getMonth()+1,g.getDate());return{year:j.jy,month:j.jm,day:j.jd,key:j.jy+'/'+String(j.jm).padStart(2,'0')+'/'+String(j.jd).padStart(2,'0')}}
 function keyObj(k){const[y,m,d]=k.split('/').map(Number);return{year:y,month:m,day:d,key:k}}
 function prevDay(k){const[y,m,d]=k.split('/').map(Number);const g=j2g(y,m,d);const dt=new Date(g.gy,g.gm-1,g.gd);dt.setDate(dt.getDate()-1);const j=g2j(dt.getFullYear(),dt.getMonth()+1,dt.getDate());return j.jy+'/'+String(j.jm).padStart(2,'0')+'/'+String(j.jd).padStart(2,'0')}
@@ -732,20 +1084,19 @@ function nextDay(k){const[y,m,d]=k.split('/').map(Number);const g=j2g(y,m,d);con
 function weekdayName(jy,jm,jd){const g=j2g(jy,jm,jd);const dt=new Date(g.gy,g.gm-1,g.gd);const map={6:0,0:1,1:2,2:3,3:4,4:5,5:6};return W[map[dt.getDay()]]}
 function monthLen(jy,jm){if(jm<=6)return 31;if(jm<=11)return 30;return isLeap(jy)?30:29}
 function cmpJ(a,b){if(a.jy!==b.jy)return a.jy-b.jy;if(a.jm!==b.jm)return a.jm-b.jm;return a.jd-b.jd}
-function cmpKey(a,b){return a<b?-1:a>b?1:0}
 
 /* ============================================================
-   بخش ۴: ذخیره‌سازی اصلی
+   بخش ۲: ذخیره‌سازی اصلی
    ============================================================ */
-const DB_KEY='nanvaii_accounting_db_v3';
-const META_KEY='nanvaii_meta_v3';
+const DB_KEY='nanvaii_accounting_db_v4';
+const META_KEY='nanvaii_meta_v4';
 function loadDB(){try{const r=localStorage.getItem(DB_KEY);return r?JSON.parse(r):{}}catch(e){return{}}}
 function saveDB(db){try{localStorage.setItem(DB_KEY,JSON.stringify(db))}catch(e){alert('خطا: '+e.message)}}
-function loadMeta(){try{const r=localStorage.getItem(META_KEY);return r?JSON.parse(r):{factoryFlour:[],loans:[],quota:{},vacations:[],currentTab:'cloud'}}catch(e){return{factoryFlour:[],loans:[],quota:{},vacations:[],currentTab:'cloud'}}}
+function loadMeta(){try{const r=localStorage.getItem(META_KEY);return r?JSON.parse(r):{factoryFlour:[],loans:[],quota:{},vacations:[],currentTab:'transfer'}}catch(e){return{factoryFlour:[],loans:[],quota:{},vacations:[],currentTab:'transfer'}}}
 function saveMeta(m){try{localStorage.setItem(META_KEY,JSON.stringify(m))}catch(e){}}
 
 /* ============================================================
-   بخش ۵: صفحه‌سازی
+   بخش ۳: صفحه‌سازی
    ============================================================ */
 const page=document.getElementById('page');
 const strip=document.getElementById('numberStrip');
@@ -766,19 +1117,13 @@ for(let i=1;i<=V;i++){
   const lab=document.createElement('div');lab.className='ref-label';lab.textContent=letters[i-1];lab.style.right=pct+'%';lab.style.top='50%';topStrip.appendChild(lab);
 }
 const xPos=n=>(n*100/(V+1))+'%',yPos=n=>(n*100/(H+1))+'%',yM=(a,b)=>((b*100/(H+1)+a*100/(H+1))/2)+'%',xN=n=>n*100/(V+1),yN=n=>n*100/(H+1);
-
-/* خطوط ضخیم */
 const sV=document.createElement('div');sV.className='vline-strong';sV.style.right=xPos(3);sV.style.top=yPos(13);sV.style.height=(yN(20)-yN(13))+'%';page.appendChild(sV);
 const sH1=document.createElement('div');sH1.className='hline-strong';sH1.style.top=yPos(13);sH1.style.right=xPos(3);sH1.style.width=(xN(4)-xN(3))+'%';page.appendChild(sH1);
 const sH2=document.createElement('div');sH2.className='hline-strong';sH2.style.top=yPos(16);sH2.style.right=xPos(1);sH2.style.width=(xN(3)-xN(1))+'%';page.appendChild(sH2);
 const mV=document.createElement('div');mV.className='vline-medium';mV.style.right=xPos(1);mV.style.top=yPos(16);mV.style.height=(yN(19)-yN(16))+'%';page.appendChild(mV);
-
-/* محاسبه‌ی اندازه‌ها */
 const rowH=100/21,colW=100/(V+1),shrinkW=colW*0.05,shrinkH=rowH*0.05;
 const rectW=colW-2*shrinkW,rectH=rowH-2*shrinkH;
 const bigW=col['b']-2*shrinkW,bigH=2*rowH-2*shrinkH,bigRight=shrinkW,bigTop=shrinkH;
-
-/* جای‌گذاری دکمه‌ها */
 const saveBtn=document.getElementById('btnSave');
 saveBtn.style.right=(col['e']+shrinkW)+'%';
 saveBtn.style.top=bigTop+'%';
@@ -793,7 +1138,7 @@ const todayDateEl=document.getElementById('todayDate');
 todayDateEl.style.top=bigTop+'%';todayDateEl.style.right=bigRight+'%';todayDateEl.style.width=bigW+'%';todayDateEl.style.height=bigH+'%';
 
 /* ============================================================
-   بخش ۶: فیلدها
+   بخش ۴: فیلدها
    ============================================================ */
 const F={};
 function mk(role,cls,ph,x,y,extra){
@@ -835,9 +1180,6 @@ mk('gross-per-bag','calc-box','تعداد ناخالص هر کیسه',mX12,yPos(
 mk('flour-stock','field-input','موجودی آرد مغازه',xPos(5),yPos(13),{transform:'translate(0%,-50%)'});
 mk('cash-stock','field-input','موجودی نقدی دخل',xPos(5),yPos(19),{transform:'translate(0%,-50%)'});
 
-/* ============================================================
-   بخش ۷: توابع کمکی فیلدها
-   ============================================================ */
 function gn(i){return parseFloat(faToEn(i.value))||0}
 function sn(i,n){i.value=formatNumber(n)}
 function collect(){const d={};Object.keys(F).forEach(r=>d[r]=F[r].value||'');return d}
@@ -846,25 +1188,18 @@ function saveDate(k){const db=loadDB();db[k]={...collect(),savedAt:new Date().to
 function loadDate(k){const db=loadDB();if(db[k]){apply(db[k]);return true}return false}
 const REQ=['bag-count','line10','line11','line12','main-card','backup-card','traveller','flour-stock','cash-stock'];
 function checkEmpty(){let c=0;REQ.forEach(r=>{const i=F[r],e=!i.value||i.value.trim()==='';if(e){i.classList.add('empty-warning');c++}else i.classList.remove('empty-warning')});return c}
-
-/* فارسی‌سازی ورودی‌ها + محاسبه‌ی مجدد */
 REQ.forEach(r=>{
   F[r].addEventListener('input',()=>{
     if(F[r].value.trim()!=='')F[r].classList.remove('empty-warning');
-    const val=F[r].value;
-    const nv=toFaDigits(val);
-    if(nv!==val){
-      const pos=F[r].selectionStart;
-      F[r].value=nv;
-      try{F[r].setSelectionRange(pos,pos)}catch(e){}
-    }
+    const val=F[r].value;const nv=toFaDigits(val);
+    if(nv!==val){const pos=F[r].selectionStart;F[r].value=nv;try{F[r].setSelectionRange(pos,pos)}catch(e){}}
   });
   F[r].addEventListener('blur',()=>{calc();checkEmpty()});
 });
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){calc();checkEmpty()}});
 
 /* ============================================================
-   بخش ۸: دیالوگ پرسش‌های روزانه
+   بخش ۵: دیالوگ پرسش‌های روزانه
    ============================================================ */
 const oV=document.getElementById('dialogOverlay'),dI=document.getElementById('dialogInput'),dQ=document.getElementById('dialogQuestion'),dC=document.getElementById('dialogCounter'),bN=document.getElementById('dialogNext'),bP=document.getElementById('dialogPrev'),bS=document.getElementById('dialogSkip'),bX=document.getElementById('dialogClose');
 const Q=[
@@ -879,14 +1214,8 @@ const Q=[
   {text:'مبلغ نقدی موجود در دخل:',role:'cash-stock'}
 ];
 let dQ1=[],sQ=[],curDate=null;
-
 function showDlg(){
-  if(dQ1.length===0){
-    oV.classList.remove('active');
-    if(curDate){saveDate(curDate);curDate=null}
-    calc();checkEmpty();
-    return;
-  }
+  if(dQ1.length===0){oV.classList.remove('active');if(curDate){saveDate(curDate);curDate=null}calc();checkEmpty();return}
   const q=dQ1[0],done=Q.length-dQ1.length;
   dC.textContent=(done+1).toLocaleString('fa-IR')+' از '+Q.length.toLocaleString('fa-IR')+(sQ.length>0?' ('+sQ.length.toLocaleString('fa-IR')+' لغو)':'');
   dQ.textContent=q.text;
@@ -896,18 +1225,8 @@ function showDlg(){
   oV.classList.add('active');
   setTimeout(()=>{dI.focus();dI.select()},50);
 }
-function goNext(){
-  const q=dQ1[0];
-  F[q.role].value=toFaDigits(dI.value.trim());
-  dQ1.shift();
-  if(dQ1.length===0&&sQ.length>0){dQ1=sQ.slice();sQ=[]}
-  showDlg();
-}
-function goSkip(){
-  const q=dQ1.shift();sQ.push(q);
-  if(dQ1.length===0&&sQ.length>0){dQ1=sQ.slice();sQ=[]}
-  showDlg();
-}
+function goNext(){const q=dQ1[0];F[q.role].value=toFaDigits(dI.value.trim());dQ1.shift();if(dQ1.length===0&&sQ.length>0){dQ1=sQ.slice();sQ=[]}showDlg()}
+function goSkip(){const q=dQ1.shift();sQ.push(q);if(dQ1.length===0&&sQ.length>0){dQ1=sQ.slice();sQ=[]}showDlg()}
 function closeDialog(){
   if(dQ1.length>0){const q=dQ1[0];if(dI.value.trim()!=='')F[q.role].value=toFaDigits(dI.value.trim())}
   oV.classList.remove('active');dQ1=[];sQ=[];
@@ -918,21 +1237,17 @@ bN.addEventListener('click',goNext);
 bS.addEventListener('click',goSkip);
 bP.addEventListener('click',()=>alert('برای ویرایش از روی فیلد قرمز کلیک کن'));
 bX.addEventListener('click',closeDialog);
-dI.addEventListener('input',()=>{
-  const val=dI.value;const nv=toFaDigits(val);
-  if(nv!==val){const pos=dI.selectionStart;dI.value=nv;try{dI.setSelectionRange(pos,pos)}catch(e){}}
-});
+dI.addEventListener('input',()=>{const val=dI.value;const nv=toFaDigits(val);if(nv!==val){const pos=dI.selectionStart;dI.value=nv;try{dI.setSelectionRange(pos,pos)}catch(e){}}});
 dI.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();goNext()}});
 
 /* ============================================================
-   بخش ۹: Toast ذخیره
+   بخش ۶: Toast ذخیره
    ============================================================ */
-let toastTimeout=null,toastHideTimeout=null;
+let toastTimeout=null;
 function showToast(msg,type,duration){
   const t=document.getElementById('saveToast');
   t.innerHTML=msg;
   t.className='save-toast show '+(type||'info');
-  // موقعیت زیر دکمه ذخیره
   const btnRect=saveBtn.getBoundingClientRect();
   const pageRect=page.getBoundingClientRect();
   const relRight=pageRect.right-btnRect.right-btnRect.width/2;
@@ -940,130 +1255,86 @@ function showToast(msg,type,duration){
   t.style.right=relRight+'px';
   t.style.top=relTop+'px';
   if(toastTimeout)clearTimeout(toastTimeout);
-  if(toastHideTimeout)clearTimeout(toastHideTimeout);
   const dur=duration||3000;
-  toastTimeout=setTimeout(()=>{
-    t.classList.remove('show');
-  },dur);
-}
-function hideToast(){
-  const t=document.getElementById('saveToast');
-  t.classList.remove('show');
+  toastTimeout=setTimeout(()=>{t.classList.remove('show')},dur);
 }
 
 /* ============================================================
-   بخش ۱۰: ذخیره‌سازی ساده
+   بخش ۷: مودال پیشرفت
    ============================================================ */
-function doLocalSave(){
-  const k=viewedKey||todayKey().key;
-  saveDate(k);
-  checkEmpty();
-  const[y,m,d]=k.split('/').map(Number);
-  setTopDate({year:y,month:m,day:d,key:k});
-  return true;
+let progressModalEl=document.getElementById('progressModal');
+function showProgress(title,icon){
+  document.getElementById('progressIcon').textContent=icon||'🔄';
+  document.getElementById('progressTitle').textContent=title||'در حال انجام...';
+  document.getElementById('progressFill').style.width='0%';
+  document.getElementById('progressFill').textContent='0%';
+  document.getElementById('progressFill').className='progress-bar-fill';
+  document.getElementById('progressDetail').textContent='';
+  document.getElementById('progressStat1').textContent='۰';
+  document.getElementById('progressStat2').textContent='۰';
+  document.getElementById('progressStat3').textContent='۰';
+  document.getElementById('progressCloseBtn').classList.remove('show');
+  progressModalEl.classList.add('active');
 }
-async function doExcelSave(){
-  const db=loadDB();
-  if(Object.keys(db).length===0)return false;
-  // اگه فایل متصل هست
-  if(backupFileHandle){
-    const ok=await saveToExcelFile();
-    if(ok)return true;
-  }
-  // دانلود
-  return downloadExcel();
+function updateProgress(pct,detail,done,total){
+  const p=Math.min(100,Math.max(0,Math.round(pct)));
+  const fill=document.getElementById('progressFill');
+  fill.style.width=p+'%';
+  fill.textContent=p+'%';
+  if(detail)document.getElementById('progressDetail').textContent=detail;
+  if(done!==undefined)document.getElementById('progressStat2').textContent=faNum(done);
+  if(total!==undefined)document.getElementById('progressStat1').textContent=faNum(total);
+  if(done!==undefined&&total!==undefined)document.getElementById('progressStat3').textContent=faNum(Math.max(0,total-done));
 }
-async function doJsonSave(){
-  const c=loadCloud();
-  if(!c.apiKey||!c.binId){
-    showToast('⚠️ تنظیمات ابری وارد نشده','warn',3000);
-    return false;
-  }
-  if(!navigator.onLine){
-    showToast('📵 اینترنت قطع است','error',3000);
-    return false;
-  }
-  showToast('☁️ در حال ذخیره در JSON <span class="spinner"></span>','json',60000);
-  const ok=await cloudPush(true);
-  if(ok){
-    const db=loadDB();
-    showToast('✅ در JSON ذخیره شد ('+faNum(Object.keys(db).length)+' روز)','success',3000);
-  }else{
-    showToast('❌ خطا در ذخیره JSON','error',3000);
-  }
-  return ok;
+function finishProgress(msg,type,showClose){
+  const fill=document.getElementById('progressFill');
+  if(type==='success')fill.className='progress-bar-fill success';
+  else if(type==='error')fill.className='progress-bar-fill error';
+  document.getElementById('progressIcon').textContent=(type==='success')?'✅':(type==='error')?'❌':'ℹ️';
+  document.getElementById('progressTitle').textContent=msg;
+  fill.style.width='100%';
+  fill.textContent='100%';
+  const btn=document.getElementById('progressCloseBtn');
+  btn.className='progress-close-btn show '+(type==='success'?'ok':type==='error'?'err':'');
+  btn.textContent=type==='success'?'✅ بستن':'❌ بستن';
+  btn.onclick=()=>{progressModalEl.classList.remove('active')};
 }
+function closeProgress(){progressModalEl.classList.remove('active')}
 
 /* ============================================================
-   بخش ۱۱: مدیریت دکمه ذخیره (تشخیص یک/دو/سه کلیک)
+   بخش ۸: مودال انتخاب حالت (جایگزینی/ادغام/لغو)
    ============================================================ */
-let clickCount=0;
-let clickTimer=null;
-let lastClickTime=0;
-const CLICK_WINDOW=600; // میلی‌ثانیه
-
-saveBtn.addEventListener('click',async()=>{
-  const now=Date.now();
-  if(now-lastClickTime>CLICK_WINDOW){
-    clickCount=0;
-  }
-  clickCount++;
-  lastClickTime=now;
-  
-  if(clickTimer)clearTimeout(clickTimer);
-  
-  // تغییر رنگ دکمه بر اساس تعداد کلیک
-  saveBtn.classList.remove('click-2','click-3');
-  if(clickCount===2)saveBtn.classList.add('click-2');
-  if(clickCount>=3)saveBtn.classList.add('click-3');
-  
-  clickTimer=setTimeout(async()=>{
-    const count=clickCount;
-    clickCount=0;
-    saveBtn.classList.remove('click-2','click-3');
-    
-    if(count===1){
-      // === یک کلیک: localStorage فقط ===
-      showToast('💾 در حال ذخیره...','info',3000);
-      const startTime=Date.now();
-      doLocalSave();
-      const elapsed=Date.now()-startTime;
-      const remaining=Math.max(0,3000-elapsed);
-      // پیام حداقل ۳ ثانیه بمونه
-      if(remaining<3000){
-        setTimeout(()=>{
-          showToast('✅ در حافظه محلی ذخیره شد','success',1500);
-        },remaining);
-      }else{
-        showToast('✅ در حافظه محلی ذخیره شد','success',1500);
-      }
-    }
-    else if(count===2){
-      // === دو کلیک: localStorage + Excel ===
-      showToast('💾 در حال ذخیره در Excel...','info',3000);
-      doLocalSave();
-      const ok=await doExcelSave();
-      const db=loadDB();
-      if(ok){
-        showToast('✅ در Excel ذخیره شد ('+faNum(Object.keys(db).length)+' روز)','success',2500);
-      }else{
-        showToast('❌ خطا در ذخیره Excel','error',2500);
-      }
-    }
-    else if(count>=3){
-      // === سه کلیک: localStorage + Excel + JSON ===
-      showToast('💾 در حال ذخیره در JSON...','json',30000);
-      doLocalSave();
-      await doExcelSave();
-      await doJsonSave();
-    }
-  },CLICK_WINDOW);
+let modeResolve=null;
+function showModeDialog(title,sourceName,sourceCount,sourceDate,targetName,targetCount,targetDate){
+  document.getElementById('modeTitle').textContent=title;
+  document.querySelector('.mode-card.cloud .mode-name').textContent=sourceName;
+  document.querySelector('.mode-card.local .mode-name').textContent=targetName;
+  document.getElementById('modeSourceCount').textContent=faNum(sourceCount);
+  document.getElementById('modeSourceDate').textContent=sourceDate||'—';
+  document.getElementById('modeTargetCount').textContent=faNum(targetCount);
+  document.getElementById('modeTargetDate').textContent=targetDate||'—';
+  document.getElementById('modeModal').classList.add('active');
+  return new Promise(resolve=>{
+    modeResolve=resolve;
+  });
+}
+document.getElementById('modeReplaceBtn').addEventListener('click',()=>{
+  document.getElementById('modeModal').classList.remove('active');
+  if(modeResolve){modeResolve('replace');modeResolve=null}
+});
+document.getElementById('modeMergeBtn').addEventListener('click',()=>{
+  document.getElementById('modeModal').classList.remove('active');
+  if(modeResolve){modeResolve('merge');modeResolve=null}
+});
+document.getElementById('modeCancelBtn').addEventListener('click',()=>{
+  document.getElementById('modeModal').classList.remove('active');
+  if(modeResolve){modeResolve('cancel');modeResolve=null}
 });
 
 /* ============================================================
-   بخش ۱۲: تنظیمات ابری (JSONBin)
+   بخش ۹: تنظیمات ابری (JSONBin)
    ============================================================ */
-const CLOUD_KEY='nanvaii_cloud_config_v3';
+const CLOUD_KEY='nanvaii_cloud_config_v4';
 function loadCloud(){try{const r=localStorage.getItem(CLOUD_KEY);return r?JSON.parse(r):{apiKey:'',binId:'',autoSync:false}}catch(e){return{apiKey:'',binId:'',autoSync:false}}}
 function saveCloud(c){try{localStorage.setItem(CLOUD_KEY,JSON.stringify(c))}catch(e){}}
 
@@ -1083,7 +1354,7 @@ async function cloudPush(silent){
     if(!r.ok)throw new Error('HTTP '+r.status);
     return true;
   }catch(e){
-    if(!silent)console.error(e);
+    if(!silent)console.error('Cloud push error:',e);
     return false;
   }
 }
@@ -1099,7 +1370,7 @@ async function cloudPull(silent){
     const j=await r.json();
     return j.record||j;
   }catch(e){
-    if(!silent)alert('❌ خطا در دریافت:\n'+e.message);
+    if(!silent)console.error('Cloud pull error:',e);
     return null;
   }
 }
@@ -1119,23 +1390,31 @@ async function cloudTest(){
 }
 function updateCloudStatus(){
   const c=loadCloud();
-  const el=document.getElementById('cloudStatus');
   const txt=document.getElementById('cloudStatusText');
-  const dot=document.getElementById('onlineDot');
+  const el=document.getElementById('cloudStatus');
   if(c.apiKey&&c.binId){
     el.className='cloud-status ok';
+    el.style.background='#d4f5d8';
+    el.style.color='#1b5e20';
     txt.textContent='متصل'+(c.autoSync?' — ذخیره خودکار فعال':' — ذخیره خودکار غیرفعال');
+    document.getElementById('dotJson').className='data-status-dot on';
+    document.getElementById('infoJson').textContent='متصل';
   }else{
     el.className='cloud-status warn';
+    el.style.background='#fff3e0';
+    el.style.color='#e65100';
     txt.textContent='تنظیم نشده';
+    document.getElementById('dotJson').className='data-status-dot off';
+    document.getElementById('infoJson').textContent='تنظیم نشده';
   }
-  dot.className='online-dot '+(navigator.onLine?'on':'off');
+  document.getElementById('dotOnline').className='data-status-dot '+(navigator.onLine?'on':'off');
+  document.getElementById('infoOnline').textContent=navigator.onLine?'آنلاین':'آفلاین';
 }
 window.addEventListener('online',updateCloudStatus);
 window.addEventListener('offline',updateCloudStatus);
 
 /* ============================================================
-   بخش ۱۳: مدیریت فایل Excel
+   بخش ۱۰: مدیریت فایل Excel
    ============================================================ */
 let backupFileHandle=null;
 function canUseFilePicker(){try{return !!(window.showSaveFilePicker&&window.self===window.top)}catch(e){return false}}
@@ -1148,6 +1427,7 @@ async function pickBackupFile(){
     });
     await saveFileHandle(backupFileHandle);
     updateSaveBtnStyle(true);
+    updateDataStatus();
     return true;
   }catch(e){
     if(e.name!=='AbortError')alert('❌ خطا: '+e.message);
@@ -1156,7 +1436,7 @@ async function pickBackupFile(){
 }
 async function saveFileHandle(h){
   return new Promise(r=>{
-    const req=indexedDB.open('nanvaii-handles-v3',1);
+    const req=indexedDB.open('nanvaii-handles-v4',1);
     req.onupgradeneeded=e=>{e.target.result.createObjectStore('files')};
     req.onsuccess=e=>{
       const db=e.target.result;
@@ -1169,7 +1449,7 @@ async function saveFileHandle(h){
 }
 async function loadFileHandle(){
   return new Promise(r=>{
-    const req=indexedDB.open('nanvaii-handles-v3',1);
+    const req=indexedDB.open('nanvaii-handles-v4',1);
     req.onupgradeneeded=e=>{e.target.result.createObjectStore('files')};
     req.onsuccess=e=>{
       const db=e.target.result;
@@ -1235,11 +1515,492 @@ function downloadExcel(){
   URL.revokeObjectURL(url);
   return true;
 }
+async function readExcelFromFile(fileOrHandle){
+  let buf;
+  if(fileOrHandle instanceof File){
+    buf=await fileOrHandle.arrayBuffer();
+  }else{
+    // handle
+    const perm=await fileOrHandle.queryPermission({mode:'read'});
+    if(perm!=='granted'){
+      const req=await fileOrHandle.requestPermission({mode:'read'});
+      if(req!=='granted')return null;
+    }
+    const file=await fileOrHandle.getFile();
+    buf=await file.arrayBuffer();
+  }
+  if(typeof XLSX==='undefined'){alert('❌ کتابخانه Excel بارگذاری نشد');return null}
+  const wb=XLSX.read(buf);
+  const ws=wb.Sheets[wb.SheetNames[0]];
+  const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+  if(rows.length<2){alert('❌ فایل خالی');return null}
+  const headerMap={};
+  rows[0].forEach((h,i)=>{headerMap[String(h).trim()]=i});
+  if(headerMap['تاریخ']===undefined){alert('❌ ستون «تاریخ» پیدا نشد');return null}
+  const db={};
+  const INPUT_FIELDS=['bag-count','line10','line11','line12','main-card','backup-card','traveller','flour-stock','cash-stock'];
+  const CALC_FIELDS_IMP=['bread-count','line11','ardeshir-amount','cash-diff','flour-used','total-amount','plastic-price','bread-price','total-bread','gross-bread','per-plastic-bag','gross-per-bag'];
+  for(let r=1;r<rows.length;r++){
+    const row=rows[r];
+    if(!row||row.length===0)continue;
+    const dk=normalizeDate(row[headerMap['تاریخ']]);
+    if(!dk)continue;
+    const rec={};
+    // فیلدهای ورودی
+    for(const field of INPUT_FIELDS){
+      const headerName=EXCEL_HEADERS[EXCEL_FIELDS.indexOf(field)];
+      const idx=headerMap[headerName];
+      if(idx!==undefined&&row[idx]!==undefined&&row[idx]!==''){
+        let val=row[idx];
+        if(typeof val==='number')val=val.toLocaleString('fa-IR');
+        else val=toFaDigits(String(val).trim());
+        rec[field]=val;
+      }
+    }
+    // فیلدهای محاسبه‌شده (اختیاری — از فایل خوانده شوند)
+    for(const field of CALC_FIELDS_IMP){
+      const headerName=EXCEL_HEADERS[EXCEL_FIELDS.indexOf(field)];
+      const idx=headerMap[headerName];
+      if(idx!==undefined&&row[idx]!==undefined&&row[idx]!==''){
+        rec[field]=typeof row[idx]==='number'?formatNumber(row[idx]):toFaDigits(String(row[idx]).trim());
+      }
+    }
+    rec.savedAt=new Date().toISOString();
+    db[dk]=rec;
+  }
+  return db;
+}
+function normalizeDate(str){
+  if(!str)return null;
+  const en=faToEn(String(str)).replace(/[^\d]/g,'');
+  if(en.length!==8)return null;
+  return en.substring(0,4)+'/'+en.substring(4,6)+'/'+en.substring(6,8);
+}
+
+/* ============================================================
+   بخش ۱۱: به‌روزرسانی وضعیت تبادل داده
+   ============================================================ */
+function updateDataStatus(){
+  const db=loadDB();
+  const days=Object.keys(db).length;
+  document.getElementById('infoLocal').textContent=days>0?faNum(days)+' روز':'خالی';
+  document.getElementById('statusLocalText').textContent=days>0?faNum(days)+' روز':'خالی';
+  document.getElementById('dotLocal').className='data-status-dot '+(days>0?'on':'warn');
+  
+  if(backupFileHandle){
+    document.getElementById('dotExcel').className='data-status-dot on';
+    document.getElementById('infoExcel').textContent='متصل ('+faNum(days)+' روز)';
+    document.getElementById('statusExcelText').textContent='متصل';
+  }else{
+    document.getElementById('dotExcel').className='data-status-dot off';
+    document.getElementById('infoExcel').textContent='متصل نیست';
+    document.getElementById('statusExcelText').textContent='—';
+  }
+  
+  const c=loadCloud();
+  if(c.apiKey&&c.binId){
+    document.getElementById('dotJson').className='data-status-dot on';
+    document.getElementById('infoJson').textContent='متصل';
+    document.getElementById('statusJsonText').textContent='—';
+    // دریافت تعداد روزها از ابر (اختیاری - برای عدم کندی skip میکنیم)
+  }else{
+    document.getElementById('dotJson').className='data-status-dot off';
+    document.getElementById('infoJson').textContent='تنظیم نشده';
+    document.getElementById('statusJsonText').textContent='—';
+  }
+  
+  document.getElementById('dotOnline').className='data-status-dot '+(navigator.onLine?'on':'off');
+  document.getElementById('infoOnline').textContent=navigator.onLine?'آنلاین':'آفلاین';
+}
+
+/* ============================================================
+   بخش ۱۲: مثلث تبادل داده (کلیک تعاملی)
+   ============================================================ */
+let triSource=null;
+function updateTriangleUI(){
+  // پاک کردن selection
+  document.querySelectorAll('.data-triangle-wrap .node').forEach(n=>n.classList.remove('selected'));
+  document.querySelectorAll('.data-triangle-wrap .edge').forEach(e=>e.classList.remove('active'));
+  
+  const info=document.getElementById('dataTriangleInfo');
+  if(!triSource){
+    info.className='data-triangle-info';
+    info.textContent='یک رأس را انتخاب کن (مبدا)';
+    return;
+  }
+  
+  // هایلایت مبدا
+  document.getElementById('node'+triSource.charAt(0).toUpperCase()+triSource.slice(1)).classList.add('selected');
+  
+  const srcNames={local:'💾 حافظه محلی',excel:'📊 فایل اکسل',json:'☁️ JSON ابری'};
+  info.className='data-triangle-info has-selection';
+  info.textContent='مبدا: '+srcNames[triSource]+' — حالا مقصد را انتخاب کن';
+}
+function getEdgeId(a,b){
+  const pair=[a,b].sort().join('-');
+  if(pair==='json-local')return'edgeLocalJson';
+  if(pair==='excel-json')return'edgeJsonExcel';
+  if(pair==='excel-local')return'edgeLocalExcel';
+  return null;
+}
+function handleNodeClick(nodeName){
+  if(!triSource){
+    triSource=nodeName;
+    updateTriangleUI();
+    return;
+  }
+  if(triSource===nodeName){
+    // لغو
+    triSource=null;
+    updateTriangleUI();
+    return;
+  }
+  const src=triSource,dst=nodeName;
+  triSource=null;
+  updateTriangleUI();
+  // هایلایت موقت ضلع
+  const edgeId=getEdgeId(src,dst);
+  if(edgeId){
+    const edge=document.getElementById(edgeId);
+    edge.classList.add('active');
+    setTimeout(()=>edge.classList.remove('active'),1500);
+  }
+  // اجرای عملیات
+  performTransfer(src,dst);
+}
+document.querySelectorAll('.data-triangle-wrap .node').forEach(n=>{
+  n.addEventListener('click',()=>handleNodeClick(n.dataset.node));
+});
+
+/* ============================================================
+   بخش ۱۳: اجرای انتقال داده
+   ============================================================ */
+async function performTransfer(src,dst){
+  if(src===dst)return;
+  const srcName={local:'💾 حافظه محلی',excel:'📊 فایل اکسل',json:'☁️ JSON ابری'};
+  const dstName={local:'💾 حافظه محلی',excel:'📊 فایل اکسل',json:'☁️ JSON ابری'};
+  
+  // تأیید
+  if(!confirm('🔄 انتقال داده\n\nاز: '+srcName[src]+'\nبه: '+dstName[dst]+'\n\nادامه؟'))return;
+  
+  if(src==='local'&&dst==='excel')await transferLocalToExcel();
+  else if(src==='excel'&&dst==='local')await transferExcelToLocal();
+  else if(src==='local'&&dst==='json')await transferLocalToJson();
+  else if(src==='json'&&dst==='local')await transferJsonToLocal();
+  else if(src==='excel'&&dst==='json')await transferExcelToJson();
+  else if(src==='json'&&dst==='excel')await transferJsonToExcel();
+  
+  updateDataStatus();
+}
+
+/* --- Local → Excel --- */
+async function transferLocalToExcel(){
+  const db=loadDB();
+  const days=Object.keys(db).length;
+  if(days===0){alert('❌ داده‌ای در حافظه محلی نیست');return}
+  
+  showProgress('📤 ارسال از لوکال به Excel','📊');
+  const total=days;
+  let done=0;
+  const keys=Object.keys(db).sort();
+  for(const k of keys){
+    done++;
+    const pct=(done/total)*100;
+    updateProgress(pct,'روز '+faNum(done)+' از '+faNum(total)+' — '+faNum(k),done,total);
+    await new Promise(r=>setTimeout(r,30)); // انیمیشن
+  }
+  
+  let ok=false;
+  if(backupFileHandle){
+    ok=await saveToExcelFile();
+  }else{
+    ok=downloadExcel();
+  }
+  
+  if(ok){
+    finishProgress('✅ '+faNum(days)+' روز به Excel ارسال شد','success');
+    showToast('✅ ارسال به Excel موفق','success',2500);
+  }else{
+    finishProgress('❌ خطا در ذخیره Excel','error');
+  }
+}
+
+/* --- Excel → Local --- */
+async function transferExcelToLocal(){
+  // اگه فایل متصل هست، ازش بخون، وگرنه از کاربر بگیر
+  let importedDB=null;
+  
+  if(backupFileHandle){
+    const useAttached=confirm('📊 از فایل متصل فعلی خوانده شود؟\n\n✅ بله = از فایل متصل\n❌ خیر = انتخاب فایل جدید');
+    if(useAttached){
+      showProgress('📥 خواندن از فایل متصل','📊');
+      updateProgress(30,'در حال خواندن فایل...');
+      importedDB=await readExcelFromFile(backupFileHandle);
+    }
+  }
+  
+  if(!importedDB){
+    // انتخاب فایل
+    const file=await selectExcelFile();
+    if(!file)return;
+    showProgress('📥 خواندن از فایل Excel','📊');
+    updateProgress(30,'در حال خواندن فایل...');
+    importedDB=await readExcelFromFile(file);
+  }
+  
+  if(!importedDB){finishProgress('❌ خطا در خواندن فایل','error');return}
+  
+  const importedCount=Object.keys(importedDB).length;
+  if(importedCount===0){finishProgress('❌ فایل خالی است','error');return}
+  
+  updateProgress(60,'مقایسه با حافظه محلی...');
+  
+  const currentDB=loadDB();
+  const currentCount=Object.keys(currentDB).length;
+  
+  let mode='replace';
+  if(currentCount>0){
+    // نمایش دیالوگ انتخاب حالت
+    const lastLocalDate=getLastDate(currentDB);
+    const lastImportedDate=getLastDate(importedDB);
+    mode=await showModeDialog(
+      '📥 دریافت از Excel',
+      '📊 Excel',importedCount,lastImportedDate,
+      '💾 محلی',currentCount,lastLocalDate
+    );
+    if(mode==='cancel'){closeProgress();return}
+  }
+  
+  updateProgress(80,'ذخیره در حافظه محلی...',importedCount,importedCount);
+  
+  let finalDB;
+  if(mode==='replace'){
+    finalDB=importedDB;
+  }else{
+    // ادغام
+    finalDB={...currentDB,...importedDB};
+  }
+  
+  saveDB(finalDB);
+  updateProgress(100,'انجام شد',importedCount,importedCount);
+  finishProgress('✅ '+faNum(Object.keys(finalDB).length)+' روز در حافظه محلی','success');
+  showToast('✅ دریافت از Excel موفق','success',2500);
+  setTimeout(()=>{
+    const t=todayKey();
+    if(loadDB()[t.key]){apply(loadDB()[t.key]);calc();checkEmpty()}
+    location.reload();
+  },1500);
+}
+
+/* --- Local → JSON --- */
+async function transferLocalToJson(){
+  const c=loadCloud();
+  if(!c.apiKey||!c.binId){alert('❌ ابتدا تنظیمات ابری را وارد کن');return}
+  if(!navigator.onLine){alert('📵 اینترنت قطع است');return}
+  
+  const db=loadDB();
+  const days=Object.keys(db).length;
+  if(days===0){alert('❌ داده‌ای در حافظه محلی نیست');return}
+  
+  showProgress('☁️ ارسال از لوکال به JSON ابری','☁️');
+  updateProgress(30,'آماده‌سازی داده‌ها...');
+  await new Promise(r=>setTimeout(r,200));
+  updateProgress(60,'ارسال به سرور...');
+  
+  const ok=await cloudPush(true);
+  
+  if(ok){
+    updateProgress(100,'انجام شد');
+    finishProgress('✅ '+faNum(days)+' روز به JSON ارسال شد','success');
+    showToast('✅ ارسال به JSON موفق','success',2500);
+  }else{
+    finishProgress('❌ خطا در ارسال به JSON','error');
+  }
+}
+
+/* --- JSON → Local --- */
+async function transferJsonToLocal(){
+  const c=loadCloud();
+  if(!c.apiKey||!c.binId){alert('❌ ابتدا تنظیمات ابری را وارد کن');return}
+  if(!navigator.onLine){alert('📵 اینترنت قطع است');return}
+  
+  showProgress('📥 دریافت از JSON ابری','☁️');
+  updateProgress(30,'اتصال به سرور...');
+  
+  const remote=await cloudPull(true);
+  if(!remote){finishProgress('❌ خطا در دریافت از ابر','error');return}
+  
+  const remoteDB=remote.data||remote;
+  const remoteCount=Object.keys(remoteDB).length;
+  if(remoteCount===0){finishProgress('☁️ ابر خالی است','error');return}
+  
+  updateProgress(60,'مقایسه با حافظه محلی...');
+  
+  const currentDB=loadDB();
+  const currentCount=Object.keys(currentDB).length;
+  
+  let mode='replace';
+  if(currentCount>0){
+    const lastRemoteDate=getLastDate(remoteDB);
+    const lastLocalDate=getLastDate(currentDB);
+    mode=await showModeDialog(
+      '📥 دریافت از ابر',
+      '☁️ ابری',remoteCount,lastRemoteDate,
+      '💾 محلی',currentCount,lastLocalDate
+    );
+    if(mode==='cancel'){closeProgress();return}
+  }
+  
+  updateProgress(80,'ذخیره در حافظه محلی...',remoteCount,remoteCount);
+  
+  let finalDB;
+  if(mode==='replace'){
+    finalDB=remoteDB;
+  }else{
+    finalDB={...currentDB,...remoteDB};
+  }
+  
+  saveDB(finalDB);
+  if(remote.meta)saveMeta(remote.meta);
+  
+  updateProgress(100,'انجام شد');
+  finishProgress('✅ '+faNum(Object.keys(finalDB).length)+' روز در حافظه محلی','success');
+  showToast('✅ دریافت از ابر موفق','success',2500);
+  setTimeout(()=>{location.reload()},1500);
+}
+
+/* --- Excel → JSON --- */
+async function transferExcelToJson(){
+  let importedDB=null;
+  
+  if(backupFileHandle){
+    showProgress('📊 خواندن از فایل متصل','📊');
+    updateProgress(20,'در حال خواندن...');
+    importedDB=await readExcelFromFile(backupFileHandle);
+  }else{
+    const file=await selectExcelFile();
+    if(!file)return;
+    showProgress('📊 خواندن از Excel','📊');
+    updateProgress(20,'در حال خواندن...');
+    importedDB=await readExcelFromFile(file);
+  }
+  
+  if(!importedDB){finishProgress('❌ خطا در خواندن','error');return}
+  const count=Object.keys(importedDB).length;
+  if(count===0){finishProgress('❌ فایل خالی','error');return}
+  
+  const c=loadCloud();
+  if(!c.apiKey||!c.binId){finishProgress('❌ تنظیمات ابری وارد نشده','error');return}
+  if(!navigator.onLine){finishProgress('📵 اینترنت قطع','error');return}
+  
+  updateProgress(50,'ارسال به سرور...');
+  try{
+    const meta=loadMeta();
+    const payload={data:importedDB,meta:meta,updatedAt:new Date().toISOString()};
+    const r=await fetch('https://api.jsonbin.io/v3/b/'+c.binId,{
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Master-Key':c.apiKey},
+      body:JSON.stringify(payload)
+    });
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    updateProgress(100,'انجام شد');
+    finishProgress('✅ '+faNum(count)+' روز از Excel به JSON ارسال شد','success');
+  }catch(e){
+    finishProgress('❌ خطا: '+e.message,'error');
+  }
+}
+
+/* --- JSON → Excel --- */
+async function transferJsonToExcel(){
+  const c=loadCloud();
+  if(!c.apiKey||!c.binId){alert('❌ تنظیمات ابری وارد نشده');return}
+  if(!navigator.onLine){alert('📵 اینترنت قطع است');return}
+  
+  showProgress('📥 دریافت از JSON برای Excel','☁️');
+  updateProgress(30,'اتصال به سرور...');
+  
+  const remote=await cloudPull(true);
+  if(!remote){finishProgress('❌ خطا در دریافت','error');return}
+  
+  const remoteDB=remote.data||remote;
+  const count=Object.keys(remoteDB).length;
+  if(count===0){finishProgress('☁️ ابر خالی','error');return}
+  
+  updateProgress(60,'نوشتن در فایل اکسل...');
+  
+  // ساخت blob از داده‌های remote
+  const keys=Object.keys(remoteDB).sort();
+  const aoa=[EXCEL_HEADERS];
+  keys.forEach(k=>{
+    const row=[faNum(k)];
+    for(let i=1;i<EXCEL_FIELDS.length;i++)row.push(remoteDB[k][EXCEL_FIELDS[i]]||'');
+    aoa.push(row);
+  });
+  const ws=XLSX.utils.aoa_to_sheet(aoa);
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'داده‌ها');
+  const arr=XLSX.write(wb,{bookType:'xlsx',type:'array'});
+  const blob=new Blob([arr],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  
+  // نوشتن در فایل متصل یا دانلود
+  let ok=false;
+  if(backupFileHandle){
+    try{
+      const perm=await backupFileHandle.queryPermission({mode:'readwrite'});
+      if(perm!=='granted'){
+        const req=await backupFileHandle.requestPermission({mode:'readwrite'});
+        if(req==='granted'){
+          const w=await backupFileHandle.createWritable();
+          await w.write(blob);await w.close();
+          ok=true;
+        }
+      }else{
+        const w=await backupFileHandle.createWritable();
+        await w.write(blob);await w.close();
+        ok=true;
+      }
+    }catch(e){ok=false}
+  }
+  
+  if(!ok){
+    // دانلود
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;a.download='nanvaii-from-cloud-'+todayKey().key.replace(/\//g,'-')+'.xlsx';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    ok=true;
+  }
+  
+  updateProgress(100,'انجام شد');
+  if(ok)finishProgress('✅ '+faNum(count)+' روز از JSON به Excel منتقل شد','success');
+  else finishProgress('❌ خطا در نوشتن Excel','error');
+}
+
+/* --- انتخاب فایل Excel --- */
+function selectExcelFile(){
+  return new Promise(resolve=>{
+    const input=document.createElement('input');
+    input.type='file';
+    input.accept='.xlsx,.xls,.csv';
+    input.onchange=e=>{
+      const f=e.target.files[0];
+      resolve(f||null);
+    };
+    input.click();
+  });
+}
+
+/* --- آخرین تاریخ از یک DB --- */
+function getLastDate(db){
+  const keys=Object.keys(db).sort();
+  if(keys.length===0)return'—';
+  return faNum(keys[keys.length-1]);
+}
 
 
-
-
-                   /* ============================================================
+  <script>
+/* ============================================================
    بخش ۱۴: تعطیلات (خودکار + مرخصی دستی)
    ============================================================ */
 function isAutoHoliday(jy,jm,jd){return jd===7||jd===21}
@@ -1255,12 +2016,23 @@ function isHoliday(k){
 }
 function showHolidayBanner(k){
   const banner=document.getElementById('holidayBanner');
-  if(isHoliday(k))banner.classList.add('show');
-  else banner.classList.remove('show');
+  banner.classList.remove('hiding');
+  if(isHoliday(k)){
+    banner.classList.add('show');
+    banner.onclick=()=>{
+      banner.classList.add('hiding');
+      setTimeout(()=>{
+        banner.classList.remove('show');
+        banner.classList.remove('hiding');
+      },300);
+    };
+  }else{
+    banner.classList.remove('show');
+  }
 }
 
 /* ============================================================
-   بخش ۱۵: پیدا کردن آخرین روز کاری (برای محاسبه)
+   بخش ۱۵: پیدا کردن آخرین روز کاری
    ============================================================ */
 function findLastWorkingDay(fromKey){
   const db=loadDB();
@@ -1268,9 +2040,7 @@ function findLastWorkingDay(fromKey){
   let max=90;
   while(max-->0){
     const d=db[k];
-    if(d&&(d['flour-stock']||d['cash-stock'])){
-      return k;
-    }
+    if(d&&(d['flour-stock']||d['cash-stock']))return k;
     k=prevDay(k);
   }
   return null;
@@ -1303,14 +2073,6 @@ function getPartyBalance(party){
   });
   return{give,take,net:give-take};
 }
-function getAllParties(){
-  const meta=loadMeta();
-  const set=new Set();
-  meta.loans.forEach(l=>{if(l.remaining>0)set.add(l.party)});
-  return Array.from(set);
-}
-
-/* رندر لیست قرض‌ها */
 function renderLoans(tab){
   const meta=loadMeta();
   const listEl=document.getElementById('loanList');
@@ -1322,8 +2084,7 @@ function renderLoans(tab){
     const empty=document.createElement('div');
     empty.className='loan-empty';
     empty.textContent=filterActive?'هیچ قرض فعالی نیست':'هیچ قرض تسویه‌شده‌ای نیست';
-    listEl.appendChild(empty);
-    return;
+    listEl.appendChild(empty);return;
   }
   filtered.forEach(loan=>{
     const item=document.createElement('div');
@@ -1347,7 +2108,6 @@ function renderLoans(tab){
     `;
     listEl.appendChild(item);
   });
-  // Event listeners
   listEl.querySelectorAll('[data-loan-settle]').forEach(btn=>{
     btn.addEventListener('click',()=>openSettleDialog(btn.dataset.loanSettle));
   });
@@ -1372,8 +2132,6 @@ function updateLoanSummary(){
   else if(t.net<0)netEl.textContent=formatNumber(-t.net)+' کیسه به نفع طرف';
   else netEl.textContent='تسویه';
 }
-
-/* باز کردن فرم قرض */
 function openLoanForm(editId){
   loanEditingId=editId||null;
   loanSelectedType=null;
@@ -1433,14 +2191,12 @@ function submitLoan(){
   const meta=loadMeta();
   
   if(loanSelectedType==='give'||loanSelectedType==='take'){
-    // ثبت قرض جدید
     meta.loans.push({
       id:'loan_'+Date.now()+'_'+Math.random().toString(36).substr(2,5),
       party,type:loanSelectedType,amount,remaining:amount,
       date,settled:false,history:[],createdAt:new Date().toISOString()
     });
   }else if(loanSelectedType==='settle-give'||loanSelectedType==='settle-take'){
-    // تسویه
     const targetType=loanSelectedType==='settle-give'?'give':'take';
     const activeLoans=meta.loans.filter(l=>l.party===party&&l.type===targetType&&!l.settled);
     activeLoans.sort((a,b)=>a.date.localeCompare(b.date));
@@ -1464,7 +2220,6 @@ function submitLoan(){
   closeLoanForm();
   renderLoans(document.querySelector('.loan-tab.active').dataset.loanTab);
   updateLoanSummary();
-  // محاسبه‌ی مجدد اگر امروز هست
   if(viewedKey===todayKey().key)calc();
 }
 function openSettleDialog(loanId){
@@ -1481,7 +2236,6 @@ function openSettleDialog(loanId){
   document.getElementById('loanAmount').value='';
   updateLoanInfo();
 }
-/* تب‌های قرض */
 document.querySelectorAll('.loan-tab').forEach(tab=>{
   tab.addEventListener('click',()=>{
     document.querySelectorAll('.loan-tab').forEach(t=>t.classList.remove('active'));
@@ -1493,9 +2247,7 @@ document.querySelectorAll('.loan-tab').forEach(tab=>{
 /* ============================================================
    بخش ۱۷: سیستم کارخانه
    ============================================================ */
-function getFactoryFlour(){
-  return loadMeta().factoryFlour||[];
-}
+function getFactoryFlour(){return loadMeta().factoryFlour||[]}
 function renderFactoryList(){
   const list=document.getElementById('factoryList');
   const items=getFactoryFlour().filter(f=>f.remaining>0);
@@ -1503,8 +2255,7 @@ function renderFactoryList(){
   if(items.length===0){
     const e=document.createElement('div');
     e.className='loan-empty';e.textContent='هیچ آردی در کارخانه نیست';
-    list.appendChild(e);
-    return;
+    list.appendChild(e);return;
   }
   items.forEach(f=>{
     const el=document.createElement('div');
@@ -1548,7 +2299,6 @@ function transferFromFactory(id){
   if(amount<=0||amount>f.remaining+0.0001){alert('مقدار نامعتبر');return}
   f.remaining=Math.round((f.remaining-amount)*10000)/10000;
   saveMeta(m);
-  // افزودن به موجودی مغازه
   const current=gn(F['flour-stock']);
   sn(F['flour-stock'],current+amount);
   renderFactoryList();
@@ -1583,14 +2333,18 @@ document.getElementById('factorySubmitBtn').addEventListener('click',()=>{
   if(amount<=0){alert('مقدار باید بیشتر از صفر باشه');return}
   const date=window._factoryDate||todayKey().key;
   const m=loadMeta();
-  m.factoryFlour.push({
+  const entry={
     id:'f_'+Date.now()+'_'+Math.random().toString(36).substr(2,5),
     factory,orderCode,amount,remaining:amount,date,
     createdAt:new Date().toISOString()
-  });
+  };
+  tagPurchaseWithPeriod(entry);
+  m.factoryFlour.push(entry);
   saveMeta(m);
   document.getElementById('factoryModal').classList.remove('active');
   renderFactoryList();
+  renderQuotaInfo();
+  checkReminder();
   showToast('✅ خرید از '+factory+' ثبت شد','success',2500);
 });
 
@@ -1608,27 +2362,19 @@ function setMonthQuota(jy,jm,data){
   m.quota[key]=data;
   saveMeta(m);
 }
-/* پیدا کردن دوره‌ی فعلی */
 function getCurrentPeriod(){
   const t=todayKey();
   const d=t.day;
-  // دوره ۱: ۲۵ ماه قبل → ۹ همین ماه
-  // دوره ۲: ۱۰ همین ماه → ۲۵ همین ماه
   if(d>=25){
-    // یعنی الان دوره‌ی ۱ ماه بعد شروع شده
     let nm=t.month+1,ny=t.year;
     if(nm>12){nm=1;ny++}
-    return{period:1,year:ny,month:nm,startKey:t.key,endKey:null};
+    return{period:1,year:ny,month:nm,startKey:t.key};
   }else if(d>=10&&d<25){
-    // دوره ۲ ماه جاری
-    return{period:2,year:t.year,month:t.month,startKey:t.key,endKey:null};
-  }else if(d>=1&&d<=9){
-    // دوره ۱ ماه جاری
-    return{period:1,year:t.year,month:t.month,startKey:t.key,endKey:null};
+    return{period:2,year:t.year,month:t.month,startKey:t.key};
+  }else{
+    return{period:1,year:t.year,month:t.month,startKey:t.key};
   }
-  return null;
 }
-/* محاسبه‌ی سقف هر دوره */
 function getPeriodLimit(jy,jm,period){
   const q=getMonthQuota(jy,jm);
   if(!q)return null;
@@ -1636,19 +2382,15 @@ function getPeriodLimit(jy,jm,period){
   const extra=period===1?(q.extra1||0):(q.extra2||0);
   return half+extra;
 }
-/* جمع خریدهای یک دوره */
 function getPeriodBought(jy,jm,period){
   const m=loadMeta();
   const monthKey=jy+'/'+String(jm).padStart(2,'0');
   let sum=0;
   m.factoryFlour.forEach(f=>{
-    if(f.period===monthKey+'_'+period){
-      sum+=f.amount;
-    }
+    if(f.period===monthKey+'_'+period)sum+=f.amount;
   });
   return sum;
 }
-/* ثبت خرید با دوره */
 function tagPurchaseWithPeriod(factoryEntry){
   const t=todayKey();
   const d=t.day;
@@ -1666,8 +2408,6 @@ function tagPurchaseWithPeriod(factoryEntry){
   factoryEntry.monthKey=monthKey;
   return factoryEntry;
 }
-
-/* رندر اطلاعات سهمیه در تنظیمات */
 function renderQuotaInfo(){
   const cp=getCurrentPeriod();
   if(!cp)return;
@@ -1727,9 +2467,6 @@ function checkReminder(){
   if(!cp){panel.classList.remove('show');return}
   const q=getMonthQuota(cp.year,cp.month);
   if(!q){
-    // سهمیه ثبت نشده → پیام اول
-    // فقط از روز ۲۵ ماه قبل یا از روز ۱ همین ماه تا ۹
-    // اگه بین ۲۵ ماه قبل تا ۹ ماه جاری
     const isInPeriod1Window=(d>=25||d<=9);
     if(isInPeriod1Window){
       const dismissKey=t.key+'_quota';
@@ -1751,29 +2488,22 @@ function checkReminder(){
     }
     return;
   }
-  // سهمیه هست → بررسی خرید
   const periodLimit=getPeriodLimit(cp.year,cp.month,cp.period);
   const bought=getPeriodBought(cp.year,cp.month,cp.period);
   const remaining=Math.max(0,periodLimit-bought);
-  if(remaining<=0.0001){
-    panel.classList.remove('show');
-    return;
-  }
-  // محاسبه‌ی روزهای باقیمونده تا آخر دوره
+  if(remaining<=0.0001){panel.classList.remove('show');return}
   let endDay;
   if(cp.period===1)endDay=9;
   else endDay=25;
   let remainingDays;
   if(d>=25){
-    // دوره‌ی ۱ ماه بعد، از ۲۵ ماه جاری تا ۹ ماه بعد
-    remainingDays=endDay+ (monthLen(cp.year, t.month)-d);
+    remainingDays=endDay+(monthLen(cp.year,t.month)-d);
   }else if(d<=9){
     remainingDays=endDay-d;
   }else{
     remainingDays=endDay-d;
   }
   if(remainingDays<0)remainingDays=0;
-  // تعیین سطح (۱ تا ۷)
   let level;
   if(remainingDays<=0)level=7;
   else if(remainingDays<=2)level=7;
@@ -1787,15 +2517,10 @@ function checkReminder(){
   const dismissKey=t.key+'_'+cp.year+'_'+cp.month+'_'+cp.period;
   if(reminderState.dismissed===dismissKey){panel.classList.remove('show');return}
   
-  // عنوان و متن بر اساس سطح
   const titles={
-    1:'📢 یادآوری خرید آرد',
-    2:'📢 یادآوری خرید آرد',
-    3:'⚠️ یادآوری خرید آرد',
-    4:'⚠️ یادآوری خرید آرد',
-    5:'🔴 یادآوری مهم خرید آرد',
-    6:'🚨 یادآوری فوری خرید آرد',
-    7:'🆘 آخرین فرصت خرید آرد'
+    1:'📢 یادآوری خرید آرد',2:'📢 یادآوری خرید آرد',
+    3:'⚠️ یادآوری خرید آرد',4:'⚠️ یادآوری خرید آرد',
+    5:'🔴 یادآوری مهم خرید آرد',6:'🚨 یادآوری فوری خرید آرد',7:'🆘 آخرین فرصت خرید آرد'
   };
   const texts={
     1:'زمان خرید آرد دوره '+faNum(cp.period)+' ماه '+M[cp.month-1]+' فرا رسیده است. تاکنون '+formatNumber(bought)+' از '+formatNumber(periodLimit)+' کیسه خریداری شده.',
@@ -1832,10 +2557,8 @@ function showReminderPanel(opts){
     s.className='r-badge';s.textContent=b;
     bEl.appendChild(s);
   });
-  // تنظیم اندازه بر اساس سطح
   const sizes={1:'12.5%',2:'12.5%',3:'25%',4:'25%',5:'50%',6:'50%',7:'100%'};
   panel.style.height=sizes[opts.level]||'12.5%';
-  // دکمه‌ها
   const buyBtn=document.getElementById('remBuyBtn');
   buyBtn.textContent=opts.buyLabel||'🛒 الان خرید می‌کنم';
   buyBtn.onclick=()=>{if(opts.onBuy)opts.onBuy()};
@@ -1843,17 +2566,14 @@ function showReminderPanel(opts){
     reminderState.dismissed=opts.dismissKey;
     panel.classList.remove('show');
   };
-  // ضربدرها
   const xs=[1,2,3,4].map(i=>document.getElementById('remClose'+i));
   xs.forEach(x=>{x.classList.remove('used');x.style.display='none'});
-  // تعداد ضربدر بر اساس سطح
   let xCount=0;
-  if(opts.level===1||opts.level===2)xCount=0; // کلیک هر جای خالی
+  if(opts.level===1||opts.level===2)xCount=0;
   else if(opts.level===3||opts.level===4)xCount=1;
   else if(opts.level===5)xCount=2;
   else if(opts.level===6)xCount=4;
   else if(opts.level===7)xCount=4;
-  
   let clickedCount=0;
   for(let i=0;i<xCount;i++){
     xs[i].style.display='flex';
@@ -1867,7 +2587,6 @@ function showReminderPanel(opts){
       }
     };
   }
-  // اگه سطح ۱ یا ۲: کلیک روی هر جای خالی صفحه → بستن
   if(xCount===0){
     const clickHandler=(e)=>{
       if(panel.contains(e.target))return;
@@ -1951,17 +2670,12 @@ document.getElementById('vacAddBtn').addEventListener('click',()=>{
 let viewedKey=null;
 function calc(){
   const baseKey=viewedKey||todayKey().key;
-  // 1) نان و مبلغ اردشیر
   const bc=gn(F['bag-count']),brc=bc*7;
   sn(F['bread-count'],brc);
   sn(F['ardeshir-amount'],brc*1.7);
-  
-  // 2) موجودی قبلی
   const lastWorkKey=findLastWorkingDay(baseKey);
   const db=loadDB();
   const yD=lastWorkKey?db[lastWorkKey]:null;
-  
-  // 3) تفاضل نقدی
   const tc=gn(F['cash-stock']);
   let cdv=0;
   if(yD&&yD['cash-stock']){
@@ -1971,57 +2685,41 @@ function calc(){
   }else{
     F['cash-diff'].value='داده قبل نیست';
   }
-  
-  // 4) آرد مصرفی با احتساب قرض‌ها و کارخانه
   const tf=gn(F['flour-stock']);
   let flourUsed=0;
   if(yD&&yD['flour-stock']){
     const yf=parseFloat(faToEn(yD['flour-stock']))||0;
-    // اثر تراکنش‌های قرض امروز
     let loanEffect=0;
     const meta=loadMeta();
     meta.loans.forEach(l=>{
       if(l.date===baseKey){
-        if(l.type==='give')loanEffect-=l.amount;   // دادم → کم شد
-        else if(l.type==='take')loanEffect+=l.amount; // گرفتم → زیاد شد
+        if(l.type==='give')loanEffect-=l.amount;
+        else if(l.type==='take')loanEffect+=l.amount;
       }
-      // history هم بررسی
       l.history.forEach(h=>{
         if(h.date===baseKey){
-          if(l.type==='give')loanEffect+=h.amount; // پس گرفتم → برگشت
-          else loanEffect-=h.amount; // پس دادم → رفت
+          if(l.type==='give')loanEffect+=h.amount;
+          else loanEffect-=h.amount;
         }
       });
     });
-    // اثر کارخانه: آردی که امروز از کارخانه اومده (به مغازه اضافه شده)
-    // این رو خود کاربر در flour-stock اعمال کرده، پس در فرمول زیر خودکار محاسبه میشه
     flourUsed=yf+loanEffect-tf;
     sn(F['flour-used'],flourUsed);
   }else{
     F['flour-used'].value='داده قبل نیست';
   }
-  
-  // 5) مبلغ کل
   const mc=gn(F['main-card']),bc2=gn(F['backup-card']),tr=gn(F['traveller']);
   const ta=mc+bc2+tr+cdv+(brc*1.7);
   sn(F['total-amount'],ta);
-  
-  // 6) پلاستیک
   const pc=gn(F['line12']),tcn=gn(F['line10']);
   const pp=pc+(tcn*3);
   sn(F['plastic-price'],pp);
-  
-  // 7) خالص نان
   const bp=ta-pp;
   sn(F['bread-price'],bp);
-  
-  // 8) تعداد خالص و ناخالص
   const nb=bp/1.7;
   sn(F['total-bread'],nb);
   const gb=ta/1.7;
   sn(F['gross-bread'],gb);
-  
-  // 9) هر کیسه
   if(flourUsed>0){
     sn(F['per-plastic-bag'],nb/flourUsed);
     sn(F['gross-per-bag'],gb/flourUsed);
@@ -2056,7 +2754,6 @@ function goToDateKey(k){
   }else{
     apply({});
     REQ.forEach(r=>F[r].classList.remove('empty-warning'));
-    // اگه روز تعطیله → پر کردن خودکار موجودی
     if(isHoliday(k)){
       const lastWork=findLastWorkingDay(k);
       if(lastWork&&db[lastWork]){
@@ -2149,7 +2846,7 @@ document.getElementById('calClose').addEventListener('click',()=>calM.classList.
 todayDateEl.addEventListener('click',openCal);
 
 /* ============================================================
-   بخش ۲۴: تقویم کوچک (برای انتخاب تاریخ در فرم‌ها)
+   بخش ۲۴: تقویم کوچک
    ============================================================ */
 const miniM=document.getElementById('miniCalendarOverlay'),miniMY=document.getElementById('miniCalMonthYear'),miniD=document.getElementById('miniCalDays'),miniMP=document.getElementById('miniCalMonthPicker'),miniYP=document.getElementById('miniCalYearPicker');
 let miY,miM,miniCallback=null,miniSource=null;
@@ -2250,15 +2947,13 @@ function openSettings(){
   document.getElementById('cloudBinId').value=c.binId||'';
   document.getElementById('cloudAutoSync').checked=c.autoSync||false;
   updateCloudStatus();
-  const fileSection=document.getElementById('fileSection');
-  const note=document.getElementById('fileSectionNote');
-  if(canUseFilePicker()){fileSection.classList.remove('settings-disabled');note.textContent=''}
-  else{fileSection.classList.add('settings-disabled');note.textContent='⚠️ این بخش در محیط فعلی کار نمی‌کند.'}
   renderFactoryList();
   renderQuotaInfo();
   renderLoans(document.querySelector('.loan-tab.active').dataset.loanTab);
   updateLoanSummary();
   renderVacations();
+  updateDataStatus();
+  triSource=null;updateTriangleUI();
   settingsModal.classList.add('active');
 }
 function closeSettings(){
@@ -2281,50 +2976,135 @@ document.querySelectorAll('.settings-tab').forEach(tab=>{
     document.querySelector('.settings-panel[data-panel="'+tab.dataset.tab+'"]').classList.add('active');
   });
 });
-document.getElementById('cloudPushBtn').addEventListener('click',async()=>{
-  const c=loadCloud();
-  c.apiKey=document.getElementById('cloudApiKey').value.trim();
-  c.binId=document.getElementById('cloudBinId').value.trim();
-  saveCloud(c);
-  showToast('☁️ در حال ارسال به ابر <span class="spinner"></span>','json',60000);
-  const ok=await cloudPush(true);
-  if(ok)showToast('✅ ارسال به ابر موفق','success',3000);
-  else showToast('❌ خطا در ارسال','error',3000);
-});
-document.getElementById('cloudPullBtn').addEventListener('click',async()=>{
-  const c=loadCloud();
-  c.apiKey=document.getElementById('cloudApiKey').value.trim();
-  c.binId=document.getElementById('cloudBinId').value.trim();
-  saveCloud(c);
-  const remote=await cloudPull(false);
-  if(!remote)return;
-  const remoteDB=remote.data||remote;
-  const days=Object.keys(remoteDB).length;
-  if(days===0){alert('☁️ ابر خالی است');return}
-  if(!confirm('☁️ دریافت از ابر\n\n📊 '+faNum(days)+' روز\n\nاطلاعات محلی جایگزین شود؟'))return;
-  saveDB(remoteDB);
-  if(remote.meta)saveMeta(remote.meta);
-  alert('✅ بارگذاری شد');
-  location.reload();
-});
-document.getElementById('cloudTestBtn').addEventListener('click',cloudTest);
-document.getElementById('pickFileBtn').addEventListener('click',async()=>{
+document.getElementById('cloudTestBtn2').addEventListener('click',cloudTest);
+document.getElementById('dataTestCloudBtn').addEventListener('click',cloudTest);
+document.getElementById('dataPickFileBtn').addEventListener('click',async()=>{
   const ok=await pickBackupFile();
-  if(ok){alert('✅ فایل متصل شد');closeSettings()}
+  if(ok){
+    alert('✅ فایل متصل شد');
+    updateDataStatus();
+  }
 });
-document.getElementById('unlinkFileBtn').addEventListener('click',()=>{
+document.getElementById('dataUnlinkFileBtn').addEventListener('click',()=>{
+  if(!backupFileHandle){alert('فایلی متصل نیست');return}
   backupFileHandle=null;
   updateSaveBtnStyle(false);
-  const req=indexedDB.open('nanvaii-handles-v3',1);
+  const req=indexedDB.open('nanvaii-handles-v4',1);
   req.onsuccess=e=>{
     const db=e.target.result;
     db.transaction('files','readwrite').objectStore('files').delete('backup');
   };
   alert('✅ اتصال فایل قطع شد');
+  updateDataStatus();
+});
+document.getElementById('dataSyncBtn').addEventListener('click',async()=>{
+  const c=loadCloud();
+  if(!c.apiKey||!c.binId){alert('❌ تنظیمات ابری وارد نشده');return}
+  if(!navigator.onLine){alert('📵 اینترنت قطع است');return}
+  const currentDB=loadDB();
+  const currentCount=Object.keys(currentDB).length;
+  if(currentCount===0){alert('❌ حافظه محلی خالی');return}
+  if(!confirm('🔄 همگام‌سازی خودکار\n\n'+faNum(currentCount)+' روز محلی → ابر\n\nادامه؟'))return;
+  showProgress('🔄 همگام‌سازی','🔄');
+  updateProgress(30,'ارسال به ابر...');
+  const ok=await cloudPush(true);
+  if(ok){
+    updateProgress(100,'انجام شد');
+    finishProgress('✅ همگام‌سازی موفق ('+faNum(currentCount)+' روز)','success');
+  }else{
+    finishProgress('❌ خطا در همگام‌سازی','error');
+  }
+});
+document.getElementById('pickFileBtn')?.addEventListener('click',async()=>{
+  const ok=await pickBackupFile();
+  if(ok){alert('✅ فایل متصل شد');closeSettings()}
 });
 
 /* ============================================================
-   بخش ۲۷: رفرش و ورود اکسل
+   بخش ۲۷: ذخیره‌سازی سه‌کلیکی
+   ============================================================ */
+function doLocalSave(){
+  const k=viewedKey||todayKey().key;
+  saveDate(k);
+  checkEmpty();
+  setTopDate(keyObj(k));
+  return true;
+}
+async function doExcelSave(){
+  const db=loadDB();
+  if(Object.keys(db).length===0)return false;
+  if(backupFileHandle){
+    const ok=await saveToExcelFile();
+    if(ok)return true;
+  }
+  return downloadExcel();
+}
+async function doJsonSave(){
+  const c=loadCloud();
+  if(!c.apiKey||!c.binId){
+    showToast('⚠️ تنظیمات ابری وارد نشده','warn',3000);
+    return false;
+  }
+  if(!navigator.onLine){
+    showToast('📵 اینترنت قطع است','error',3000);
+    return false;
+  }
+  showToast('☁️ در حال ذخیره در JSON <span class="spinner"></span>','json',60000);
+  const ok=await cloudPush(true);
+  if(ok){
+    const db=loadDB();
+    showToast('✅ در JSON ذخیره شد ('+faNum(Object.keys(db).length)+' روز)','success',3000);
+  }else{
+    showToast('❌ خطا در ذخیره JSON','error',3000);
+  }
+  return ok;
+}
+let clickCount=0;
+let clickTimer=null;
+let lastClickTime=0;
+const CLICK_WINDOW=600;
+saveBtn.addEventListener('click',async()=>{
+  const now=Date.now();
+  if(now-lastClickTime>CLICK_WINDOW)clickCount=0;
+  clickCount++;
+  lastClickTime=now;
+  if(clickTimer)clearTimeout(clickTimer);
+  saveBtn.classList.remove('click-2','click-3');
+  if(clickCount===2)saveBtn.classList.add('click-2');
+  if(clickCount>=3)saveBtn.classList.add('click-3');
+  clickTimer=setTimeout(async()=>{
+    const count=clickCount;
+    clickCount=0;
+    saveBtn.classList.remove('click-2','click-3');
+    if(count===1){
+      showToast('💾 در حال ذخیره...','info',3000);
+      const startTime=Date.now();
+      doLocalSave();
+      const elapsed=Date.now()-startTime;
+      const remaining=Math.max(0,3000-elapsed);
+      if(remaining<3000){
+        setTimeout(()=>showToast('✅ در حافظه محلی ذخیره شد','success',1500),remaining);
+      }else{
+        showToast('✅ در حافظه محلی ذخیره شد','success',1500);
+      }
+    }else if(count===2){
+      showToast('💾 در حال ذخیره در Excel...','info',3000);
+      doLocalSave();
+      const ok=await doExcelSave();
+      const db=loadDB();
+      if(ok)showToast('✅ در Excel ذخیره شد ('+faNum(Object.keys(db).length)+' روز)','success',2500);
+      else showToast('❌ خطا در ذخیره Excel','error',2500);
+    }else if(count>=3){
+      showToast('💾 در حال ذخیره در JSON...','json',30000);
+      doLocalSave();
+      await doExcelSave();
+      await doJsonSave();
+    }
+  },CLICK_WINDOW);
+});
+
+/* ============================================================
+   بخش ۲۸: رفرش و ورود اکسل
    ============================================================ */
 document.getElementById('btnRefresh').addEventListener('click',()=>{
   const keys=Object.keys(loadDB()).sort();
@@ -2354,57 +3134,40 @@ document.getElementById('excelImport').addEventListener('change',async e=>{
   await importFromExcel(f);
   e.target.value='';
 });
-function normalizeDate(str){
-  if(!str)return null;
-  const en=faToEn(String(str)).replace(/[^\d]/g,'');
-  if(en.length!==8)return null;
-  return en.substring(0,4)+'/'+en.substring(4,6)+'/'+en.substring(6,8);
-}
 async function importFromExcel(file){
-  if(typeof XLSX==='undefined'){alert('❌ کتابخانه Excel بارگذاری نشد');return}
-  try{
-    const buf=await file.arrayBuffer();
-    const wb=XLSX.read(buf);
-    const ws=wb.Sheets[wb.SheetNames[0]];
-    const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
-    if(rows.length<2){alert('❌ فایل خالی');return}
-    const headerMap={};
-    rows[0].forEach((h,i)=>{headerMap[String(h).trim()]=i});
-    if(headerMap['تاریخ']===undefined){alert('❌ ستون «تاریخ» پیدا نشد');return}
-    const db=loadDB();
-    let imported=0;
-    for(let r=1;r<rows.length;r++){
-      const row=rows[r];
-      if(!row||row.length===0)continue;
-      const dk=normalizeDate(row[headerMap['تاریخ']]);
-      if(!dk)continue;
-      const dataObj={};
-      const INPUT_FIELDS=['bag-count','line10','line11','line12','main-card','backup-card','traveller','flour-stock','cash-stock'];
-      for(const field of INPUT_FIELDS){
-        const headerName=EXCEL_HEADERS[EXCEL_FIELDS.indexOf(field)];
-        const idx=headerMap[headerName];
-        if(idx!==undefined&&row[idx]!==undefined&&row[idx]!==''){
-          let val=row[idx];
-          if(typeof val==='number')val=val.toLocaleString('fa-IR');
-          else val=toFaDigits(String(val).trim());
-          dataObj[field]=val;
-        }
-      }
-      apply(dataObj);
-      viewedKey=dk;
-      calc();
-      db[dk]={...dataObj,...collect(),savedAt:new Date().toISOString()};
-      imported++;
-    }
-    saveDB(db);
-    alert('✅ ورود کامل شد\n📥 '+faNum(imported)+' روز');
+  showProgress('📥 ورود از Excel','📊');
+  updateProgress(20,'در حال خواندن فایل...');
+  const importedDB=await readExcelFromFile(file);
+  if(!importedDB){finishProgress('❌ خطا در خواندن','error');return}
+  const count=Object.keys(importedDB).length;
+  if(count===0){finishProgress('❌ فایل خالی','error');return}
+  updateProgress(60,'مقایسه با حافظه محلی...');
+  const currentDB=loadDB();
+  const currentCount=Object.keys(currentDB).length;
+  let mode='replace';
+  if(currentCount>0){
+    mode=await showModeDialog(
+      '📥 ورود از Excel',
+      '📊 Excel',count,getLastDate(importedDB),
+      '💾 محلی',currentCount,getLastDate(currentDB)
+    );
+    if(mode==='cancel'){closeProgress();return}
+  }
+  let finalDB;
+  if(mode==='replace')finalDB=importedDB;
+  else finalDB={...currentDB,...importedDB};
+  saveDB(finalDB);
+  updateProgress(100,'انجام شد');
+  finishProgress('✅ '+faNum(Object.keys(finalDB).length)+' روز در حافظه محلی','success');
+  setTimeout(()=>{
     const t=todayKey();
     if(loadDB()[t.key]){apply(loadDB()[t.key]);calc();checkEmpty()}
-  }catch(err){alert('❌ خطا: '+err.message)}
+    location.reload();
+  },1500);
 }
 
 /* ============================================================
-   بخش ۲۸: ماشین‌حساب شناور
+   بخش ۲۹: ماشین‌حساب دایره‌ای
    ============================================================ */
 (function(){
   const toggle=document.getElementById('calcToggle');
@@ -2412,9 +3175,8 @@ async function importFromExcel(file){
   const display=document.getElementById('calcDisplay');
   const faD='۰۱۲۳۴۵۶۷۸۹',enD='0123456789';
   let current='0',previous=null,operation=null,shouldReset=false;
-  function toFa(s){return String(s).replace(/[0-9]/g,d=>faD[+d]).replace('.','٫')}
   function toEn(s){return String(s).replace(/[۰-۹]/g,d=>enD[faD.indexOf(d)]).replace('٫','.')}
-  function updateDisplay(){display.textContent=toFa(current)}
+  function updateDisplay(){display.textContent=current}
   function inputNum(n){
     if(shouldReset){current='0';shouldReset=false}
     if(current==='0')current=n;
@@ -2472,7 +3234,7 @@ async function importFromExcel(file){
 })();
 
 /* ============================================================
-   بخش ۲۹: Service Worker + راه‌اندازی
+   بخش ۳۰: Service Worker + راه‌اندازی
    ============================================================ */
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
@@ -2495,7 +3257,6 @@ window.addEventListener('load',async()=>{
     calc();checkEmpty();
   }else{
     if(isHoliday(t.key)){
-      // روز تعطیله → پر کردن خودکار
       const lastWork=findLastWorkingDay(t.key);
       const db=loadDB();
       if(lastWork&&db[lastWork]){
@@ -2509,12 +3270,10 @@ window.addEventListener('load',async()=>{
       showDlg();
     }
   }
-  // بررسی یادآوری سهمیه
+  updateCloudStatus();
   setTimeout(checkReminder,1500);
 });
 </script>
 
 </body>
-</html>            
-
-    
+</html>
