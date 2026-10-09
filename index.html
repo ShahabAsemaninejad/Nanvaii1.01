@@ -80,7 +80,8 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .holiday-banner.hiding{opacity:0;transform:translateY(-100%)}
 @keyframes holidayIn{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:0.5}}
 
-  /* ===== Toast ذخیره ===== */
+
+/* ===== Toast ذخیره ===== */
 .save-toast{position:absolute;z-index:200;background:#263238;color:#fff;font-family:'Vazirmatn',Tahoma,sans-serif;font-size:11px;font-weight:700;padding:8px 12px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.4);white-space:nowrap;pointer-events:none;opacity:0;transform:translate(50%, 8px);transition:opacity .25s, transform .25s;text-align:center;line-height:1.4}
 .save-toast.show{opacity:1;transform:translate(50%, 0)}
 .save-toast::before{content:'';position:absolute;top:-6px;right:50%;transform:translateX(50%);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:6px solid #263238}
@@ -280,6 +281,8 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
 .mode-note{font-size:10px;color:#888;text-align:center;margin-top:12px;line-height:1.5}
 .mode-buttons-row{display:flex;gap:8px}
 .mode-buttons-row .mode-btn{flex:1}
+
+
 
   /* ===== قرض آرد ===== */
 .loan-section{margin-top:8px;padding:12px;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:10px}
@@ -596,7 +599,8 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
   </div>
 </div>
 
-  <!-- ========== دیالوگ پرسش‌های روزانه ========== -->
+
+<!-- ========== دیالوگ پرسش‌های روزانه ========== -->
 <div class="modal dialog-overlay" id="dialogOverlay">
   <div class="dialog-box">
     <button class="dialog-close" id="dialogClose">✕</button>
@@ -1053,6 +1057,7 @@ body{background:#d4a574;display:flex;justify-content:center;align-items:center;m
     <button class="calc-btn eq" data-action="eq">=</button>
   </div>
 </div>
+
 
   <script>
 /* ============================================================
@@ -3277,3 +3282,5 @@ window.addEventListener('load',async()=>{
 
 </body>
 </html>
+  
+  
